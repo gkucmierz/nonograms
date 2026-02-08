@@ -22,8 +22,37 @@ const installDismissed = ref(false);
 const isCoarsePointer = ref(false);
 const isStandalone = ref(false);
 const themePreference = ref('system');
+const isLangOpen = ref(false);
+const langMenuRef = ref(null);
 let displayModeMedia = null;
 let prefersColorSchemeMedia = null;
+const languageFlags = {
+  en: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#b22234"/><rect y="2" width="24" height="2" fill="#fff"/><rect y="6" width="24" height="2" fill="#fff"/><rect y="10" width="24" height="2" fill="#fff"/><rect y="14" width="24" height="2" fill="#fff"/><rect width="10" height="8" fill="#3c3b6e"/></svg>',
+  zh: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#de2910"/><circle cx="6" cy="5" r="2" fill="#ffde00"/></svg>',
+  hi: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect width="24" height="5.33" fill="#ff9933"/><rect y="10.67" width="24" height="5.33" fill="#128807"/><circle cx="12" cy="8" r="2" fill="#000080"/></svg>',
+  es: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#aa151b"/><rect y="4" width="24" height="8" fill="#f1bf00"/></svg>',
+  fr: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="8" height="16" fill="#0055a4"/><rect x="8" width="8" height="16" fill="#ffffff"/><rect x="16" width="8" height="16" fill="#ef4135"/></svg>',
+  ar: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#006c35"/><rect y="11" width="24" height="3" fill="#ffffff"/></svg>',
+  bn: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#006a4e"/><circle cx="11" cy="8" r="4" fill="#f42a41"/></svg>',
+  ru: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="5.33" width="24" height="5.33" fill="#0039a6"/><rect y="10.67" width="24" height="5.33" fill="#d52b1e"/></svg>',
+  pt: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9.5" cy="8" r="2.5" fill="#ffcc00"/></svg>',
+  ur: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#01411c"/><rect width="6" height="16" fill="#ffffff"/><circle cx="15" cy="8" r="3" fill="#ffffff"/></svg>',
+  pl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="8" width="24" height="8" fill="#dc143c"/></svg>'
+};
+
+const languages = computed(() => [
+  { code: 'en', label: t('language.en') },
+  { code: 'zh', label: t('language.zh') },
+  { code: 'hi', label: t('language.hi') },
+  { code: 'es', label: t('language.es') },
+  { code: 'fr', label: t('language.fr') },
+  { code: 'ar', label: t('language.ar') },
+  { code: 'bn', label: t('language.bn') },
+  { code: 'ru', label: t('language.ru') },
+  { code: 'pt', label: t('language.pt') },
+  { code: 'ur', label: t('language.ur') },
+  { code: 'pl', label: t('language.pl') }
+]);
 
 const installLabel = computed(() => {
   return isCoarsePointer.value ? t('pwa.installMobile') : t('pwa.installDesktop');
@@ -85,6 +114,18 @@ const handleSystemThemeChange = () => {
   }
 };
 
+const selectLanguage = (value) => {
+  setLocale(value);
+  isLangOpen.value = false;
+};
+
+const handleOutsideClick = (event) => {
+  if (!langMenuRef.value) return;
+  if (!langMenuRef.value.contains(event.target)) {
+    isLangOpen.value = false;
+  }
+};
+
 onMounted(() => {
   if (!store.loadState()) {
     store.initGame(); // Inicjalizacja domyślnej gry jeśli brak zapisu
@@ -111,6 +152,7 @@ onMounted(() => {
     } else if (displayModeMedia?.addListener) {
       displayModeMedia.addListener(updateStandalone);
     }
+    document.addEventListener('click', handleOutsideClick);
   }
 });
 
@@ -128,6 +170,7 @@ onUnmounted(() => {
   } else if (displayModeMedia?.removeListener) {
     displayModeMedia.removeListener(updateStandalone);
   }
+  document.removeEventListener('click', handleOutsideClick);
 });
 </script>
 
@@ -138,9 +181,29 @@ onUnmounted(() => {
     <header class="game-header">
       <h1>{{ t('app.title') }}</h1>
       <div class="header-toggles">
-        <div class="lang-toggle">
-          <button class="lang-btn" :class="{ active: locale === 'pl' }" @click="setLocale('pl')">PL</button>
-          <button class="lang-btn" :class="{ active: locale === 'en' }" @click="setLocale('en')">EN</button>
+        <div class="lang-dropdown" ref="langMenuRef">
+          <button
+            class="lang-trigger"
+            type="button"
+            :aria-label="t('language.label')"
+            :aria-expanded="isLangOpen"
+            @click="isLangOpen = !isLangOpen"
+          >
+            <span class="lang-flag" v-html="languageFlags[locale]"></span>
+          </button>
+          <div v-if="isLangOpen" class="lang-menu">
+            <button
+              v-for="lang in languages"
+              :key="lang.code"
+              class="lang-option"
+              :class="{ active: locale === lang.code }"
+              type="button"
+              @click="selectLanguage(lang.code)"
+            >
+              <span class="lang-flag" v-html="languageFlags[lang.code]"></span>
+              <span class="lang-name">{{ lang.label }}</span>
+            </button>
+          </div>
         </div>
         <div class="theme-toggle">
           <span class="theme-label">{{ t('theme.label') }}</span>
@@ -242,35 +305,87 @@ h1 {
   margin-top: 12px;
 }
 
-.lang-toggle {
+.lang-dropdown {
+  position: relative;
   display: inline-flex;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  align-items: center;
+}
+
+.lang-trigger {
   background: var(--toggle-bg);
   border: 1px solid var(--toggle-border);
   box-shadow: var(--toggle-shadow);
-}
-
-.lang-btn {
-  background: transparent;
-  border: 1px solid var(--toggle-btn-border);
-  color: var(--text-strong);
-  padding: 4px 10px;
   border-radius: 999px;
-  font-size: 0.8rem;
-  letter-spacing: 1px;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.lang-btn.active {
+.lang-trigger:hover {
+  border-color: var(--toggle-hover-border);
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 170px;
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  box-shadow: var(--toggle-shadow);
+  border-radius: 16px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+  opacity: 1;
+}
+
+.lang-option {
+  background: transparent;
+  border: 1px solid var(--toggle-btn-border);
+  color: var(--text-strong);
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.lang-option:hover {
+  border-color: var(--toggle-hover-border);
+}
+
+.lang-option.active {
   border-color: var(--primary-accent);
   box-shadow: var(--toggle-active-shadow);
 }
 
-.lang-btn:hover {
-  border-color: var(--toggle-hover-border);
+.lang-flag {
+  width: 24px;
+  height: 16px;
+  display: inline-flex;
+}
+
+.lang-flag svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 2px;
+}
+
+.lang-name {
+  font-weight: 500;
 }
 
 .theme-toggle {

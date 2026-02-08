@@ -337,6 +337,7 @@ onUnmounted(() => {
   animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   z-index: 1001;
+  overflow-wrap: anywhere;
 }
 
 h2 {
@@ -344,12 +345,14 @@ h2 {
   color: var(--primary-accent);
   margin: 0 0 10px 0;
   text-shadow: 0 0 20px var(--primary-accent);
+  overflow-wrap: anywhere;
 }
 
 p {
   color: var(--text-secondary);
   font-size: 1.2rem;
   margin-bottom: 30px;
+  overflow-wrap: anywhere;
 }
 
 .stats {
@@ -380,6 +383,7 @@ p {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--text-muted);
+  overflow-wrap: anywhere;
 }
 
 .share-buttons {
@@ -409,6 +413,13 @@ p {
   align-self: center;
   padding: 8px 18px;
   font-size: 0.85rem;
+  max-width: 100%;
+  white-space: normal;
+}
+
+.actions .btn-neon {
+  max-width: 100%;
+  white-space: normal;
 }
 
 @keyframes fadeIn {
