@@ -22,6 +22,15 @@ const cellClass = computed(() => {
 });
 
 let lastTap = 0;
+let longPressTimer = null;
+let longPressTriggered = false;
+
+const clearLongPress = () => {
+  if (longPressTimer) {
+    clearTimeout(longPressTimer);
+    longPressTimer = null;
+  }
+};
 
 const handlePointerDown = (e) => {
   if (e.pointerType === 'mouse') {
@@ -29,6 +38,18 @@ const handlePointerDown = (e) => {
     if (e.button === 2) emit('start-drag', props.r, props.c, true);
     return;
   }
+  longPressTriggered = false;
+  clearLongPress();
+  longPressTimer = setTimeout(() => {
+    longPressTriggered = true;
+    emit('start-drag', props.r, props.c, true);
+  }, 450);
+};
+
+const handlePointerUp = (e) => {
+  if (e.pointerType === 'mouse') return;
+  clearLongPress();
+  if (longPressTriggered) return;
   const now = Date.now();
   const isDoubleTap = now - lastTap < 300;
   lastTap = now;
@@ -37,6 +58,11 @@ const handlePointerDown = (e) => {
   } else {
     emit('start-drag', props.r, props.c, false);
   }
+};
+
+const handlePointerCancel = (e) => {
+  if (e.pointerType === 'mouse') return;
+  clearLongPress();
 };
 </script>
 
@@ -47,6 +73,9 @@ const handlePointerDown = (e) => {
     :data-r="props.r"
     :data-c="props.c"
     @pointerdown.prevent="handlePointerDown"
+    @pointerup="handlePointerUp"
+    @pointercancel="handlePointerCancel"
+    @pointerleave="handlePointerCancel"
     @mouseenter="emit('enter-cell', props.r, props.c)"
     @contextmenu.prevent
   >
