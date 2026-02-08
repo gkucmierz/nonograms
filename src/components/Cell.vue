@@ -76,7 +76,7 @@ const handlePointerCancel = (e) => {
     @pointerup="handlePointerUp"
     @pointercancel="handlePointerCancel"
     @pointerleave="handlePointerCancel"
-    @mouseenter="emit('enter-cell', props.r, props.c)"
+    @mouseenter="emit('enter-cell', props.r, props.c, $event)"
     @contextmenu.prevent
   >
     <span v-if="props.state === 2" class="cross-mark">×</span>

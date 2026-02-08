@@ -12,6 +12,9 @@ const { startDrag, onMouseEnter, stopDrag } = useNonogram();
 
 const cellSize = ref(30);
 const rowHintsRef = ref(null);
+const activeRow = ref(null);
+const activeCol = ref(null);
+const isFinePointer = ref(false);
 
 const getRowHintsWidth = () => {
   const el = rowHintsRef.value?.$el;
@@ -52,10 +55,24 @@ const handlePointerMove = (e) => {
   }
 };
 
+const handleCellEnter = (r, c) => {
+  onMouseEnter(r, c);
+  if (!isFinePointer.value) return;
+  activeRow.value = r;
+  activeCol.value = c;
+};
+
+const handleGridLeave = () => {
+  stopDrag();
+  activeRow.value = null;
+  activeCol.value = null;
+};
+
 onMounted(() => {
   nextTick(() => {
     computeCellSize();
   });
+  isFinePointer.value = window.matchMedia('(pointer: fine)').matches;
   window.addEventListener('resize', computeCellSize);
   window.addEventListener('mouseup', handleGlobalMouseUp);
   window.addEventListener('pointerup', handleGlobalPointerUp);
@@ -81,10 +98,10 @@ watch(() => store.size, async () => {
       <div class="corner-spacer"></div>
       
       <!-- Column Hints -->
-      <Hints :hints="colHints" orientation="col" :size="store.size" />
+      <Hints :hints="colHints" orientation="col" :size="store.size" :activeIndex="activeCol" />
       
       <!-- Row Hints -->
-      <Hints ref="rowHintsRef" :hints="rowHints" orientation="row" :size="store.size" />
+      <Hints ref="rowHintsRef" :hints="rowHints" orientation="row" :size="store.size" :activeIndex="activeRow" />
       
       <!-- Grid -->
       <div 
@@ -94,7 +111,7 @@ watch(() => store.size, async () => {
           gridTemplateRows: `repeat(${store.size}, var(--cell-size))`
         }"
         @pointermove.prevent="handlePointerMove"
-        @mouseleave="stopDrag"
+        @mouseleave="handleGridLeave"
       >
         <template v-for="(row, r) in store.playerGrid" :key="r">
           <Cell 
@@ -108,7 +125,7 @@ watch(() => store.size, async () => {
                 'guide-bottom': (r + 1) % 5 === 0 && r !== store.size - 1
             }"
             @start-drag="startDrag"
-            @enter-cell="onMouseEnter"
+            @enter-cell="handleCellEnter"
           />
         </template>
       </div>

@@ -12,6 +12,10 @@ defineProps({
   size: {
     type: Number,
     required: true
+  },
+  activeIndex: {
+    type: Number,
+    default: null
   }
 });
 </script>
@@ -28,7 +32,7 @@ defineProps({
       v-for="(group, index) in hints" 
       :key="index" 
       class="hint-group"
-      :class="{ 'hint-alt': index % 2 !== 0 }"
+      :class="{ 'hint-alt': index % 2 !== 0, 'is-active': index === activeIndex }"
     >
       <span 
         v-for="(num, idx) in group" 
@@ -99,5 +103,11 @@ defineProps({
 .hint-group:hover {
     background: rgba(255, 255, 255, 0.1);
     border-color: var(--accent-cyan);
+}
+
+.hint-group.is-active {
+    background: rgba(79, 172, 254, 0.2);
+    border-color: rgba(79, 172, 254, 0.8);
+    box-shadow: 0 0 12px rgba(79, 172, 254, 0.35);
 }
 </style>
