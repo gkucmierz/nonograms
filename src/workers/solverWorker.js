@@ -40,61 +40,143 @@ const t = (locale, key, params) => {
   return typeof value === 'string' ? format(value, params) : key;
 };
 
-const getPermutations = (length, hints) => {
-  const results = [];
-  const recurse = (index, hintIndex, currentLine) => {
-    if (hintIndex === hints.length) {
-      while (currentLine.length < length) {
-        currentLine.push(0);
+const buildPrefix = (lineState) => {
+  const n = lineState.length;
+  const filled = new Array(n + 1).fill(0);
+  const cross = new Array(n + 1).fill(0);
+  for (let i = 0; i < n; i++) {
+    filled[i + 1] = filled[i] + (lineState[i] === 1 ? 1 : 0);
+    cross[i + 1] = cross[i] + (lineState[i] === 2 ? 1 : 0);
+  }
+  return { filled, cross };
+};
+
+const buildSuffixMin = (hints) => {
+  const m = hints.length;
+  const suffixMin = new Array(m + 1).fill(0);
+  let sumHints = 0;
+  for (let i = m - 1; i >= 0; i--) {
+    sumHints += hints[i];
+    const separators = m - i - 1;
+    suffixMin[i] = sumHints + separators;
+  }
+  return suffixMin;
+};
+
+const solveLineLogic = (lineState, hints) => {
+  const n = lineState.length;
+  const m = hints.length;
+  if (m === 0) {
+    for (let i = 0; i < n; i++) {
+      if (lineState[i] === 0) return { index: i, state: 2 };
+    }
+    return { index: -1 };
+  }
+
+  const { filled, cross } = buildPrefix(lineState);
+  const suffixMin = buildSuffixMin(hints);
+
+  const hasFilled = (a, b) => filled[b] - filled[a] > 0;
+  const hasCross = (a, b) => cross[b] - cross[a] > 0;
+
+  const memoSuffix = Array.from({ length: n + 1 }, () => Array(m + 1).fill(null));
+  const memoPrefix = Array.from({ length: n + 1 }, () => Array(m + 1).fill(null));
+
+  const canPlaceSuffix = (pos, hintIndex) => {
+    const cached = memoSuffix[pos][hintIndex];
+    if (cached !== null) return cached;
+    if (hintIndex === m) {
+      const result = !hasFilled(pos, n);
+      memoSuffix[pos][hintIndex] = result;
+      return result;
+    }
+    const len = hints[hintIndex];
+    const maxStart = n - suffixMin[hintIndex];
+    for (let start = pos; start <= maxStart; start++) {
+      if (hasFilled(pos, start)) continue;
+      if (hasCross(start, start + len)) continue;
+      if (start + len < n && lineState[start + len] === 1) continue;
+      const nextPos = start + len < n ? start + len + 1 : start + len;
+      if (canPlaceSuffix(nextPos, hintIndex + 1)) {
+        memoSuffix[pos][hintIndex] = true;
+        return true;
       }
-      results.push(currentLine);
-      return;
     }
-
-    const currentHint = hints[hintIndex];
-    let remainingHintsLen = 0;
-    for (let i = hintIndex + 1; i < hints.length; i++) remainingHintsLen += hints[i] + 1;
-    const maxStart = length - remainingHintsLen - currentHint;
-
-    for (let start = index; start <= maxStart; start++) {
-      const newLine = [...currentLine];
-      for (let k = index; k < start; k++) newLine.push(0);
-      for (let k = 0; k < currentHint; k++) newLine.push(1);
-      if (hintIndex < hints.length - 1) newLine.push(0);
-      recurse(newLine.length, hintIndex + 1, newLine);
-    }
+    memoSuffix[pos][hintIndex] = false;
+    return false;
   };
 
-  recurse(0, 0, []);
-  return results;
-};
-
-const isValidPermutation = (perm, currentLineState) => {
-  for (let i = 0; i < perm.length; i++) {
-    const boardVal = currentLineState[i];
-    const permVal = perm[i];
-    if (boardVal === 1 && permVal !== 1) return false;
-    if (boardVal === 2 && permVal !== 0) return false;
-  }
-  return true;
-};
-
-const solveLineLogic = (lineState, hints, size) => {
-  const allPerms = getPermutations(size, hints);
-  const validPerms = allPerms.filter(p => isValidPermutation(p, lineState));
-  if (validPerms.length === 0) return { index: -1 };
-
-  for (let i = 0; i < size; i++) {
-    if (lineState[i] !== 0) continue;
-    let allOne = true;
-    let allZero = true;
-    for (const p of validPerms) {
-      if (p[i] === 0) allOne = false;
-      if (p[i] === 1) allZero = false;
-      if (!allOne && !allZero) break;
+  const canPlacePrefix = (pos, hintCount) => {
+    const cached = memoPrefix[pos][hintCount];
+    if (cached !== null) return cached;
+    if (hintCount === 0) {
+      const result = !hasFilled(0, pos);
+      memoPrefix[pos][hintCount] = result;
+      return result;
     }
-    if (allOne) return { index: i, state: 1 };
-    if (allZero) return { index: i, state: 2 };
+    const len = hints[hintCount - 1];
+    const maxStart = pos - len;
+    for (let start = maxStart; start >= 0; start--) {
+      if (hasCross(start, start + len)) continue;
+      if (start + len < pos && lineState[start + len] === 1) continue;
+      if (hasFilled(start + len, pos)) continue;
+      if (start > 0 && lineState[start - 1] === 1) continue;
+      const prevPos = start > 0 ? start - 1 : 0;
+      if (canPlacePrefix(prevPos, hintCount - 1)) {
+        memoPrefix[pos][hintCount] = true;
+        return true;
+      }
+    }
+    memoPrefix[pos][hintCount] = false;
+    return false;
+  };
+
+  const possibleStarts = [];
+  for (let i = 0; i < m; i++) {
+    const len = hints[i];
+    const starts = [];
+    for (let start = 0; start <= n - len; start++) {
+      if (!canPlacePrefix(start, i)) continue;
+      if (hasCross(start, start + len)) continue;
+      if (start + len < n && lineState[start + len] === 1) continue;
+      const nextPos = start + len < n ? start + len + 1 : start + len;
+      if (!canPlaceSuffix(nextPos, i + 1)) continue;
+      starts.push(start);
+    }
+    possibleStarts.push(starts);
+  }
+
+  const mustFill = new Array(n).fill(false);
+  const coverage = new Array(n).fill(false);
+
+  for (let i = 0; i < m; i++) {
+    const starts = possibleStarts[i];
+    const len = hints[i];
+    if (starts.length === 0) return { index: -1 };
+    let earliest = starts[0];
+    let latest = starts[0];
+    for (let j = 1; j < starts.length; j++) {
+      earliest = Math.min(earliest, starts[j]);
+      latest = Math.max(latest, starts[j]);
+    }
+    const startOverlap = Math.max(earliest, latest);
+    const endOverlap = Math.min(earliest + len - 1, latest + len - 1);
+    for (let k = startOverlap; k <= endOverlap; k++) {
+      if (k >= 0 && k < n) mustFill[k] = true;
+    }
+    for (let s = 0; s < starts.length; s++) {
+      const start = starts[s];
+      for (let k = start; k < start + len; k++) {
+        coverage[k] = true;
+      }
+    }
+  }
+
+  for (let i = 0; i < n; i++) {
+    if (lineState[i] === 0 && mustFill[i]) return { index: i, state: 1 };
+  }
+  for (let i = 0; i < n; i++) {
+    if (lineState[i] === 0 && !coverage[i]) return { index: i, state: 2 };
   }
   return { index: -1 };
 };
@@ -124,7 +206,7 @@ const handleStep = (playerGrid, solution, locale) => {
   for (let r = 0; r < size; r++) {
     const rowLine = playerGrid[r];
     const hints = rowHints[r];
-    const result = solveLineLogic(rowLine, hints, size);
+    const result = solveLineLogic(rowLine, hints);
     if (result.index !== -1) {
       const stateLabel = t(locale, result.state === 1 ? 'worker.state.filled' : 'worker.state.empty');
       return {
@@ -141,7 +223,7 @@ const handleStep = (playerGrid, solution, locale) => {
     const colLine = [];
     for (let r = 0; r < size; r++) colLine.push(playerGrid[r][c]);
     const hints = colHints[c];
-    const result = solveLineLogic(colLine, hints, size);
+    const result = solveLineLogic(colLine, hints);
     if (result.index !== -1) {
       const stateLabel = t(locale, result.state === 1 ? 'worker.state.filled' : 'worker.state.empty');
       return {

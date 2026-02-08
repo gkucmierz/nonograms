@@ -10,6 +10,15 @@ const { t } = useI18n();
 const customSize = ref(10);
 const errorMsg = ref('');
 
+const snapToStep = (value, step) => {
+  const rounded = Math.round(value / step) * step;
+  return Math.max(5, Math.min(80, rounded));
+};
+
+const handleSnap = () => {
+  customSize.value = snapToStep(Number(customSize.value), 5);
+};
+
 const confirm = () => {
   const size = parseInt(customSize.value);
   if (isNaN(size) || size < 5 || size > 80) {
@@ -36,6 +45,7 @@ const confirm = () => {
           min="5" 
           max="80"
           step="1"
+          @change="handleSnap"
         />
         <div class="range-scale">
           <span>5</span>
