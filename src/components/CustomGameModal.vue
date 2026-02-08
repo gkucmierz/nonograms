@@ -12,7 +12,7 @@ const errorMsg = ref('');
 
 const confirm = () => {
   const size = parseInt(customSize.value);
-  if (isNaN(size) || size < 5 || size > 100) {
+  if (isNaN(size) || size < 5 || size > 80) {
     errorMsg.value = t('custom.sizeError');
     return;
   }
@@ -29,13 +29,18 @@ const confirm = () => {
       <p>{{ t('custom.prompt') }}</p>
       
       <div class="input-group">
+        <div class="range-value">{{ customSize }}</div>
         <input 
-          type="number" 
+          type="range" 
           v-model="customSize" 
           min="5" 
-          max="100"
-          @keyup.enter="confirm"
+          max="80"
+          step="1"
         />
+        <div class="range-scale">
+          <span>5</span>
+          <span>80</span>
+        </div>
       </div>
       
       <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
@@ -89,23 +94,61 @@ p {
 
 .input-group {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-input {
+.range-value {
+    min-width: 64px;
+    padding: 6px 12px;
+    border-radius: 999px;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid var(--glass-border);
     color: #fff;
-    padding: 10px;
-    font-size: 1.2rem;
-    border-radius: 8px;
-    width: 100px;
+    font-size: 1.1rem;
     text-align: center;
 }
 
-input:focus {
+input[type="range"] {
+    -webkit-appearance: none;
+    width: min(300px, 70vw);
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
     outline: none;
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--accent-cyan);
+    box-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
+    cursor: pointer;
+}
+
+.range-scale {
+    width: min(300px, 70vw);
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
 }
 
 .error {
