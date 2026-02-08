@@ -39,7 +39,13 @@ const messages = {
     'win.title': 'GRATULACJE!',
     'win.message': 'Rozwiązałeś zagadkę!',
     'win.time': 'Czas:',
-    'win.playAgain': 'Zagraj Ponownie'
+    'win.playAgain': 'Zagraj Ponownie',
+    'win.shareTitle': 'Udostępnij wynik',
+    'win.shareText': 'Ułożyłem nonogram {size}x{size} w {time}!',
+    'win.shareX': 'X',
+    'win.shareFacebook': 'Facebook',
+    'win.shareWhatsapp': 'WhatsApp',
+    'win.shareDownload': 'Pobierz zrzut'
   },
   en: {
     'app.title': 'Nonograms',
@@ -72,7 +78,13 @@ const messages = {
     'win.title': 'CONGRATULATIONS!',
     'win.message': 'You solved the puzzle!',
     'win.time': 'Time:',
-    'win.playAgain': 'Play Again'
+    'win.playAgain': 'Play Again',
+    'win.shareTitle': 'Share your result',
+    'win.shareText': 'I solved a {size}x{size} nonogram in {time}!',
+    'win.shareX': 'X',
+    'win.shareFacebook': 'Facebook',
+    'win.shareWhatsapp': 'WhatsApp',
+    'win.shareDownload': 'Download screenshot'
   }
 };
 

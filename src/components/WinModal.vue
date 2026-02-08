@@ -1,15 +1,24 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { Fireworks } from 'fireworks-js';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
+import { useTimer } from '@/composables/useTimer';
+import xIcon from '@/assets/brands/x.svg';
+import facebookIcon from '@/assets/brands/facebook.svg';
+import whatsappIcon from '@/assets/brands/whatsapp.svg';
 
 const store = usePuzzleStore();
 const { t } = useI18n();
+const { formatTime } = useTimer();
 const fireworksRef = ref(null);
 let fireworksInstance = null;
 let audioContext = null;
 let masterGain = null;
+const shareInProgress = ref(false);
+
+const formattedTime = computed(() => formatTime(store.elapsedTime));
+const shareText = computed(() => t('win.shareText', { size: store.size, time: formattedTime.value }));
 
 const handleClose = () => {
   store.closeWinModal();
@@ -68,6 +77,151 @@ const triggerVibration = () => {
   }
 };
 
+const buildShareCanvas = () => {
+  const grid = store.playerGrid;
+  if (!grid || !grid.length) return null;
+  const appUrl = 'https://nonograms.7u.pl/';
+  const size = store.size;
+  const maxBoard = 640;
+  const cellSize = Math.max(8, Math.floor(maxBoard / size));
+  const boardSize = cellSize * size;
+  const padding = 28;
+  const headerHeight = 64;
+  const footerHeight = 28;
+  const width = boardSize + padding * 2;
+  const height = boardSize + padding * 2 + headerHeight + footerHeight;
+  const scale = window.devicePixelRatio || 1;
+  const canvas = document.createElement('canvas');
+  canvas.width = width * scale;
+  canvas.height = height * scale;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+  ctx.scale(scale, scale);
+  const bg = ctx.createLinearGradient(0, 0, width, height);
+  bg.addColorStop(0, '#1b2a4a');
+  bg.addColorStop(1, '#0a1324');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+  ctx.fillRect(12, 12, width - 24, height - 24);
+  ctx.fillStyle = '#e8fbff';
+  ctx.font = '700 26px "Segoe UI", sans-serif';
+  ctx.fillText(t('app.title'), padding, padding + 10);
+  ctx.font = '600 16px "Segoe UI", sans-serif';
+  ctx.fillText(`${t('win.time')} ${formattedTime.value}`, padding, padding + 34);
+  const gridX = padding;
+  const gridY = padding + headerHeight;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+  ctx.fillRect(gridX, gridY, boardSize, boardSize);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= size; i++) {
+    const x = gridX + i * cellSize;
+    const y = gridY + i * cellSize;
+    ctx.beginPath();
+    ctx.moveTo(x, gridY);
+    ctx.lineTo(x, gridY + boardSize);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(gridX, y);
+    ctx.lineTo(gridX + boardSize, y);
+    ctx.stroke();
+  }
+  ctx.fillStyle = '#00f2fe';
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+  ctx.lineWidth = Math.max(1.5, Math.floor(cellSize * 0.12));
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const state = grid[r]?.[c];
+      if (state === 1) {
+        const x = gridX + c * cellSize + 1;
+        const y = gridY + r * cellSize + 1;
+        ctx.fillRect(x, y, cellSize - 2, cellSize - 2);
+      } else if (state === 2) {
+        const x = gridX + c * cellSize + cellSize * 0.2;
+        const y = gridY + r * cellSize + cellSize * 0.2;
+        const d = cellSize * 0.6;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + d, y + d);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x + d, y);
+        ctx.lineTo(x, y + d);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+  ctx.font = '500 14px "Segoe UI", sans-serif';
+  ctx.fillText(appUrl, padding, height - padding + 6);
+  return canvas;
+};
+
+const canvasToBlob = (canvas) => new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), 'image/png'));
+
+const createShareBlob = async () => {
+  const canvas = buildShareCanvas();
+  if (!canvas) return null;
+  return canvasToBlob(canvas);
+};
+
+const downloadShareImage = async () => {
+  const blob = await createShareBlob();
+  if (!blob) return;
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `nonogram-${store.size}x${store.size}.png`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+};
+
+const buildShareUrl = (target, text, url) => {
+  const encodedText = encodeURIComponent(text);
+  const encodedUrl = encodeURIComponent(url);
+  if (target === 'x') {
+    return `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+  }
+  if (target === 'facebook') {
+    return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+  }
+  if (target === 'whatsapp') {
+    return `https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}`;
+  }
+  return '';
+};
+
+const shareTo = async (target) => {
+  if (shareInProgress.value) return;
+  shareInProgress.value = true;
+  try {
+    const blob = await createShareBlob();
+    if (!blob) return;
+    const file = new File([blob], `nonogram-${store.size}x${store.size}.png`, { type: 'image/png' });
+    const text = shareText.value;
+    const url = window.location.href;
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        text,
+        title: t('app.title'),
+        url
+      });
+      return;
+    }
+    await downloadShareImage();
+    const shareUrl = buildShareUrl(target, text, url);
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'noopener');
+    }
+  } finally {
+    shareInProgress.value = false;
+  }
+};
+
 onMounted(() => {
   if (fireworksRef.value) {
     fireworksInstance = new Fireworks(fireworksRef.value, {
@@ -118,8 +272,26 @@ onUnmounted(() => {
       <div class="stats">
         <div class="stat">
           <span>{{ t('win.time') }}</span>
-          <strong>{{ store.elapsedTime }}s</strong>
+          <strong>{{ formattedTime }}</strong>
         </div>
+      </div>
+
+      <div class="share">
+        <div class="share-title">{{ t('win.shareTitle') }}</div>
+        <div class="share-buttons">
+          <button class="btn-neon secondary share-btn" :disabled="shareInProgress" :aria-label="t('win.shareX')" @click="shareTo('x')">
+            <img :src="xIcon" alt="" class="share-icon" />
+          </button>
+          <button class="btn-neon secondary share-btn" :disabled="shareInProgress" :aria-label="t('win.shareFacebook')" @click="shareTo('facebook')">
+            <img :src="facebookIcon" alt="" class="share-icon" />
+          </button>
+          <button class="btn-neon secondary share-btn" :disabled="shareInProgress" :aria-label="t('win.shareWhatsapp')" @click="shareTo('whatsapp')">
+            <img :src="whatsappIcon" alt="" class="share-icon" />
+          </button>
+        </div>
+        <button class="btn-neon secondary share-download" :disabled="shareInProgress" @click="downloadShareImage">
+          {{ t('win.shareDownload') }}
+        </button>
       </div>
 
       <div class="actions">
@@ -157,8 +329,9 @@ onUnmounted(() => {
 .modal {
   padding: 40px;
   text-align: center;
-  max-width: 400px;
-  width: 90%;
+  width: fit-content;
+  max-width: min(92vw, 560px);
+  min-width: 280px;
   border: 1px solid var(--primary-accent);
   box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
   animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -193,6 +366,49 @@ p {
 .stat strong {
   color: #fff;
   margin-left: 10px;
+}
+
+.share {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.share-title {
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.share-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.share-download {
+  align-self: center;
+  padding: 8px 18px;
+  font-size: 0.85rem;
 }
 
 @keyframes fadeIn {
