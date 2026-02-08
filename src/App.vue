@@ -27,7 +27,7 @@ onMounted(() => {
     <FixedBar />
 
     <header class="game-header">
-      <h1>NONOGRAMY</h1>
+      <h1>NONOGRAMS</h1>
       <div class="underline"></div>
     </header>
 
