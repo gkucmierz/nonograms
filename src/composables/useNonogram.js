@@ -1,6 +1,5 @@
 import { ref } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
-import confetti from 'canvas-confetti';
 
 export function useNonogram() {
   const store = usePuzzleStore();
@@ -49,7 +48,6 @@ export function useNonogram() {
   const stopDrag = () => {
     isDragging.value = false;
     dragMode.value = null;
-    checkWinEffect();
   };
 
   const applyDrag = (r, c) => {
@@ -84,38 +82,6 @@ export function useNonogram() {
       // For now, simple paint is fine.
       
       store.setCell(r, c, dragMode.value);
-  };
-
-  const checkWinEffect = () => {
-    if (store.isGameWon) {
-      triggerConfetti();
-    }
-  };
-
-  const triggerConfetti = () => {
-    const duration = 3000;
-    const end = Date.now() + duration;
-
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ['#00f2ff', '#ff0055', '#ffffff']
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ['#00f2ff', '#ff0055', '#ffffff']
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    }());
   };
 
   return {

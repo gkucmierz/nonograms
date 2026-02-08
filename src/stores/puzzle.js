@@ -324,6 +324,12 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     }
   }
 
+  function closeWinModal() {
+    if (!isGameWon.value) return;
+    isGameWon.value = false;
+    saveState();
+  }
+
   return {
     currentLevelId,
     solution,
@@ -340,7 +346,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     checkWin,
     loadState, // expose loadState
     moves,
-    undo
+    undo,
+    closeWinModal
   };
 
 });

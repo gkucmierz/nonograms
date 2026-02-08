@@ -8,9 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "fireworks-js": "^2.10.8",
     "pinia": "^2.1.7",
-    "vue": "^3.4.19",
-    "canvas-confetti": "^1.9.2"
+    "vue": "^3.4.19"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

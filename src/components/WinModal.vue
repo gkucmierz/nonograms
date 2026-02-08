@@ -1,11 +1,55 @@
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
+import { Fireworks } from 'fireworks-js';
 import { usePuzzleStore } from '@/stores/puzzle';
 
 const store = usePuzzleStore();
+const fireworksRef = ref(null);
+let fireworksInstance = null;
+
+const handleClose = () => {
+  store.closeWinModal();
+};
+
+const handleKeyDown = (e) => {
+  if (e.key === 'Escape') {
+    handleClose();
+  }
+};
+
+onMounted(() => {
+  if (fireworksRef.value) {
+    fireworksInstance = new Fireworks(fireworksRef.value, {
+      autoresize: true,
+      opacity: 0.6,
+      acceleration: 1.05,
+      friction: 0.98,
+      gravity: 1.4,
+      particles: 60,
+      traceLength: 3,
+      traceSpeed: 10,
+      explosion: 5,
+      intensity: 35,
+      flickering: 60,
+      hue: { min: 170, max: 210 },
+      delay: { min: 20, max: 40 },
+      rocketsPoint: { min: 50, max: 50 }
+    });
+    fireworksInstance.start();
+  }
+  window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
+  fireworksInstance?.stop(true);
+  fireworksInstance = null;
+});
 </script>
 
 <template>
-  <div class="modal-overlay">
+  <div class="modal-overlay" @click.self="handleClose">
+    <div ref="fireworksRef" class="fireworks-layer"></div>
     <div class="modal glass-panel">
       <h2>GRATULACJE!</h2>
       <p>Rozwiązałeś zagadkę!</p>
@@ -40,6 +84,15 @@ const store = usePuzzleStore();
   animation: fadeIn 0.5s ease;
 }
 
+.fireworks-layer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
 .modal {
   padding: 40px;
   text-align: center;
@@ -48,6 +101,8 @@ const store = usePuzzleStore();
   border: 1px solid var(--primary-accent);
   box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
   animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 1001;
 }
 
 h2 {
