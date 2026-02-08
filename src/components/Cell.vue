@@ -21,10 +21,22 @@ const cellClass = computed(() => {
   }
 });
 
-const handleMouseDown = (e) => {
-    // 0 = left, 2 = right
+let lastTap = 0;
+
+const handlePointerDown = (e) => {
+  if (e.pointerType === 'mouse') {
     if (e.button === 0) emit('start-drag', props.r, props.c, false);
     if (e.button === 2) emit('start-drag', props.r, props.c, true);
+    return;
+  }
+  const now = Date.now();
+  const isDoubleTap = now - lastTap < 300;
+  lastTap = now;
+  if (isDoubleTap) {
+    emit('start-drag', props.r, props.c, true);
+  } else {
+    emit('start-drag', props.r, props.c, false);
+  }
 };
 </script>
 
@@ -32,7 +44,9 @@ const handleMouseDown = (e) => {
   <div 
     class="cell" 
     :class="cellClass"
-    @mousedown.prevent="handleMouseDown"
+    :data-r="props.r"
+    :data-c="props.c"
+    @pointerdown.prevent="handlePointerDown"
     @mouseenter="emit('enter-cell', props.r, props.c)"
     @contextmenu.prevent
   >
@@ -52,6 +66,7 @@ const handleMouseDown = (e) => {
   align-items: center;
   transition: background-color 0.1s ease, box-shadow 0.1s ease;
   user-select: none;
+  touch-action: none;
 }
 
 .cell:hover {

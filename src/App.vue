@@ -111,4 +111,22 @@ h1 {
   justify-content: center;
   margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+  .game-header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+  }
+}
+
+@media (max-width: 420px) {
+  h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+}
 </style>

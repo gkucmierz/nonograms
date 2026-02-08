@@ -8,12 +8,22 @@ defineProps({
     type: String,
     required: true,
     validator: (v) => ['row', 'col'].includes(v)
+  },
+  size: {
+    type: Number,
+    required: true
   }
 });
 </script>
 
 <template>
-  <div class="hints-container" :class="orientation">
+  <div 
+    class="hints-container" 
+    :class="orientation"
+    :style="orientation === 'col' 
+      ? { gridTemplateColumns: `repeat(${size}, var(--cell-size))` } 
+      : { gridTemplateRows: `repeat(${size}, var(--cell-size))` }"
+  >
     <div 
       v-for="(group, index) in hints" 
       :key="index" 
@@ -33,22 +43,21 @@ defineProps({
 
 <style scoped>
 .hints-container {
-  display: flex;
+  display: grid;
   gap: var(--gap-size);
 }
 
 .hints-container.col {
-  flex-direction: row;
-  margin-bottom: 5px;
+  padding-bottom: var(--grid-padding);
   align-items: flex-end;
-  padding: 0 5px; /* Match grid padding */
+  padding-left: var(--grid-padding);
+  padding-right: var(--grid-padding);
 }
 
 .hints-container.row {
-  flex-direction: column;
-  margin-right: 5px;
   align-items: flex-end;
-  padding: 5px 0; /* Match grid padding */
+  padding: var(--grid-padding) var(--grid-padding) var(--grid-padding) 0;
+  width: max-content;
 }
 
 .hint-group {
@@ -59,20 +68,19 @@ defineProps({
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
 }
 
 .col .hint-group {
   flex-direction: column;
-  width: var(--cell-size);
   padding: 4px 2px;
   justify-content: flex-end;
 }
 
 .row .hint-group {
   flex-direction: row;
-  height: var(--cell-size);
   padding: 2px 8px;
-  width: 100px; /* Stała szerokość */
 }
 
 .hint-num {
