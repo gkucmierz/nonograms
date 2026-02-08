@@ -66,6 +66,7 @@ const {
     font-size: 0.8rem;
 }
 </style>
+<style>
 .btn-neon.small {
     padding: 8px 16px;
     font-size: 0.8rem;
