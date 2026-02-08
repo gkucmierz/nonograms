@@ -40,19 +40,22 @@ const languageFlags = {
   pl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="8" width="24" height="8" fill="#dc143c"/></svg>'
 };
 
-const languages = computed(() => [
-  { code: 'en', label: t('language.en') },
-  { code: 'zh', label: t('language.zh') },
-  { code: 'hi', label: t('language.hi') },
-  { code: 'es', label: t('language.es') },
-  { code: 'fr', label: t('language.fr') },
-  { code: 'ar', label: t('language.ar') },
-  { code: 'bn', label: t('language.bn') },
-  { code: 'ru', label: t('language.ru') },
-  { code: 'pt', label: t('language.pt') },
-  { code: 'ur', label: t('language.ur') },
-  { code: 'pl', label: t('language.pl') }
-]);
+const languages = computed(() => {
+  const items = [
+    { code: 'en', label: t('language.en') },
+    { code: 'zh', label: t('language.zh') },
+    { code: 'hi', label: t('language.hi') },
+    { code: 'es', label: t('language.es') },
+    { code: 'fr', label: t('language.fr') },
+    { code: 'ar', label: t('language.ar') },
+    { code: 'bn', label: t('language.bn') },
+    { code: 'ru', label: t('language.ru') },
+    { code: 'pt', label: t('language.pt') },
+    { code: 'ur', label: t('language.ur') },
+    { code: 'pl', label: t('language.pl') }
+  ];
+  return items.sort((a, b) => a.label.localeCompare(b.label, locale.value));
+});
 
 const installLabel = computed(() => {
   return isCoarsePointer.value ? t('pwa.installMobile') : t('pwa.installDesktop');
