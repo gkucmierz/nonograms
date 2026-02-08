@@ -48,7 +48,11 @@ const messages = {
     'win.shareDownload': 'Pobierz zrzut',
     'pwa.installTitle': 'Zainstaluj aplikację i graj offline',
     'pwa.installMobile': 'Dodaj do ekranu głównego',
-    'pwa.installDesktop': 'Zainstaluj na komputerze'
+    'pwa.installDesktop': 'Zainstaluj na komputerze',
+    'theme.label': 'Motyw',
+    'theme.system': 'System',
+    'theme.light': 'Jasny',
+    'theme.dark': 'Ciemny'
   },
   en: {
     'app.title': 'Nonograms',
@@ -90,7 +94,11 @@ const messages = {
     'win.shareDownload': 'Download screenshot',
     'pwa.installTitle': 'Install the app and play offline',
     'pwa.installMobile': 'Add to home screen',
-    'pwa.installDesktop': 'Install on desktop'
+    'pwa.installDesktop': 'Install on desktop',
+    'theme.label': 'Theme',
+    'theme.system': 'System',
+    'theme.light': 'Light',
+    'theme.dark': 'Dark'
   }
 };
 

@@ -68,8 +68,8 @@ defineProps({
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--hint-bg);
+  border: 1px solid var(--hint-border);
   border-radius: 4px;
   transition: all 0.3s ease;
   width: 100%;
@@ -89,7 +89,7 @@ defineProps({
 
 .hint-num {
   font-size: 0.85rem;
-  color: #fff;
+  color: var(--text-strong);
   font-weight: bold;
   padding: 2px;
 }
@@ -101,7 +101,7 @@ defineProps({
 
 /* Hover effect for readability */
 .hint-group:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--hint-hover-bg);
     border-color: var(--accent-cyan);
 }
 

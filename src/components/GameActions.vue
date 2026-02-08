@@ -34,15 +34,15 @@ function handleNewRandom() {
 }
 
 .btn-neon.secondary {
-  border-color: rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.8);
+  border-color: var(--button-secondary-border);
+  color: var(--button-secondary-text);
   font-size: 0.9rem;
   padding: 10px 25px;
 }
 
 .btn-neon.secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #fff;
-  color: #fff;
+  background: var(--button-secondary-hover-bg);
+  border-color: var(--button-secondary-hover-border);
+  color: var(--button-secondary-hover-text);
 }
 </style>

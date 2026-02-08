@@ -5,18 +5,114 @@
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   --text-color: #ffffff;
+  --text-strong: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.85);
+  --text-muted: rgba(255, 255, 255, 0.7);
   --accent-cyan: #00f2fe;
   --accent-purple: #4facfe;
+  --primary-accent: #00f2fe;
   --cell-empty: rgba(255, 255, 255, 0.05);
   --cell-hover: rgba(255, 255, 255, 0.2);
   --cell-filled-gradient: linear-gradient(45deg, #00f2fe, #4facfe);
   --cell-x-color: rgba(255, 255, 255, 0.4);
+  --title-glow: rgba(0, 255, 255, 0.2);
+  --toggle-bg: rgba(255, 255, 255, 0.08);
+  --toggle-border: rgba(255, 255, 255, 0.2);
+  --toggle-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  --toggle-btn-border: rgba(255, 255, 255, 0.2);
+  --toggle-hover-border: #ffffff;
+  --toggle-active-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+  --banner-bg: rgba(0, 0, 0, 0.35);
+  --banner-border: rgba(0, 242, 254, 0.35);
+  --banner-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  --panel-bg: rgba(255, 255, 255, 0.1);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --panel-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  --panel-bg-strong: rgba(0, 0, 0, 0.3);
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --fixed-bar-bg: rgba(0, 0, 0, 0.85);
+  --fixed-bar-border: rgba(255, 255, 255, 0.1);
+  --fixed-bar-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --progress-track-bg: rgba(255, 255, 255, 0.1);
+  --hint-bg: rgba(255, 255, 255, 0.05);
+  --hint-border: rgba(255, 255, 255, 0.1);
+  --hint-hover-bg: rgba(255, 255, 255, 0.1);
+  --button-bg: rgba(255, 255, 255, 0.1);
+  --button-border: rgba(255, 255, 255, 0.2);
+  --button-text: #ffffff;
+  --button-hover-bg: rgba(255, 255, 255, 0.25);
+  --button-hover-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  --button-active-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+  --button-secondary-bg: rgba(0, 0, 0, 0.2);
+  --button-secondary-border: rgba(255, 255, 255, 0.1);
+  --button-secondary-text: rgba(255, 255, 255, 0.8);
+  --button-secondary-hover-bg: rgba(255, 255, 255, 0.1);
+  --button-secondary-hover-border: #ffffff;
+  --button-secondary-hover-text: #ffffff;
+  --scroll-track: rgba(0, 0, 0, 0.1);
+  --scroll-thumb: rgba(255, 255, 255, 0.2);
+  --scroll-thumb-hover: var(--accent-cyan);
   
   /* Rozmiary */
   --cell-size: 30px;
   --gap-size: 2px;
   --hint-row-width: 100px;
   --grid-padding: 5px;
+}
+
+:root[data-theme="light"] {
+  --bg-gradient: linear-gradient(135deg, #f7fbff 0%, #dde7ff 100%);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(15, 23, 42, 0.12);
+  --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.12);
+  --text-color: #0f172a;
+  --text-strong: #0f172a;
+  --text-secondary: rgba(15, 23, 42, 0.7);
+  --text-muted: rgba(15, 23, 42, 0.6);
+  --accent-cyan: #0ea5e9;
+  --accent-purple: #6366f1;
+  --primary-accent: #0ea5e9;
+  --cell-empty: rgba(15, 23, 42, 0.05);
+  --cell-hover: rgba(15, 23, 42, 0.12);
+  --cell-filled-gradient: linear-gradient(45deg, #0ea5e9, #6366f1);
+  --cell-x-color: rgba(15, 23, 42, 0.35);
+  --title-glow: rgba(14, 165, 233, 0.35);
+  --toggle-bg: rgba(255, 255, 255, 0.85);
+  --toggle-border: rgba(15, 23, 42, 0.12);
+  --toggle-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+  --toggle-btn-border: rgba(15, 23, 42, 0.18);
+  --toggle-hover-border: rgba(15, 23, 42, 0.5);
+  --toggle-active-shadow: 0 0 12px rgba(14, 165, 233, 0.25);
+  --banner-bg: rgba(255, 255, 255, 0.8);
+  --banner-border: rgba(14, 165, 233, 0.35);
+  --banner-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+  --panel-bg: rgba(255, 255, 255, 0.7);
+  --panel-border: rgba(15, 23, 42, 0.12);
+  --panel-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+  --panel-bg-strong: rgba(15, 23, 42, 0.08);
+  --modal-overlay: rgba(15, 23, 42, 0.45);
+  --fixed-bar-bg: rgba(248, 250, 255, 0.95);
+  --fixed-bar-border: rgba(15, 23, 42, 0.12);
+  --fixed-bar-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  --progress-track-bg: rgba(15, 23, 42, 0.08);
+  --hint-bg: rgba(255, 255, 255, 0.7);
+  --hint-border: rgba(15, 23, 42, 0.12);
+  --hint-hover-bg: rgba(15, 23, 42, 0.06);
+  --button-bg: rgba(255, 255, 255, 0.85);
+  --button-border: rgba(15, 23, 42, 0.16);
+  --button-text: #0f172a;
+  --button-hover-bg: rgba(255, 255, 255, 1);
+  --button-hover-shadow: 0 6px 18px rgba(15, 23, 42, 0.18);
+  --button-active-shadow: 0 0 18px rgba(14, 165, 233, 0.25);
+  --button-secondary-bg: rgba(15, 23, 42, 0.06);
+  --button-secondary-border: rgba(15, 23, 42, 0.2);
+  --button-secondary-text: rgba(15, 23, 42, 0.8);
+  --button-secondary-hover-bg: rgba(15, 23, 42, 0.12);
+  --button-secondary-hover-border: rgba(15, 23, 42, 0.5);
+  --button-secondary-hover-text: #0f172a;
+  --scroll-track: rgba(15, 23, 42, 0.08);
+  --scroll-thumb: rgba(15, 23, 42, 0.2);
+  --scroll-thumb-hover: #0ea5e9;
 }
 
 * {
@@ -60,9 +156,9 @@ body {
 
 /* Button Styles */
 button.btn-neon {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  color: var(--button-text);
   padding: 12px 24px;
   font-size: 0.95rem;
   border-radius: 30px;
@@ -79,21 +175,21 @@ button.btn-neon {
 }
 
 button.btn-neon:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--button-hover-bg);
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: var(--button-hover-shadow);
 }
 
 button.btn-neon.active {
   background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
   border-color: transparent;
-  box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+  box-shadow: var(--button-active-shadow);
   font-weight: 700;
 }
 
 button.btn-neon.secondary {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(0,0,0,0.2);
+  border-color: var(--button-secondary-border);
+  background: var(--button-secondary-bg);
 }
 
 /* Scrollbar */
@@ -101,14 +197,14 @@ button.btn-neon.secondary {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.1);
+  background: var(--scroll-track);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
+  background: var(--scroll-thumb);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-cyan);
+  background: var(--scroll-thumb-hover);
 }
 
 /* Animations */

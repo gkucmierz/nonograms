@@ -41,10 +41,10 @@ const progressText = computed(() => `${store.progressPercentage.toFixed(3)}%`);
   align-items: center;
   padding: 20px 40px;
   border-radius: 15px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--panel-bg);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
   margin-bottom: 30px;
   width: 100%;
   max-width: 600px;
@@ -60,13 +60,13 @@ const progressText = computed(() => `${store.progressPercentage.toFixed(3)}%`);
 .label {
   font-size: 0.8rem;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
   letter-spacing: 1px;
 }
 
 .value {
   font-size: 1.8rem;
-  color: #fff;
+  color: var(--text-strong);
   font-weight: 300;
   font-family: 'Courier New', monospace;
 }

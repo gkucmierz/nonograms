@@ -70,7 +70,7 @@ const confirm = () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--modal-overlay);
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
@@ -114,9 +114,9 @@ p {
     min-width: 64px;
     padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--glass-border);
-    color: #fff;
+    background: var(--panel-bg-strong);
+    border: 1px solid var(--panel-border);
+    color: var(--text-strong);
     font-size: 1.1rem;
     text-align: center;
 }
@@ -128,7 +128,7 @@ input[type="range"] {
     border-radius: 999px;
     background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
     outline: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--panel-border);
     box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
 }
 
@@ -137,7 +137,7 @@ input[type="range"]::-webkit-slider-thumb {
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--text-strong);
     border: 2px solid var(--accent-cyan);
     box-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
     cursor: pointer;
@@ -147,7 +147,7 @@ input[type="range"]::-moz-range-thumb {
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--text-strong);
     border: 2px solid var(--accent-cyan);
     box-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
     cursor: pointer;
@@ -157,7 +157,7 @@ input[type="range"]::-moz-range-thumb {
     width: min(300px, 70vw);
     display: flex;
     justify-content: space-between;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-muted);
     font-size: 0.85rem;
 }
 

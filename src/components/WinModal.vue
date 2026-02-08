@@ -308,7 +308,7 @@ onUnmounted(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--modal-overlay);
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
@@ -355,7 +355,7 @@ p {
 .stats {
   margin-bottom: 30px;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--panel-bg-strong);
   border-radius: 8px;
 }
 
@@ -364,7 +364,7 @@ p {
 }
 
 .stat strong {
-  color: #fff;
+  color: var(--text-strong);
   margin-left: 10px;
 }
 
@@ -379,7 +379,7 @@ p {
   font-size: 0.95rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
 }
 
 .share-buttons {

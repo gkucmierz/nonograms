@@ -21,7 +21,9 @@ const canInstall = ref(false);
 const installDismissed = ref(false);
 const isCoarsePointer = ref(false);
 const isStandalone = ref(false);
+const themePreference = ref('system');
 let displayModeMedia = null;
+let prefersColorSchemeMedia = null;
 
 const installLabel = computed(() => {
   return isCoarsePointer.value ? t('pwa.installMobile') : t('pwa.installDesktop');
@@ -60,12 +62,46 @@ const handleInstall = async () => {
   }
 };
 
+const resolveSystemTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+
+const applyTheme = () => {
+  const nextTheme = themePreference.value === 'system' ? resolveSystemTheme() : themePreference.value;
+  document.documentElement.dataset.theme = nextTheme;
+};
+
+const setThemePreference = (value) => {
+  themePreference.value = value;
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('theme', value);
+  }
+  applyTheme();
+};
+
+const handleSystemThemeChange = () => {
+  if (themePreference.value === 'system') {
+    applyTheme();
+  }
+};
+
 onMounted(() => {
   if (!store.loadState()) {
     store.initGame(); // Inicjalizacja domyślnej gry jeśli brak zapisu
   }
   if (typeof window !== 'undefined') {
     isCoarsePointer.value = window.matchMedia('(pointer: coarse)').matches;
+    const storedTheme = typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null;
+    if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
+      themePreference.value = storedTheme;
+    }
+    applyTheme();
+    prefersColorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersColorSchemeMedia?.addEventListener) {
+      prefersColorSchemeMedia.addEventListener('change', handleSystemThemeChange);
+    } else if (prefersColorSchemeMedia?.addListener) {
+      prefersColorSchemeMedia.addListener(handleSystemThemeChange);
+    }
     updateStandalone();
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
@@ -82,6 +118,11 @@ onUnmounted(() => {
   if (typeof window === 'undefined') return;
   window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
   window.removeEventListener('appinstalled', handleAppInstalled);
+  if (prefersColorSchemeMedia?.removeEventListener) {
+    prefersColorSchemeMedia.removeEventListener('change', handleSystemThemeChange);
+  } else if (prefersColorSchemeMedia?.removeListener) {
+    prefersColorSchemeMedia.removeListener(handleSystemThemeChange);
+  }
   if (displayModeMedia?.removeEventListener) {
     displayModeMedia.removeEventListener('change', updateStandalone);
   } else if (displayModeMedia?.removeListener) {
@@ -96,9 +137,23 @@ onUnmounted(() => {
 
     <header class="game-header">
       <h1>{{ t('app.title') }}</h1>
-      <div class="lang-toggle">
-        <button class="lang-btn" :class="{ active: locale === 'pl' }" @click="setLocale('pl')">PL</button>
-        <button class="lang-btn" :class="{ active: locale === 'en' }" @click="setLocale('en')">EN</button>
+      <div class="header-toggles">
+        <div class="lang-toggle">
+          <button class="lang-btn" :class="{ active: locale === 'pl' }" @click="setLocale('pl')">PL</button>
+          <button class="lang-btn" :class="{ active: locale === 'en' }" @click="setLocale('en')">EN</button>
+        </div>
+        <div class="theme-toggle">
+          <span class="theme-label">{{ t('theme.label') }}</span>
+          <button class="theme-btn" :class="{ active: themePreference === 'system' }" @click="setThemePreference('system')">
+            {{ t('theme.system') }}
+          </button>
+          <button class="theme-btn" :class="{ active: themePreference === 'light' }" @click="setThemePreference('light')">
+            {{ t('theme.light') }}
+          </button>
+          <button class="theme-btn" :class="{ active: themePreference === 'dark' }" @click="setThemePreference('dark')">
+            {{ t('theme.dark') }}
+          </button>
+        </div>
       </div>
       <div class="underline"></div>
     </header>
@@ -166,8 +221,8 @@ h1 {
   margin: 0;
   letter-spacing: 5px;
   font-weight: 300;
-  color: #fff;
-  text-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  color: var(--text-strong);
+  text-shadow: 0 0 20px var(--title-glow);
 }
 
 .underline {
@@ -178,21 +233,29 @@ h1 {
   box-shadow: 0 0 10px var(--primary-accent);
 }
 
+.header-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+
 .lang-toggle {
   display: inline-flex;
   gap: 8px;
-  margin-top: 12px;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  box-shadow: var(--toggle-shadow);
 }
 
 .lang-btn {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  border: 1px solid var(--toggle-btn-border);
+  color: var(--text-strong);
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -203,11 +266,50 @@ h1 {
 
 .lang-btn.active {
   border-color: var(--primary-accent);
-  box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+  box-shadow: var(--toggle-active-shadow);
 }
 
 .lang-btn:hover {
-  border-color: #fff;
+  border-color: var(--toggle-hover-border);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  box-shadow: var(--toggle-shadow);
+}
+
+.theme-label {
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--toggle-btn-border);
+  color: var(--text-strong);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-btn.active {
+  border-color: var(--primary-accent);
+  box-shadow: var(--toggle-active-shadow);
+}
+
+.theme-btn:hover {
+  border-color: var(--toggle-hover-border);
 }
 
 .game-layout {
@@ -226,15 +328,15 @@ h1 {
   gap: 16px;
   padding: 12px 16px;
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(0, 242, 254, 0.35);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  background: var(--banner-bg);
+  border: 1px solid var(--banner-border);
+  box-shadow: var(--banner-shadow);
   width: min(680px, 92vw);
   margin: -10px 0 20px;
 }
 
 .install-text {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   letter-spacing: 0.5px;
 }
@@ -252,8 +354,8 @@ h1 {
 
 .install-close {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  border: 1px solid var(--toggle-btn-border);
+  color: var(--text-strong);
   width: 32px;
   height: 32px;
   border-radius: 999px;
@@ -267,7 +369,7 @@ h1 {
 }
 
 .install-close:hover {
-  border-color: #fff;
+  border-color: var(--toggle-hover-border);
 }
 
 /* Remove old glass panel style from game-layout since we split it */

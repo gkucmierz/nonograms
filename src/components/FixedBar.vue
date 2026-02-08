@@ -62,16 +62,16 @@ const toggleVisibility = () => {
     left: 0;
     width: 100%;
     height: 60px;
-    background: rgba(0, 0, 0, 0.85);
+    background: var(--fixed-bar-bg);
     backdrop-filter: blur(10px);
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--fixed-bar-border);
     transform: translateY(-100%);
     transition: transform 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    box-shadow: var(--fixed-bar-shadow);
 }
 
 #fixed-bar.visible {
@@ -95,13 +95,13 @@ const toggleVisibility = () => {
     display: flex;
     gap: 10px;
     align-items: center;
-    color: #fff;
+    color: var(--text-strong);
 }
 
 .fixed-stat span:first-child {
-    opacity: 0.7;
     font-size: 0.9rem;
     text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 .progress-line-container {
@@ -110,7 +110,7 @@ const toggleVisibility = () => {
     left: 0;
     width: 100%;
     height: 3px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--progress-track-bg);
 }
 
 .progress-line-fill {
