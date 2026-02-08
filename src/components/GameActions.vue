@@ -19,7 +19,6 @@ function handleNewRandom() {
     <button class="btn-neon secondary" @click="store.resetGame">RESET</button>
     <button class="btn-neon secondary" @click="handleNewRandom">NOWA LOSOWA</button>
     <button class="btn-neon secondary" @click="store.undo">COFNIJ</button>
-    <button class="btn-neon secondary" @click="store.checkWin">SPRAWDŹ</button>
   </div>
 </template>
 

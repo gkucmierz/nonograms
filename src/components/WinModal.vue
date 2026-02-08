@@ -6,6 +6,8 @@ import { usePuzzleStore } from '@/stores/puzzle';
 const store = usePuzzleStore();
 const fireworksRef = ref(null);
 let fireworksInstance = null;
+let audioContext = null;
+let masterGain = null;
 
 const handleClose = () => {
   store.closeWinModal();
@@ -14,6 +16,53 @@ const handleClose = () => {
 const handleKeyDown = (e) => {
   if (e.key === 'Escape') {
     handleClose();
+  }
+};
+
+const playFanfare = async () => {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return;
+  audioContext = new AudioCtx();
+  if (audioContext.state === 'suspended') {
+    try {
+      await audioContext.resume();
+    } catch {
+      return;
+    }
+  }
+  masterGain = audioContext.createGain();
+  masterGain.gain.value = 0.18;
+  masterGain.connect(audioContext.destination);
+  const notes = [
+    { time: 0.0, dur: 0.18, freqs: [523.25, 659.25, 783.99] },
+    { time: 0.2, dur: 0.18, freqs: [587.33, 740.0, 880.0] },
+    { time: 0.4, dur: 0.22, freqs: [659.25, 830.61, 987.77] },
+    { time: 0.7, dur: 0.35, freqs: [698.46, 880.0, 1046.5] }
+  ];
+  const now = audioContext.currentTime;
+  notes.forEach(({ time, dur, freqs }) => {
+    freqs.forEach((freq) => {
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, now + time);
+      gain.gain.linearRampToValueAtTime(0.8, now + time + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + time + dur);
+      osc.connect(gain);
+      gain.connect(masterGain);
+      osc.start(now + time);
+      osc.stop(now + time + dur + 0.05);
+    });
+  });
+};
+
+const triggerVibration = () => {
+  if (!('vibrate' in navigator)) return;
+  const isCoarse = window.matchMedia?.('(pointer: coarse)')?.matches;
+  const isTouch = navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
+  if (isCoarse || isTouch) {
+    navigator.vibrate([80, 40, 120, 40, 180]);
   }
 };
 
@@ -37,6 +86,8 @@ onMounted(() => {
     });
     fireworksInstance.start();
   }
+  playFanfare();
+  triggerVibration();
   window.addEventListener('keydown', handleKeyDown);
 });
 
@@ -44,6 +95,14 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown);
   fireworksInstance?.stop(true);
   fireworksInstance = null;
+  if ('vibrate' in navigator) {
+    navigator.vibrate(0);
+  }
+  if (audioContext) {
+    audioContext.close();
+    audioContext = null;
+  }
+  masterGain = null;
 });
 </script>
 
