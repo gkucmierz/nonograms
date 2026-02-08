@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
+import { useI18n } from '@/composables/useI18n';
 
 const emit = defineEmits(['close']);
 const store = usePuzzleStore();
+const { t } = useI18n();
 
 const customSize = ref(10);
 const errorMsg = ref('');
@@ -11,7 +13,7 @@ const errorMsg = ref('');
 const confirm = () => {
   const size = parseInt(customSize.value);
   if (isNaN(size) || size < 5 || size > 100) {
-    errorMsg.value = 'Rozmiar musi być między 5 a 100!';
+    errorMsg.value = t('custom.sizeError');
     return;
   }
   
@@ -23,8 +25,8 @@ const confirm = () => {
 <template>
   <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal glass-panel">
-      <h2>GRA WŁASNA</h2>
-      <p>Wprowadź rozmiar siatki (5 - 100):</p>
+      <h2>{{ t('custom.title') }}</h2>
+      <p>{{ t('custom.prompt') }}</p>
       
       <div class="input-group">
         <input 
@@ -39,8 +41,8 @@ const confirm = () => {
       <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
 
       <div class="actions">
-        <button class="btn-neon secondary" @click="emit('close')">Anuluj</button>
-        <button class="btn-neon" @click="confirm">Start</button>
+        <button class="btn-neon secondary" @click="emit('close')">{{ t('custom.cancel') }}</button>
+        <button class="btn-neon" @click="confirm">{{ t('custom.start') }}</button>
       </div>
     </div>
   </div>

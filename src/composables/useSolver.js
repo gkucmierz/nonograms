@@ -1,15 +1,17 @@
 import { ref, computed, onUnmounted } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
+import { useI18n } from '@/composables/useI18n';
 
 export function useSolver() {
     const store = usePuzzleStore();
+    const { t, locale } = useI18n();
     
     const isPlaying = ref(false);
     const isProcessing = ref(false);
     const speedIndex = ref(0);
     const speeds = [1000, 500, 250, 125];
     const speedLabels = ['x1', 'x2', 'x3', 'x4'];
-    const statusText = ref('Oczekiwanie...');
+    const statusText = ref(t('guide.waiting'));
     
     let intervalId = null;
     let worker = null;
@@ -18,7 +20,7 @@ export function useSolver() {
     function step() {
         if (store.isGameWon) {
             pause();
-            statusText.value = "Rozwiązane!";
+            statusText.value = t('guide.solved');
             return;
         }
         if (isProcessing.value) return;
@@ -28,7 +30,7 @@ export function useSolver() {
         const playerGrid = store.playerGrid.map(row => row.slice());
         const solution = store.solution.map(row => row.slice());
         const id = ++requestId;
-        worker.postMessage({ id, playerGrid, solution });
+        worker.postMessage({ id, playerGrid, solution, locale: locale.value });
     }
 
     function togglePlay() {

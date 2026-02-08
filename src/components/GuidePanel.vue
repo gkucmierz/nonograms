@@ -1,5 +1,6 @@
 <script setup>
 import { useSolver } from '@/composables/useSolver';
+import { useI18n } from '@/composables/useI18n';
 
 const { 
     isPlaying, 
@@ -9,6 +10,7 @@ const {
     togglePlay, 
     changeSpeed 
 } = useSolver();
+const { t } = useI18n();
 </script>
 
 <template>
@@ -17,15 +19,15 @@ const {
     
     <div class="guide-controls">
       <button class="btn-neon small" @click="togglePlay" :class="{ active: isPlaying }">
-        {{ isPlaying ? 'PAUSE' : 'PLAY' }}
+        {{ isPlaying ? t('guide.pause') : t('guide.play') }}
       </button>
       
       <button class="btn-neon small" @click="step" :disabled="isPlaying">
-        STEP
+        {{ t('guide.step') }}
       </button>
       
       <button class="btn-neon small" @click="changeSpeed">
-        SPEED: {{ speedLabel }}
+        {{ t('guide.speed') }}: {{ speedLabel }}
       </button>
     </div>
   </div>

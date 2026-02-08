@@ -2,8 +2,10 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import { Fireworks } from 'fireworks-js';
 import { usePuzzleStore } from '@/stores/puzzle';
+import { useI18n } from '@/composables/useI18n';
 
 const store = usePuzzleStore();
+const { t } = useI18n();
 const fireworksRef = ref(null);
 let fireworksInstance = null;
 let audioContext = null;
@@ -110,18 +112,18 @@ onUnmounted(() => {
   <div class="modal-overlay" @click.self="handleClose">
     <div ref="fireworksRef" class="fireworks-layer"></div>
     <div class="modal glass-panel">
-      <h2>GRATULACJE!</h2>
-      <p>Rozwiązałeś zagadkę!</p>
+      <h2>{{ t('win.title') }}</h2>
+      <p>{{ t('win.message') }}</p>
       
       <div class="stats">
         <div class="stat">
-          <span>Czas:</span>
+          <span>{{ t('win.time') }}</span>
           <strong>{{ store.elapsedTime }}s</strong>
         </div>
       </div>
 
       <div class="actions">
-        <button class="btn-neon" @click="store.resetGame">Zagraj Ponownie</button>
+        <button class="btn-neon" @click="store.resetGame">{{ t('win.playAgain') }}</button>
       </div>
     </div>
   </div>

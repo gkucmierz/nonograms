@@ -1,13 +1,16 @@
 <script setup>
+import { computed } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
+import { useI18n } from '@/composables/useI18n';
 
 const store = usePuzzleStore();
+const { t } = useI18n();
 
-const levels = [
-  { id: 'easy', label: 'ŁATWY 5X5' },
-  { id: 'medium', label: 'ŚREDNI 10X10' },
-  { id: 'hard', label: 'TRUDNY 15X15' }
-];
+const levels = computed(() => [
+  { id: 'easy', label: t('level.easy') },
+  { id: 'medium', label: t('level.medium') },
+  { id: 'hard', label: t('level.hard') }
+]);
 
 const emit = defineEmits(['open-custom', 'toggle-guide']);
 </script>
@@ -29,14 +32,14 @@ const emit = defineEmits(['open-custom', 'toggle-guide']);
         :class="{ active: store.currentLevelId === 'custom' }"
         @click="emit('open-custom')"
     >
-        WŁASNY
+        {{ t('level.custom') }}
     </button>
 
     <button 
         class="btn-neon guide-btn"
         @click="emit('toggle-guide')"
     >
-        GUIDE ❓
+        {{ t('level.guide') }}
     </button>
   </div>
 </template>

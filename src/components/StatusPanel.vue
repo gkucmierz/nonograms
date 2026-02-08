@@ -2,9 +2,11 @@
 import { computed } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useTimer } from '@/composables/useTimer';
+import { useI18n } from '@/composables/useI18n';
 
 const store = usePuzzleStore();
 const { formatTime } = useTimer();
+const { t } = useI18n();
 
 const formattedTime = computed(() => formatTime(store.elapsedTime));
 const progressText = computed(() => `${store.progressPercentage.toFixed(3)}%`);
@@ -13,17 +15,17 @@ const progressText = computed(() => `${store.progressPercentage.toFixed(3)}%`);
 <template>
   <div class="status-panel glass-panel">
     <div class="stat-item">
-      <span class="label">CZAS</span>
+      <span class="label">{{ t('status.time') }}</span>
       <span class="value">{{ formattedTime }}</span>
     </div>
     
     <div class="stat-item">
-      <span class="label">RUCHY</span>
+      <span class="label">{{ t('status.moves') }}</span>
       <span class="value">{{ store.moves }}</span>
     </div>
     
     <div class="stat-item">
-      <span class="label">POSTĘP</span>
+      <span class="label">{{ t('status.progress') }}</span>
       <div class="progress-wrapper">
          <span class="value small">{{ progressText }}</span>
          <span class="eye-icon">👁️</span>

@@ -1,7 +1,9 @@
 <script setup>
 import { usePuzzleStore } from '@/stores/puzzle';
+import { useI18n } from '@/composables/useI18n';
 
 const store = usePuzzleStore();
+const { t } = useI18n();
 
 function handleNewRandom() {
     // If currently custom, regenerate custom.
@@ -16,9 +18,9 @@ function handleNewRandom() {
 
 <template>
   <div class="game-actions">
-    <button class="btn-neon secondary" @click="store.resetGame">RESET</button>
-    <button class="btn-neon secondary" @click="handleNewRandom">NOWA LOSOWA</button>
-    <button class="btn-neon secondary" @click="store.undo">COFNIJ</button>
+    <button class="btn-neon secondary" @click="store.resetGame">{{ t('actions.reset') }}</button>
+    <button class="btn-neon secondary" @click="handleNewRandom">{{ t('actions.random') }}</button>
+    <button class="btn-neon secondary" @click="store.undo">{{ t('actions.undo') }}</button>
   </div>
 </template>
 

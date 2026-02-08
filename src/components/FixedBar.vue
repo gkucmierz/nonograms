@@ -2,9 +2,11 @@
 import { computed, ref } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useTimer } from '@/composables/useTimer';
+import { useI18n } from '@/composables/useI18n';
 
 const store = usePuzzleStore();
 const { formatTime } = useTimer();
+const { t } = useI18n();
 
 const isVisible = ref(false);
 const isProgressVisible = ref(true); // Toggle for progress percentage
@@ -33,14 +35,14 @@ const toggleVisibility = () => {
   <div id="fixed-bar" :class="{ visible: isVisible }">
     <div class="fixed-content">
       <div class="fixed-stat">
-        <span>Czas:</span>
+        <span>{{ t('fixed.time') }}</span>
         <span>{{ formattedTime }}</span>
       </div>
       
       <div class="fixed-stat">
-        <span>Postęp:</span>
+        <span>{{ t('fixed.progress') }}</span>
         <span style="min-width: 60px; text-align: right;">{{ progressText }}</span>
-        <button class="btn-eye" @click="toggleVisibility" :title="isProgressVisible ? 'Ukryj' : 'Pokaż'">
+        <button class="btn-eye" @click="toggleVisibility" :title="isProgressVisible ? t('fixed.hide') : t('fixed.show')">
            <span v-if="isProgressVisible">👁️</span>
            <span v-else>🔒</span>
         </button>

@@ -1,5 +1,45 @@
 import { calculateHints } from '../utils/puzzleUtils.js';
 
+const messages = {
+  pl: {
+    'worker.solved': 'Rozwiązane!',
+    'worker.logicRow': 'Logika: Wiersz {row}, Kolumna {col} -> {state}',
+    'worker.logicCol': 'Logika: Kolumna {col}, Wiersz {row} -> {state}',
+    'worker.guess': 'Zgadywanie: Wiersz {row}, Kolumna {col}',
+    'worker.done': 'Koniec!',
+    'worker.state.filled': 'Pełne',
+    'worker.state.empty': 'Puste'
+  },
+  en: {
+    'worker.solved': 'Solved!',
+    'worker.logicRow': 'Logic: Row {row}, Column {col} -> {state}',
+    'worker.logicCol': 'Logic: Column {col}, Row {row} -> {state}',
+    'worker.guess': 'Guessing: Row {row}, Column {col}',
+    'worker.done': 'Done!',
+    'worker.state.filled': 'Filled',
+    'worker.state.empty': 'Empty'
+  }
+};
+
+const resolveLocale = (value) => {
+  if (!value) return 'en';
+  const short = String(value).toLowerCase().split('-')[0];
+  return short === 'pl' ? 'pl' : 'en';
+};
+
+const format = (text, params = {}) => {
+  return text.replace(/\{(\w+)\}/g, (_, key) => {
+    const value = params[key];
+    return value === undefined ? `{${key}}` : String(value);
+  });
+};
+
+const t = (locale, key, params) => {
+  const lang = messages[locale] || messages.en;
+  const value = lang[key] || messages.en[key] || key;
+  return typeof value === 'string' ? format(value, params) : key;
+};
+
 const getPermutations = (length, hints) => {
   const results = [];
   const recurse = (index, hintIndex, currentLine) => {
@@ -73,9 +113,9 @@ const isSolved = (grid, solution) => {
   return true;
 };
 
-const handleStep = (playerGrid, solution) => {
+const handleStep = (playerGrid, solution, locale) => {
   if (isSolved(playerGrid, solution)) {
-    return { type: 'done', statusText: 'Rozwiązane!' };
+    return { type: 'done', statusText: t(locale, 'worker.solved') };
   }
 
   const size = solution.length;
@@ -86,12 +126,13 @@ const handleStep = (playerGrid, solution) => {
     const hints = rowHints[r];
     const result = solveLineLogic(rowLine, hints, size);
     if (result.index !== -1) {
+      const stateLabel = t(locale, result.state === 1 ? 'worker.state.filled' : 'worker.state.empty');
       return {
         type: 'move',
         r,
         c: result.index,
         state: result.state,
-        statusText: `Logika: Wiersz ${r + 1}, Kolumna ${result.index + 1} -> ${result.state === 1 ? 'Pełne' : 'Puste'}`
+        statusText: t(locale, 'worker.logicRow', { row: r + 1, col: result.index + 1, state: stateLabel })
       };
     }
   }
@@ -102,12 +143,13 @@ const handleStep = (playerGrid, solution) => {
     const hints = colHints[c];
     const result = solveLineLogic(colLine, hints, size);
     if (result.index !== -1) {
+      const stateLabel = t(locale, result.state === 1 ? 'worker.state.filled' : 'worker.state.empty');
       return {
         type: 'move',
         r: result.index,
         c,
         state: result.state,
-        statusText: `Logika: Kolumna ${c + 1}, Wiersz ${result.index + 1} -> ${result.state === 1 ? 'Pełne' : 'Puste'}`
+        statusText: t(locale, 'worker.logicCol', { row: result.index + 1, col: c + 1, state: stateLabel })
       };
     }
   }
@@ -128,17 +170,18 @@ const handleStep = (playerGrid, solution) => {
           r,
           c,
           state: newState,
-          statusText: `Zgadywanie: Wiersz ${r + 1}, Kolumna ${c + 1}`
+          statusText: t(locale, 'worker.guess', { row: r + 1, col: c + 1 })
         };
       }
     }
   }
 
-  return { type: 'done', statusText: 'Koniec!' };
+  return { type: 'done', statusText: t(locale, 'worker.done') };
 };
 
 self.onmessage = (event) => {
-  const { id, playerGrid, solution } = event.data;
-  const result = handleStep(playerGrid, solution);
+  const { id, playerGrid, solution, locale } = event.data;
+  const resolved = resolveLocale(locale);
+  const result = handleStep(playerGrid, solution, resolved);
   self.postMessage({ id, ...result });
 };
