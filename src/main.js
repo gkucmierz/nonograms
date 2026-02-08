@@ -29,3 +29,20 @@ app.use(createPinia())
 app.directive('cell-hover', vCellHover)
 
 app.mount('#app')
+
+if ('serviceWorker' in navigator) {
+  let refreshing = false
+  const triggerReload = () => {
+    if (refreshing) return
+    refreshing = true
+    window.location.reload()
+  }
+  navigator.serviceWorker.addEventListener('controllerchange', triggerReload)
+  const checkForUpdate = () => {
+    navigator.serviceWorker.getRegistration().then((registration) => registration?.update())
+  }
+  window.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') checkForUpdate()
+  })
+  window.addEventListener('focus', checkForUpdate)
+}
