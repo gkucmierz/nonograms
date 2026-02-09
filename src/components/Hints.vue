@@ -32,12 +32,13 @@ defineProps({
       v-for="(group, index) in hints" 
       :key="index" 
       class="hint-group"
-      :class="{ 'hint-alt': index % 2 !== 0, 'is-active': index === activeIndex }"
+      :class="{ 'is-active': index === activeIndex }"
     >
       <span 
         v-for="(num, idx) in group" 
         :key="idx" 
         class="hint-num"
+        :class="{ 'hint-alt': idx % 2 !== 0 }"
       >
         {{ num }}
       </span>
@@ -94,8 +95,8 @@ defineProps({
   padding: 2px;
 }
 
-/* Alternating Colors */
-.hint-group.hint-alt .hint-num {
+/* Alternating Colors within the group */
+.hint-num.hint-alt {
     color: var(--accent-cyan);
 }
 
