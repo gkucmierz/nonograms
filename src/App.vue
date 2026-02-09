@@ -13,7 +13,7 @@ import FixedBar from './components/FixedBar.vue';
 
 // Main App Entry
 const store = usePuzzleStore();
-const { t, locale, setLocale } = useI18n();
+const { t, locale, setLocale, locales } = useI18n();
 const showCustomModal = ref(false);
 const showGuide = ref(false);
 const deferredPrompt = ref(null);
@@ -74,53 +74,9 @@ const languageFlags = {
 };
 
 const languages = computed(() => {
-  const items = [
-    { code: 'en', label: t('language.en') },
-    { code: 'zh', label: t('language.zh') },
-    { code: 'hi', label: t('language.hi') },
-    { code: 'es', label: t('language.es') },
-    { code: 'fr', label: t('language.fr') },
-    { code: 'ar', label: t('language.ar') },
-    { code: 'bn', label: t('language.bn') },
-    { code: 'ru', label: t('language.ru') },
-    { code: 'pt', label: t('language.pt') },
-    { code: 'ur', label: t('language.ur') },
-    { code: 'pl', label: t('language.pl') },
-    { code: 'de', label: t('language.de') },
-    { code: 'it', label: t('language.it') },
-    { code: 'nl', label: t('language.nl') },
-    { code: 'sv', label: t('language.sv') },
-    { code: 'da', label: t('language.da') },
-    { code: 'fi', label: t('language.fi') },
-    { code: 'no', label: t('language.no') },
-    { code: 'cs', label: t('language.cs') },
-    { code: 'sk', label: t('language.sk') },
-    { code: 'hu', label: t('language.hu') },
-    { code: 'ro', label: t('language.ro') },
-    { code: 'bg', label: t('language.bg') },
-    { code: 'el', label: t('language.el') },
-    { code: 'uk', label: t('language.uk') },
-    { code: 'be', label: t('language.be') },
-    { code: 'sr', label: t('language.sr') },
-    { code: 'hr', label: t('language.hr') },
-    { code: 'sl', label: t('language.sl') },
-    { code: 'lt', label: t('language.lt') },
-    { code: 'lv', label: t('language.lv') },
-    { code: 'et', label: t('language.et') },
-    { code: 'ga', label: t('language.ga') },
-    { code: 'is', label: t('language.is') },
-    { code: 'mt', label: t('language.mt') },
-    { code: 'sq', label: t('language.sq') },
-    { code: 'mk', label: t('language.mk') },
-    { code: 'bs', label: t('language.bs') },
-    { code: 'tr', label: t('language.tr') },
-    { code: 'ca', label: t('language.ca') },
-    { code: 'gl', label: t('language.gl') },
-    { code: 'cy', label: t('language.cy') },
-    { code: 'gd', label: t('language.gd') },
-    { code: 'eu', label: t('language.eu') }
-  ];
-  return items.sort((a, b) => a.label.localeCompare(b.label, locale.value));
+  return locales.value
+    .map((code) => ({ code, label: t(`language.${code}`) }))
+    .sort((a, b) => a.label.localeCompare(b.label, locale.value));
 });
 
 const installLabel = computed(() => {
@@ -574,6 +530,23 @@ h1 {
     font-size: 2.4rem;
     letter-spacing: 3px;
   }
+  .lang-menu {
+    position: fixed;
+    top: 64px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(92vw, 340px);
+    min-width: 240px;
+    z-index: 1005;
+    max-height: calc(100vh - 96px);
+    padding: 12px;
+    border-radius: 18px;
+  }
+  .lang-option {
+    font-size: 1rem;
+    padding: 10px 12px;
+  }
 }
 
 @media (max-width: 420px) {
@@ -582,17 +555,7 @@ h1 {
     letter-spacing: 2px;
   }
   .lang-menu {
-    position: fixed;
-    top: 64px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: min(90vw, 320px);
-    min-width: 240px;
-    z-index: 1005;
-    max-height: calc(100vh - 96px);
-    padding: 12px;
-    border-radius: 18px;
+    width: min(94vw, 360px);
   }
 }
 </style>

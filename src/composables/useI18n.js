@@ -1,18 +1,5 @@
 import { ref, computed } from 'vue';
 
-const supportedLocales = [
-  'pl','en','zh','hi','es','fr','ar','bn','ru','pt','ur',
-  'de','it','nl','sv','da','fi','no','cs','sk','hu','ro','bg','el','uk','be',
-  'sr','hr','sl','lt','lv','et','ga','is','mt','sq','mk','bs','tr','ca','gl','cy','gd','eu'
-];
-
-const detectLocale = () => {
-  if (typeof navigator === 'undefined') return 'en';
-  const browserLocale = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
-  const short = browserLocale.toLowerCase().split('-')[0];
-  return supportedLocales.includes(short) ? short : 'en';
-};
-
 const messages = {
   pl: {
     'app.title': 'Nonograms',
@@ -787,6 +774,28 @@ const messages = {
   }
 };
 
+const requiredKeys = [
+  'app.title','level.easy','level.medium','level.hard','level.custom','level.guide',
+  'actions.reset','actions.random','actions.undo','status.time','status.moves','status.progress',
+  'fixed.time','fixed.progress','fixed.hide','fixed.show','guide.play','guide.pause','guide.step',
+  'guide.speed','guide.waiting','guide.solved','custom.title','custom.prompt','custom.cancel',
+  'custom.start','custom.sizeError','win.title','win.message','win.time','win.playAgain',
+  'win.shareTitle','win.shareText','win.shareX','win.shareFacebook','win.shareWhatsapp',
+  'win.shareDownload','pwa.installTitle','pwa.installMobile','pwa.installDesktop',
+  'language.label','theme.label','theme.system','theme.light','theme.dark'
+];
+
+const supportedLocales = Object.keys(messages).filter(
+  (code) => requiredKeys.every((k) => messages[code] && messages[code][k])
+);
+
+const detectLocale = () => {
+  if (typeof navigator === 'undefined') return 'en';
+  const browserLocale = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+  const short = browserLocale.toLowerCase().split('-')[0];
+  return supportedLocales.includes(short) ? short : 'en';
+};
+
 const locale = ref(detectLocale());
 
 const format = (text, params = {}) => {
@@ -819,6 +828,7 @@ export function useI18n() {
   return {
     locale: computed(() => locale.value),
     t,
-    setLocale
+    setLocale,
+    locales: computed(() => supportedLocales)
   };
 }
