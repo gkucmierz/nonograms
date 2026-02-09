@@ -403,9 +403,9 @@ h1 {
   top: calc(100% + 8px);
   right: 0;
   min-width: 170px;
-  background: var(--toggle-bg);
-  border: 1px solid var(--toggle-border);
-  box-shadow: var(--toggle-shadow);
+  background: var(--fixed-bar-bg);
+  border: 1px solid var(--fixed-bar-border);
+  box-shadow: var(--fixed-bar-shadow);
   border-radius: 16px;
   padding: 8px;
   display: flex;
