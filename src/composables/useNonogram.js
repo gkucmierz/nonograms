@@ -8,7 +8,7 @@ export function useNonogram() {
   const dragMode = ref(null); // 'fill', 'empty', 'cross'
   const startCellState = ref(null);
 
-  const startDrag = (r, c, isRightClick = false) => {
+  const startDrag = (r, c, isRightClick = false, force = false) => {
     if (store.isGameWon) return;
     
     isDragging.value = true;
@@ -16,9 +16,7 @@ export function useNonogram() {
     
     if (isRightClick) {
         // Right click logic
-        // If current is 1 (filled), do nothing usually? Or ignore?
-        // Standard: Toggle 0 <-> 2
-        if (current === 1) {
+        if (!force && current === 1) {
             dragMode.value = null; // invalid drag start
             return;
         }

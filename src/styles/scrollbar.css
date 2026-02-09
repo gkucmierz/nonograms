@@ -1,0 +1,54 @@
+
+/* Fixed Scroll Bar */
+.fixed-scroll-bar {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  max-width: 400px;
+  height: 44px; /* Increased hit area */
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.fixed-scroll-track {
+  width: 100%;
+  height: 14px; /* Increased visual thickness */
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 7px;
+  position: relative;
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.fixed-scroll-thumb {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: var(--primary-accent);
+  border-radius: 7px;
+  cursor: grab;
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fixed-scroll-thumb:active {
+  cursor: grabbing;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}

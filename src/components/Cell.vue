@@ -34,35 +34,30 @@ const clearLongPress = () => {
 
 const handlePointerDown = (e) => {
   if (e.pointerType === 'mouse') {
-    if (e.button === 0) emit('start-drag', props.r, props.c, false);
-    if (e.button === 2) emit('start-drag', props.r, props.c, true);
+    if (e.button === 0) emit('start-drag', props.r, props.c, false, false);
+    if (e.button === 2) emit('start-drag', props.r, props.c, true, false);
     return;
   }
-  longPressTriggered = false;
-  clearLongPress();
-  longPressTimer = setTimeout(() => {
-    longPressTriggered = true;
-    emit('start-drag', props.r, props.c, true);
-  }, 450);
+  
+  // Touch logic
+  const now = Date.now();
+  if (now - lastTap < 300) {
+    // Double tap -> X (Force)
+    emit('start-drag', props.r, props.c, true, true);
+    lastTap = 0;
+  } else {
+    // Single tap / Start drag -> Fill
+    emit('start-drag', props.r, props.c, false, false);
+    lastTap = now;
+  }
 };
 
 const handlePointerUp = (e) => {
-  if (e.pointerType === 'mouse') return;
-  clearLongPress();
-  if (longPressTriggered) return;
-  const now = Date.now();
-  const isDoubleTap = now - lastTap < 300;
-  lastTap = now;
-  if (isDoubleTap) {
-    emit('start-drag', props.r, props.c, true);
-  } else {
-    emit('start-drag', props.r, props.c, false);
-  }
+  // Handled in pointerdown
 };
 
 const handlePointerCancel = (e) => {
-  if (e.pointerType === 'mouse') return;
-  clearLongPress();
+  // Handled in pointerdown
 };
 </script>
 

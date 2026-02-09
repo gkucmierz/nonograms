@@ -607,14 +607,14 @@ watch(isMobileMenuOpen, (val) => {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     background: rgba(10, 10, 25, 0.98);
     backdrop-filter: blur(20px);
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 0;
     overflow-y: auto;
 }
 
@@ -622,22 +622,24 @@ watch(isMobileMenuOpen, (val) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
+    padding: 10px 20px;
     border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+    flex-shrink: 0;
 }
 
 .mobile-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: var(--primary-neon);
     margin: 0;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-weight: 300;
 }
 
 .mobile-menu-items {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 20px;
 }
 
 .mobile-group {

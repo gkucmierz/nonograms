@@ -15,6 +15,94 @@ const rowHintsRef = ref(null);
 const activeRow = ref(null);
 const activeCol = ref(null);
 const isFinePointer = ref(false);
+const scrollWrapper = ref(null);
+const scrollTrack = ref(null);
+const showScrollbar = ref(false);
+const thumbWidth = ref(20);
+const thumbLeft = ref(0);
+let isDraggingScroll = false;
+let dragStartX = 0;
+let dragStartLeft = 0;
+
+const checkScroll = () => {
+  const el = scrollWrapper.value;
+  if (!el) return;
+  const sw = el.scrollWidth;
+  const cw = el.clientWidth;
+  
+  // Only show custom scrollbar on mobile/tablet (width < 768px) and if content overflows
+  const isMobile = window.innerWidth <= 768;
+  showScrollbar.value = isMobile && (sw > cw + 1);
+  
+  if (showScrollbar.value) {
+    // Thumb width percentage = (viewport / total) * 100
+    const ratio = cw / sw;
+    thumbWidth.value = Math.max(10, ratio * 100);
+  }
+};
+
+const handleScroll = () => {
+  if (isDraggingScroll) return;
+  const el = scrollWrapper.value;
+  if (!el) return;
+  const sw = el.scrollWidth;
+  const cw = el.clientWidth;
+  const sl = el.scrollLeft;
+  const maxScroll = sw - cw;
+  if (maxScroll <= 0) return;
+  
+  // Map scroll position to thumb position (0 to 100 - thumbWidth)
+  const maxThumb = 100 - thumbWidth.value;
+  thumbLeft.value = (sl / maxScroll) * maxThumb;
+};
+
+const startScrollDrag = (e) => {
+  isDraggingScroll = true;
+  dragStartX = e.clientX || e.touches[0].clientX;
+  dragStartLeft = thumbLeft.value;
+  
+  document.addEventListener('mousemove', onScrollDrag);
+  document.addEventListener('mouseup', stopScrollDrag);
+  document.addEventListener('touchmove', onScrollDrag, { passive: false });
+  document.addEventListener('touchend', stopScrollDrag);
+};
+
+const onScrollDrag = (e) => {
+  if (!isDraggingScroll || !scrollTrack.value) return;
+  
+  const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+  const deltaX = clientX - dragStartX;
+  const trackWidth = scrollTrack.value.offsetWidth;
+  
+  if (trackWidth === 0) return;
+  
+  // Calculate delta as percentage of track
+  const deltaPercent = (deltaX / trackWidth) * 100;
+  
+  // New thumb position
+  let newLeft = dragStartLeft + deltaPercent;
+  const maxThumb = 100 - thumbWidth.value;
+  newLeft = Math.max(0, Math.min(maxThumb, newLeft));
+  
+  thumbLeft.value = newLeft;
+  
+  // Sync scroll
+  const el = scrollWrapper.value;
+  if (el) {
+    const sw = el.scrollWidth;
+    const cw = el.clientWidth;
+    const maxScroll = sw - cw;
+    el.scrollLeft = (newLeft / maxThumb) * maxScroll;
+  }
+};
+
+const stopScrollDrag = () => {
+  isDraggingScroll = false;
+  document.removeEventListener('mousemove', onScrollDrag);
+  document.removeEventListener('mouseup', stopScrollDrag);
+  document.removeEventListener('touchmove', onScrollDrag);
+  document.removeEventListener('touchend', stopScrollDrag);
+};
 
 const getRowHintsWidth = () => {
   const el = rowHintsRef.value?.$el;
@@ -74,6 +162,7 @@ onMounted(() => {
   });
   isFinePointer.value = window.matchMedia('(pointer: fine)').matches;
   window.addEventListener('resize', computeCellSize);
+  window.addEventListener('resize', checkScroll);
   window.addEventListener('mouseup', handleGlobalMouseUp);
   window.addEventListener('pointerup', handleGlobalPointerUp);
   window.addEventListener('touchend', handleGlobalPointerUp, { passive: true });
@@ -81,6 +170,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', computeCellSize);
+  window.removeEventListener('resize', checkScroll);
   window.removeEventListener('mouseup', handleGlobalMouseUp);
   window.removeEventListener('pointerup', handleGlobalPointerUp);
   window.removeEventListener('touchend', handleGlobalPointerUp);
@@ -89,11 +179,12 @@ onUnmounted(() => {
 watch(() => store.size, async () => {
   await nextTick();
   computeCellSize();
+  checkScroll();
 });
 </script>
 
 <template>
-  <div class="game-board-wrapper">
+  <div class="game-board-wrapper" ref="scrollWrapper" @scroll="handleScroll">
     <div class="game-container" :style="{ '--cell-size': `${cellSize}px` }">
       <div class="corner-spacer"></div>
       
@@ -131,13 +222,30 @@ watch(() => store.size, async () => {
       </div>
     </div>
   </div>
+
+  <Teleport to="body">
+    <div v-if="showScrollbar" class="fixed-scroll-bar">
+      <div class="fixed-scroll-track" ref="scrollTrack" @pointerdown="startScrollDrag">
+        <div 
+          class="fixed-scroll-thumb" 
+          :style="{ width: `${thumbWidth}%`, left: `${thumbLeft}%` }"
+        ></div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
 .game-board-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  overflow-x: auto;
+  width: 100%;
+  scrollbar-width: none; /* Hide default scrollbar */
+}
+.game-board-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 .game-container {
@@ -145,15 +253,22 @@ watch(() => store.size, async () => {
   grid-template-columns: auto auto;
   grid-template-rows: auto auto;
   gap: 0;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
   margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 .corner-spacer {
   height: auto; /* Adapts to Col Hints height */
+}
+
+/* Row Hints */
+.game-container > :nth-child(3) {
+  /* No special styles */
 }
 
 .grid {

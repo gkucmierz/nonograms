@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useTimer } from '@/composables/useTimer';
 import { useI18n } from '@/composables/useI18n';
-import { RotateCcw, RefreshCw, Eye } from 'lucide-vue-next';
+import { RotateCcw, RefreshCw, Eye, Undo } from 'lucide-vue-next';
 
 const store = usePuzzleStore();
 const { formatTime } = useTimer();
@@ -45,7 +45,7 @@ const progressText = computed(() => `${store.progressPercentage.toFixed(3)}%`);
       </button>
       <div class="action-separator"></div>
       <button class="action-btn" @click="store.undo" :title="t('actions.undo')">
-        <RotateCcw :size="20" />
+        <Undo :size="20" />
       </button>
     </div>
   </div>

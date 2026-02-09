@@ -1,3 +1,5 @@
+@import './scrollbar.css';
+
 :root {
   /* --- Glassmorphism Design System --- */
   --bg-gradient: linear-gradient(135deg, #43C6AC 0%, #191654 100%);
@@ -52,6 +54,9 @@
   --scroll-track: rgba(0, 0, 0, 0.1);
   --scroll-thumb: rgba(255, 255, 255, 0.2);
   --scroll-thumb-hover: var(--accent-cyan);
+  --fixed-bar-bg: rgba(0, 0, 0, 0.85);
+  --fixed-bar-thumb: rgba(0, 242, 255, 0.5);
+  --fixed-bar-thumb-hover: rgba(0, 242, 255, 0.8);
   
   /* Rozmiary */
   --cell-size: 30px;
@@ -113,6 +118,9 @@
   --scroll-track: rgba(15, 23, 42, 0.08);
   --scroll-thumb: rgba(15, 23, 42, 0.2);
   --scroll-thumb-hover: #0ea5e9;
+  --fixed-bar-bg: rgba(248, 250, 255, 0.95);
+  --fixed-bar-thumb: rgba(14, 165, 233, 0.5);
+  --fixed-bar-thumb-hover: rgba(14, 165, 233, 0.8);
 }
 
 * {
