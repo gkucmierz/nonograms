@@ -158,6 +158,12 @@ const handleOutsideClick = (event) => {
   }
 };
 
+const handleKeydown = (e) => {
+  if (e.key === 'Escape') {
+    isLangOpen.value = false;
+  }
+};
+
 onMounted(() => {
   if (!store.loadState()) {
     store.initGame(); // Inicjalizacja domyślnej gry jeśli brak zapisu
@@ -185,6 +191,7 @@ onMounted(() => {
       displayModeMedia.addListener(updateStandalone);
     }
     document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('keydown', handleKeydown);
   }
 });
 
@@ -203,6 +210,7 @@ onUnmounted(() => {
     displayModeMedia.removeListener(updateStandalone);
   }
   document.removeEventListener('click', handleOutsideClick);
+  document.removeEventListener('keydown', handleKeydown);
 });
 </script>
 

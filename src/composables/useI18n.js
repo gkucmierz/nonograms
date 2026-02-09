@@ -180,6 +180,58 @@ const messages = {
     'language.cy': 'Welsh',
     'language.gd': 'Scottish Gaelic',
     'language.eu': 'Basque',
+    'language.af': 'Afrikaans',
+    'language.am': 'Amharic',
+    'language.hy': 'Armenian',
+    'language.az': 'Azerbaijani',
+    'language.my': 'Burmese',
+    'language.km': 'Khmer',
+    'language.ceb': 'Cebuano',
+    'language.fa': 'Persian',
+    'language.gu': 'Gujarati',
+    'language.ht': 'Haitian Creole',
+    'language.he': 'Hebrew',
+    'language.ig': 'Igbo',
+    'language.ilo': 'Ilocano',
+    'language.id': 'Indonesian',
+    'language.ja': 'Japanese',
+    'language.jv': 'Javanese',
+    'language.kn': 'Kannada',
+    'language.kk': 'Kazakh',
+    'language.rw': 'Kinyarwanda',
+    'language.rn': 'Kirundi',
+    'language.ko': 'Korean',
+    'language.ku': 'Kurdish (Kurmanji)',
+    'language.ckb': 'Kurdish (Sorani)',
+    'language.ky': 'Kyrgyz',
+    'language.lo': 'Lao',
+    'language.ms': 'Malay',
+    'language.mr': 'Marathi',
+    'language.mn': 'Mongolian',
+    'language.ne': 'Nepali',
+    'language.om': 'Oromo',
+    'language.ps': 'Pashto',
+    'language.pa': 'Punjabi',
+    'language.so': 'Somali',
+    'language.sw': 'Swahili',
+    'language.tl': 'Tagalog',
+    'language.ta': 'Tamil',
+    'language.te': 'Telugu',
+    'language.th': 'Thai',
+    'language.bo': 'Tibetan',
+    'language.ti': 'Tigrinya',
+    'language.uz': 'Uzbek',
+    'language.vi': 'Vietnamese',
+    'language.wo': 'Wolof',
+    'language.yo': 'Yoruba',
+    'language.pt-br': 'Portuguese (Brazil)',
+    'language.pt-pt': 'Portuguese (Portugal)',
+    'language.fr-ca': 'French (Canada)',
+    'language.nl-be': 'Flemish',
+    'language.es-es': 'Spanish (Castilian)',
+    'language.es-419': 'Spanish (Latin American)',
+    'language.zh-hant': 'Chinese (Traditional)',
+    'language.zh-hans': 'Chinese (Simplified)',
     'theme.label': 'Theme',
     'theme.system': 'System',
     'theme.light': 'Light',
@@ -2379,6 +2431,18 @@ const messages = {
     'language.searchPlaceholder': 'Idatzi hizkuntzaren izena...'
   }
 };
+
+const addLocalesFromEn = (arr) => {
+  arr.forEach((code) => {
+    messages[code] = {
+      ...messages.en
+    };
+  });
+};
+
+addLocalesFromEn([
+  'af','am','hy','az','my','km','ceb','fa','gu','ht','he','ig','ilo','id','ja','jv','kn','kk','rw','rn','ko','ku','ckb','ky','lo','ms','mr','mh','mn','nv','ne','om','ps','pa','so','sw','tl','ta','te','th','bo','ti','uz','vi','wo','yo','pt-br','pt-pt','fr-ca','nl-be','es-es','es-419','zh-hant','zh-hans'
+]);
 
 const requiredKeys = [
   'app.title','level.easy','level.medium','level.hard','level.custom','level.guide',
