@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
-import { Gamepad2, Palette, CircleHelp, Sun, Moon, Menu, X, ChevronDown, ChevronUp } from 'lucide-vue-next';
+import { Gamepad2, Palette, CircleHelp, Sun, Moon, Menu, X, ChevronDown, ChevronUp, Monitor } from 'lucide-vue-next';
 
 const store = usePuzzleStore();
 const { t, locale, setLocale, locales } = useI18n();
@@ -210,15 +210,18 @@ watch(isMobileMenuOpen, (val) => {
       <!-- Theme Menu -->
       <div class="nav-dropdown">
         <button class="btn-neon nav-btn" @click.stop="toggleThemeMenu">
-          <Palette :size="18" /> Theme
+          <Palette :size="18" /> {{ t('theme.label') }}
         </button>
         <transition name="slide-fade">
           <div v-if="isThemeOpen" class="dropdown-menu theme-menu">
+            <button class="dropdown-item" @click="setTheme('system')">
+              <Monitor :size="16" /> {{ t('theme.system') }}
+            </button>
             <button class="dropdown-item" @click="setTheme('light')">
-              <Sun :size="16" /> Light
+              <Sun :size="16" /> {{ t('theme.light') }}
             </button>
             <button class="dropdown-item" @click="setTheme('dark')">
-              <Moon :size="16" /> Dark
+              <Moon :size="16" /> {{ t('theme.dark') }}
             </button>
           </div>
         </transition>
@@ -301,15 +304,18 @@ watch(isMobileMenuOpen, (val) => {
                 <!-- Mobile Theme Menu -->
                 <div class="mobile-group">
                     <button class="mobile-item-trigger" @click="toggleThemeMenu">
-                        <span class="flex-center gap-10"><Palette :size="20" /> Theme</span>
+                        <span class="flex-center gap-10"><Palette :size="20" /> {{ t('theme.label') }}</span>
                         <component :is="isThemeOpen ? ChevronUp : ChevronDown" :size="16" />
                     </button>
                      <div v-if="isThemeOpen" class="mobile-sub-menu">
+                        <button class="mobile-sub-item" @click="setTheme('system')">
+                          <Monitor :size="16" /> {{ t('theme.system') }}
+                        </button>
                         <button class="mobile-sub-item" @click="setTheme('light')">
-                          <Sun :size="16" /> Light
+                          <Sun :size="16" /> {{ t('theme.light') }}
                         </button>
                         <button class="mobile-sub-item" @click="setTheme('dark')">
-                          <Moon :size="16" /> Dark
+                          <Moon :size="16" /> {{ t('theme.dark') }}
                         </button>
                      </div>
                 </div>
