@@ -37,7 +37,40 @@ const languageFlags = {
   ru: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="5.33" width="24" height="5.33" fill="#0039a6"/><rect y="10.67" width="24" height="5.33" fill="#d52b1e"/></svg>',
   pt: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="9" height="16" fill="#006600"/><rect x="9" width="15" height="16" fill="#ff0000"/><circle cx="9.5" cy="8" r="2.5" fill="#ffcc00"/></svg>',
   ur: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#01411c"/><rect width="6" height="16" fill="#ffffff"/><circle cx="15" cy="8" r="3" fill="#ffffff"/></svg>',
-  pl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="8" width="24" height="8" fill="#dc143c"/></svg>'
+  pl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="8" width="24" height="8" fill="#dc143c"/></svg>',
+  de: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#000"/><rect y="5.33" width="24" height="5.33" fill="#dd0000"/><rect y="10.67" width="24" height="5.33" fill="#ffce00"/></svg>',
+  it: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#ffffff"/><rect x="16" width="8" height="16" fill="#ce2b37"/></svg>',
+  nl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#ae1c28"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.67" width="24" height="5.33" fill="#21468b"/></svg>',
+  sv: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#006aa7"/><rect x="6" width="3" height="16" fill="#fecc00"/><rect y="7" width="24" height="3" fill="#fecc00"/></svg>',
+  da: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#c8102e"/><rect x="6" width="2" height="16" fill="#fff"/><rect y="7" width="24" height="2" fill="#fff"/></svg>',
+  fi: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#fff"/><rect x="6" width="3" height="16" fill="#003580"/><rect y="7" width="24" height="3" fill="#003580"/></svg>',
+  no: '<svg viewBox=\"0 0 24 16\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"24\" height=\"16\" fill=\"#ba0c2f\"/><rect x=\"6\" width=\"2\" height=\"16\" fill=\"#fff\"/><rect y=\"7\" width=\"24\" height=\"2\" fill=\"#fff\"/><rect x=\"7\" width=\"1\" height=\"16\" fill=\"#00205b\"/><rect y=\"8\" width=\"24\" height=\"1\" fill=\"#00205b\"/></svg>',
+  cs: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#fff"/><rect y="5.33" width="24" height="5.33" fill="#11457e"/><rect y="10.67" width="24" height="5.33" fill="#d7141a"/></svg>',
+  sk: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#fff"/><rect y="5.33" width="24" height="5.33" fill="#0b4ea2"/><rect y="10.67" width="24" height="5.33" fill="#ee1c25"/></svg>',
+  hu: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#cd2a3e"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.67" width="24" height="5.33" fill="#436f4d"/></svg>',
+  ro: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="8" height="16" fill="#002b7f"/><rect x="8" width="8" height="16" fill="#fcd116"/><rect x="16" width="8" height="16" fill="#ce1126"/></svg>',
+  bg: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#fff"/><rect y="5.33" width="24" height="5.33" fill="#00966e"/><rect y="10.67" width="24" height="5.33" fill="#d62612"/></svg>',
+  el: '<svg viewBox=\"0 0 24 16\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"24\" height=\"16\" fill=\"#0d5eaf\"/><rect y=\"2\" width=\"24\" height=\"2\" fill=\"#fff\"/><rect y=\"6\" width=\"24\" height=\"2\" fill=\"#fff\"/><rect y=\"10\" width=\"24\" height=\"2\" fill=\"#fff\"/><rect y=\"14\" width=\"24\" height=\"2\" fill=\"#fff\"/></svg>',
+  uk: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="8" fill="#0057b8"/><rect y="8" width="24" height="8" fill="#ffd700"/></svg>',
+  be: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="8" height="16" fill="#000"/><rect x="8" width="8" height="16" fill="#fecc00"/><rect x="16" width="8" height="16" fill="#ed1c24"/></svg>',
+  sr: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#ed1c24"/><rect y="5.33" width="24" height="5.33" fill="#0b4ea2"/><rect y="10.67" width="24" height="5.33" fill="#fff"/></svg>',
+  hr: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#ff0000"/><rect y="5.33" width="24" height="5.33" fill="#fff"/><rect y="10.67" width="24" height="5.33" fill="#0000ff"/></svg>',
+  sl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#fff"/><rect y="5.33" width="24" height="5.33" fill="#0038a8"/><rect y="10.67" width="24" height="5.33" fill="#d40000"/></svg>',
+  lt: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#ffb81c"/><rect y="5.33" width="24" height="5.33" fill="#006a44"/><rect y="10.67" width="24" height="5.33" fill="#c1272d"/></svg>',
+  lv: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="6" fill="#8b1a1a"/><rect y="6" width="24" height="4" fill="#fff"/><rect y="10" width="24" height="6" fill="#8b1a1a"/></svg>',
+  et: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="5.33" fill="#0072ce"/><rect y="5.33" width="24" height="5.33" fill="#000"/><rect y="10.67" width="24" height="5.33" fill="#fff"/></svg>',
+  ga: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="8" height="16" fill="#169b62"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#ff883e"/></svg>',
+  is: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#003897"/><rect x="6" width="2" height="16" fill="#fff"/><rect y="7" width="24" height="2" fill="#fff"/><rect x="7" width="1" height="16" fill="#d72828"/><rect y="8" width="24" height="1" fill="#d72828"/></svg>',
+  mt: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="16" fill="#fff"/><rect x="12" width="12" height="16" fill="#cf142b"/></svg>',
+  sq: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#e41e20"/></svg>',
+  mk: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#d20000"/><circle cx="12" cy="8" r="3" fill="#ffe600"/></svg>',
+  bs: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#002f6c"/><rect y="10" width="24" height="6" fill="#fcd116"/></svg>',
+  tr: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#e30a17"/></svg>',
+  ca: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="2" fill="#f1c40f"/><rect y="2" width="24" height="2" fill="#e74c3c"/><rect y="4" width="24" height="2" fill="#f1c40f"/><rect y="6" width="24" height="2" fill="#e74c3c"/><rect y="8" width="24" height="2" fill="#f1c40f"/><rect y="10" width="24" height="2" fill="#e74c3c"/><rect y="12" width="24" height="2" fill="#f1c40f"/><rect y="14" width="24" height="2" fill="#e74c3c"/></svg>',
+  gl: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#ffffff"/><rect y="6" width="24" height="4" fill="#00a3e8"/></svg>',
+  cy: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="8" fill="#ffffff"/><rect y="8" width="24" height="8" fill="#007a3d"/></svg>',
+  gd: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#0065bd"/></svg>',
+  eu: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#d52b1e"/><rect y="7" width="24" height="2" fill="#fff"/><rect x="11" width="2" height="16" fill="#fff"/><rect x="11" width="2" height="16" fill="#2e8b57"/></svg>'
 };
 
 const languages = computed(() => {
@@ -52,7 +85,40 @@ const languages = computed(() => {
     { code: 'ru', label: t('language.ru') },
     { code: 'pt', label: t('language.pt') },
     { code: 'ur', label: t('language.ur') },
-    { code: 'pl', label: t('language.pl') }
+    { code: 'pl', label: t('language.pl') },
+    { code: 'de', label: t('language.de') },
+    { code: 'it', label: t('language.it') },
+    { code: 'nl', label: t('language.nl') },
+    { code: 'sv', label: t('language.sv') },
+    { code: 'da', label: t('language.da') },
+    { code: 'fi', label: t('language.fi') },
+    { code: 'no', label: t('language.no') },
+    { code: 'cs', label: t('language.cs') },
+    { code: 'sk', label: t('language.sk') },
+    { code: 'hu', label: t('language.hu') },
+    { code: 'ro', label: t('language.ro') },
+    { code: 'bg', label: t('language.bg') },
+    { code: 'el', label: t('language.el') },
+    { code: 'uk', label: t('language.uk') },
+    { code: 'be', label: t('language.be') },
+    { code: 'sr', label: t('language.sr') },
+    { code: 'hr', label: t('language.hr') },
+    { code: 'sl', label: t('language.sl') },
+    { code: 'lt', label: t('language.lt') },
+    { code: 'lv', label: t('language.lv') },
+    { code: 'et', label: t('language.et') },
+    { code: 'ga', label: t('language.ga') },
+    { code: 'is', label: t('language.is') },
+    { code: 'mt', label: t('language.mt') },
+    { code: 'sq', label: t('language.sq') },
+    { code: 'mk', label: t('language.mk') },
+    { code: 'bs', label: t('language.bs') },
+    { code: 'tr', label: t('language.tr') },
+    { code: 'ca', label: t('language.ca') },
+    { code: 'gl', label: t('language.gl') },
+    { code: 'cy', label: t('language.cy') },
+    { code: 'gd', label: t('language.gd') },
+    { code: 'eu', label: t('language.eu') }
   ];
   return items.sort((a, b) => a.label.localeCompare(b.label, locale.value));
 });
@@ -347,6 +413,8 @@ h1 {
   gap: 6px;
   z-index: 10;
   opacity: 1;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .lang-option {
@@ -512,6 +580,19 @@ h1 {
   h1 {
     font-size: 2rem;
     letter-spacing: 2px;
+  }
+  .lang-menu {
+    position: fixed;
+    top: 64px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(90vw, 320px);
+    min-width: 240px;
+    z-index: 1005;
+    max-height: calc(100vh - 96px);
+    padding: 12px;
+    border-radius: 18px;
   }
 }
 </style>

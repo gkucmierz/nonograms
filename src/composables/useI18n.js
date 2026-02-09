@@ -1,6 +1,10 @@
 import { ref, computed } from 'vue';
 
-const supportedLocales = ['pl', 'en', 'zh', 'hi', 'es', 'fr', 'ar', 'bn', 'ru', 'pt', 'ur'];
+const supportedLocales = [
+  'pl','en','zh','hi','es','fr','ar','bn','ru','pt','ur',
+  'de','it','nl','sv','da','fi','no','cs','sk','hu','ro','bg','el','uk','be',
+  'sr','hr','sl','lt','lv','et','ga','is','mt','sq','mk','bs','tr','ca','gl','cy','gd','eu'
+];
 
 const detectLocale = () => {
   if (typeof navigator === 'undefined') return 'en';
@@ -647,6 +651,139 @@ const messages = {
     'theme.system': 'سسٹم',
     'theme.light': 'ہلکا',
     'theme.dark': 'گہرا'
+  }
+  ,
+  de: {
+    'language.label': 'Sprachauswahl',
+    'language.de': 'Deutsch'
+  },
+  it: {
+    'language.label': 'Selezione lingua',
+    'language.it': 'Italiano'
+  },
+  nl: {
+    'language.label': 'Taalkeuze',
+    'language.nl': 'Nederlands'
+  },
+  sv: {
+    'language.label': 'Språkval',
+    'language.sv': 'Svenska'
+  },
+  da: {
+    'language.label': 'Sprogvalg',
+    'language.da': 'Dansk'
+  },
+  fi: {
+    'language.label': 'Kielen valinta',
+    'language.fi': 'Suomi'
+  },
+  no: {
+    'language.label': 'Språkvalg',
+    'language.no': 'Norsk'
+  },
+  cs: {
+    'language.label': 'Výběr jazyka',
+    'language.cs': 'Čeština'
+  },
+  sk: {
+    'language.label': 'Voľba jazyka',
+    'language.sk': 'Slovenčina'
+  },
+  hu: {
+    'language.label': 'Nyelvválasztás',
+    'language.hu': 'Magyar'
+  },
+  ro: {
+    'language.label': 'Selectare limbă',
+    'language.ro': 'Română'
+  },
+  bg: {
+    'language.label': 'Избор на език',
+    'language.bg': 'Български'
+  },
+  el: {
+    'language.label': 'Επιλογή γλώσσας',
+    'language.el': 'Ελληνικά'
+  },
+  uk: {
+    'language.label': 'Вибір мови',
+    'language.uk': 'Українська'
+  },
+  be: {
+    'language.label': 'Выбар мовы',
+    'language.be': 'Беларуская'
+  },
+  sr: {
+    'language.label': 'Избор језика',
+    'language.sr': 'Српски'
+  },
+  hr: {
+    'language.label': 'Odabir jezika',
+    'language.hr': 'Hrvatski'
+  },
+  sl: {
+    'language.label': 'Izbira jezika',
+    'language.sl': 'Slovenščina'
+  },
+  lt: {
+    'language.label': 'Kalbos pasirinkimas',
+    'language.lt': 'Lietuvių'
+  },
+  lv: {
+    'language.label': 'Valodas izvēle',
+    'language.lv': 'Latviešu'
+  },
+  et: {
+    'language.label': 'Keele valik',
+    'language.et': 'Eesti'
+  },
+  ga: {
+    'language.label': 'Rogha teanga',
+    'language.ga': 'Gaeilge'
+  },
+  is: {
+    'language.label': 'Val á tungumáli',
+    'language.is': 'Íslenska'
+  },
+  mt: {
+    'language.label': 'Għażla tal-lingwa',
+    'language.mt': 'Malti'
+  },
+  sq: {
+    'language.label': 'Zgjedhja e gjuhës',
+    'language.sq': 'Shqip'
+  },
+  mk: {
+    'language.label': 'Избор на јазик',
+    'language.mk': 'Македонски'
+  },
+  bs: {
+    'language.label': 'Izbor jezika',
+    'language.bs': 'Bosanski'
+  },
+  tr: {
+    'language.label': 'Dil seçimi',
+    'language.tr': 'Türkçe'
+  },
+  ca: {
+    'language.label': 'Selecció d’idioma',
+    'language.ca': 'Català'
+  },
+  gl: {
+    'language.label': 'Selección de idioma',
+    'language.gl': 'Galego'
+  },
+  cy: {
+    'language.label': 'Dewis iaith',
+    'language.cy': 'Cymraeg'
+  },
+  gd: {
+    'language.label': 'Taghadh cànain',
+    'language.gd': 'Gàidhlig'
+  },
+  eu: {
+    'language.label': 'Hizkuntza hautaketa',
+    'language.eu': 'Euskara'
   }
 };
 
