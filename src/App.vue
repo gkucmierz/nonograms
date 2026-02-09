@@ -26,6 +26,25 @@ const isLangOpen = ref(false);
 const langMenuRef = ref(null);
 let displayModeMedia = null;
 let prefersColorSchemeMedia = null;
+const flagModules = import.meta.glob('./assets/flags/*.svg', { eager: true, as: 'url' });
+const flagMap = Object.fromEntries(
+  Object.entries(flagModules).map(([path, url]) => [path.split('/').pop().replace('.svg', ''), url])
+);
+const flagAliases = {
+  'pt-br': 'pt',
+  'pt-pt': 'pt',
+  'fr-ca': 'fr',
+  'nl-be': 'nl',
+  'es-es': 'es',
+  'es-419': 'es',
+  'zh-hans': 'zh',
+  'zh-hant': 'zh'
+};
+const getFlagUrl = (code) => {
+  const base = flagAliases[code] || code;
+  return flagMap[base] || flagMap['globe'] || null;
+};
+
 const languageFlags = {
   en: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#b22234"/><rect y="2" width="24" height="2" fill="#fff"/><rect y="6" width="24" height="2" fill="#fff"/><rect y="10" width="24" height="2" fill="#fff"/><rect y="14" width="24" height="2" fill="#fff"/><rect width="10" height="8" fill="#3c3b6e"/></svg>',
   zh: '<svg viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="16" fill="#de2910"/><circle cx="6" cy="5" r="2" fill="#ffde00"/></svg>',
@@ -229,7 +248,10 @@ onUnmounted(() => {
             :aria-expanded="isLangOpen"
             @click="isLangOpen = !isLangOpen"
           >
-            <span class="lang-flag" v-html="languageFlags[locale]"></span>
+            <span class="lang-flag">
+              <img v-if="getFlagUrl(locale)" :src="getFlagUrl(locale)" alt="" />
+              <span v-else v-html="languageFlags[locale]"></span>
+            </span>
           </button>
           <div v-if="isLangOpen" class="lang-menu">
             <div class="lang-search">
@@ -249,7 +271,10 @@ onUnmounted(() => {
               type="button"
               @click="selectLanguage(lang.code)"
             >
-              <span class="lang-flag" v-html="languageFlags[lang.code]"></span>
+              <span class="lang-flag">
+                <img v-if="getFlagUrl(lang.code)" :src="getFlagUrl(lang.code)" alt="" />
+                <span v-else v-html="languageFlags[lang.code]"></span>
+              </span>
               <span class="lang-name">{{ lang.label }}</span>
             </button>
           </div>
