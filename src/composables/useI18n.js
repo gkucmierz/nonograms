@@ -4498,7 +4498,8 @@ const requiredKeys = [
   'custom.start','custom.sizeError','win.title','win.message','win.time','win.playAgain',
   'win.shareTitle','win.shareText','win.shareX','win.shareFacebook','win.shareWhatsapp',
   'win.shareDownload','pwa.installTitle','pwa.installMobile','pwa.installDesktop',
-  'language.label','theme.label','theme.system','theme.light','theme.dark'
+  'language.label','theme.label','theme.system','theme.light','theme.dark',
+  'language.searchLabel','language.searchPlaceholder'
 ];
 
 const supportedLocales = Object.keys(messages).filter(
@@ -4506,6 +4507,12 @@ const supportedLocales = Object.keys(messages).filter(
 );
 
 const detectLocale = () => {
+  if (typeof localStorage !== 'undefined') {
+    const saved = localStorage.getItem('locale');
+    if (saved && supportedLocales.includes(saved)) {
+      return saved;
+    }
+  }
   if (typeof navigator === 'undefined') return 'en';
   const browserLocale = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
   let short = browserLocale.toLowerCase().split('-')[0];
@@ -4541,6 +4548,9 @@ const t = (key, params) => {
 
 const setLocale = (value) => {
   locale.value = supportedLocales.includes(value) ? value : 'en';
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('locale', locale.value);
+  }
   if (typeof document !== 'undefined') {
     document.documentElement.lang = locale.value;
     document.title = t('app.title');
