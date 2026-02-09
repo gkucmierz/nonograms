@@ -42,7 +42,9 @@ const flagAliases = {
 };
 const getFlagUrl = (code) => {
   const base = flagAliases[code] || code;
-  return flagMap[base] || flagMap['globe'] || null;
+  if (flagMap[base]) return flagMap[base];
+  if (languageFlags[code] || languageFlags[base]) return null;
+  return flagMap['globe'] || null;
 };
 
 const languageFlags = {
