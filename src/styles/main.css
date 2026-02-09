@@ -121,6 +121,11 @@
   -webkit-user-select: none;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 body {
   margin: 0;
   padding: 20px;
