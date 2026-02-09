@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+import '/node_modules/flag-icons/css/flag-icons.min.css'
 import './styles/main.css'
 
 // Custom directive v-cell-hover (zgodnie z wymaganiami)
