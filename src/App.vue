@@ -79,6 +79,13 @@ const languages = computed(() => {
     .sort((a, b) => a.label.localeCompare(b.label, locale.value));
 });
 
+const searchTerm = ref('');
+const filteredLanguages = computed(() => {
+  const q = searchTerm.value.trim().toLowerCase();
+  if (!q) return languages.value;
+  return languages.value.filter((l) => l.label.toLowerCase().includes(q) || l.code.includes(q));
+});
+
 const installLabel = computed(() => {
   return isCoarsePointer.value ? t('pwa.installMobile') : t('pwa.installDesktop');
 });
@@ -217,8 +224,17 @@ onUnmounted(() => {
             <span class="lang-flag" v-html="languageFlags[locale]"></span>
           </button>
           <div v-if="isLangOpen" class="lang-menu">
+            <div class="lang-search">
+              <input
+                class="lang-search-input"
+                type="text"
+                :placeholder="t('language.searchPlaceholder')"
+                :aria-label="t('language.searchLabel')"
+                v-model="searchTerm"
+              />
+            </div>
             <button
-              v-for="lang in languages"
+              v-for="lang in filteredLanguages"
               :key="lang.code"
               class="lang-option"
               :class="{ active: locale === lang.code }"
@@ -357,7 +373,7 @@ h1 {
 .lang-menu {
   position: absolute;
   top: calc(100% + 8px);
-  right: 0;
+  left: 0;
   min-width: 170px;
   background: var(--fixed-bar-bg);
   border: 1px solid var(--fixed-bar-border);
@@ -371,6 +387,21 @@ h1 {
   opacity: 1;
   max-height: 70vh;
   overflow-y: auto;
+}
+
+.lang-search {
+  display: flex;
+  padding: 6px;
+}
+
+.lang-search-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--toggle-btn-border);
+  border-radius: 10px;
+  background: var(--toggle-bg);
+  color: var(--text-strong);
+  outline: none;
 }
 
 .lang-option {
@@ -532,16 +563,22 @@ h1 {
   }
   .lang-menu {
     position: fixed;
-    top: 64px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: min(92vw, 340px);
-    min-width: 240px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    min-width: 0;
     z-index: 1005;
-    max-height: calc(100vh - 96px);
-    padding: 12px;
-    border-radius: 18px;
+    max-height: none;
+    padding: 16px;
+    border-radius: 0;
+  }
+  .lang-search {
+    position: sticky;
+    top: 0;
+    padding: 8px 0 12px 0;
+    background: var(--fixed-bar-bg);
   }
   .lang-option {
     font-size: 1rem;
@@ -555,7 +592,7 @@ h1 {
     letter-spacing: 2px;
   }
   .lang-menu {
-    width: min(94vw, 360px);
+    width: 100vw;
   }
 }
 </style>

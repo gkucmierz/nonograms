@@ -57,7 +57,9 @@ const messages = {
     'theme.label': 'Motyw',
     'theme.system': 'System',
     'theme.light': 'Jasny',
-    'theme.dark': 'Ciemny'
+    'theme.dark': 'Ciemny',
+    'language.searchLabel': 'Wyszukaj język',
+    'language.searchPlaceholder': 'Wpisz nazwę języka...'
   },
   en: {
     'app.title': 'Nonograms',
@@ -115,7 +117,9 @@ const messages = {
     'theme.label': 'Theme',
     'theme.system': 'System',
     'theme.light': 'Light',
-    'theme.dark': 'Dark'
+    'theme.dark': 'Dark',
+    'language.searchLabel': 'Search language',
+    'language.searchPlaceholder': 'Type language name...'
   },
   zh: {
     'app.title': 'Nonograms',
@@ -173,7 +177,9 @@ const messages = {
     'theme.label': '主题',
     'theme.system': '系统',
     'theme.light': '浅色',
-    'theme.dark': '深色'
+    'theme.dark': '深色',
+    'language.searchLabel': '搜索语言',
+    'language.searchPlaceholder': '输入语言名称...'
   },
   hi: {
     'app.title': 'Nonograms',
@@ -231,7 +237,9 @@ const messages = {
     'theme.label': 'थीम',
     'theme.system': 'सिस्टम',
     'theme.light': 'हल्का',
-    'theme.dark': 'गहरा'
+    'theme.dark': 'गहरा',
+    'language.searchLabel': 'भाषा खोजें',
+    'language.searchPlaceholder': 'भाषा का नाम लिखें...'
   },
   es: {
     'app.title': 'Nonograms',
@@ -289,7 +297,9 @@ const messages = {
     'theme.label': 'Tema',
     'theme.system': 'Sistema',
     'theme.light': 'Claro',
-    'theme.dark': 'Oscuro'
+    'theme.dark': 'Oscuro',
+    'language.searchLabel': 'Buscar idioma',
+    'language.searchPlaceholder': 'Escribe el nombre del idioma...'
   },
   fr: {
     'app.title': 'Nonograms',
@@ -347,7 +357,9 @@ const messages = {
     'theme.label': 'Thème',
     'theme.system': 'Système',
     'theme.light': 'Clair',
-    'theme.dark': 'Sombre'
+    'theme.dark': 'Sombre',
+    'language.searchLabel': 'Rechercher une langue',
+    'language.searchPlaceholder': 'Tapez le nom de la langue...'
   },
   ar: {
     'app.title': 'Nonograms',
@@ -405,7 +417,9 @@ const messages = {
     'theme.label': 'السمة',
     'theme.system': 'النظام',
     'theme.light': 'فاتح',
-    'theme.dark': 'داكن'
+    'theme.dark': 'داكن',
+    'language.searchLabel': 'ابحث عن لغة',
+    'language.searchPlaceholder': 'اكتب اسم اللغة...'
   },
   bn: {
     'app.title': 'Nonograms',
@@ -463,7 +477,9 @@ const messages = {
     'theme.label': 'থিম',
     'theme.system': 'সিস্টেম',
     'theme.light': 'হালকা',
-    'theme.dark': 'গাঢ়'
+    'theme.dark': 'গাঢ়',
+    'language.searchLabel': 'ভাষা অনুসন্ধান করুন',
+    'language.searchPlaceholder': 'ভাষার নাম লিখুন...'
   },
   ru: {
     'app.title': 'Nonograms',
@@ -521,7 +537,9 @@ const messages = {
     'theme.label': 'Тема',
     'theme.system': 'Система',
     'theme.light': 'Светлая',
-    'theme.dark': 'Тёмная'
+    'theme.dark': 'Тёмная',
+    'language.searchLabel': 'Поиск языка',
+    'language.searchPlaceholder': 'Введите название языка...'
   },
   pt: {
     'app.title': 'Nonograms',
@@ -579,7 +597,9 @@ const messages = {
     'theme.label': 'Tema',
     'theme.system': 'Sistema',
     'theme.light': 'Claro',
-    'theme.dark': 'Escuro'
+    'theme.dark': 'Escuro',
+    'language.searchLabel': 'Buscar idioma',
+    'language.searchPlaceholder': 'Digite o nome do idioma...'
   },
   ur: {
     'app.title': 'Nonograms',
@@ -637,7 +657,9 @@ const messages = {
     'theme.label': 'تھیم',
     'theme.system': 'سسٹم',
     'theme.light': 'ہلکا',
-    'theme.dark': 'گہرا'
+    'theme.dark': 'گہرا',
+    'language.searchLabel': 'زبان تلاش کریں',
+    'language.searchPlaceholder': 'زبان کا نام درج کریں...'
   }
   ,
   de: {
