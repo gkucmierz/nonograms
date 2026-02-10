@@ -7,6 +7,7 @@ import { useTimer } from '@/composables/useTimer';
 import xIcon from '@/assets/brands/x.svg';
 import facebookIcon from '@/assets/brands/facebook.svg';
 import whatsappIcon from '@/assets/brands/whatsapp.svg';
+import { calculateDifficulty } from '@/utils/puzzleUtils';
 
 const store = usePuzzleStore();
 const { t } = useI18n();
@@ -113,12 +114,11 @@ const buildShareCanvas = () => {
   
   // Difficulty & Density Info
   const densityPercent = Math.round(store.currentDensity * 100);
-  const dist = Math.abs(densityPercent - 50);
-  let difficultyKey = 'easy';
+  const difficultyKey = calculateDifficulty(store.currentDensity);
   let diffColor = '#33ff33';
-  if (dist <= 5) { difficultyKey = 'extreme'; diffColor = '#ff3333'; }
-  else if (dist <= 15) { difficultyKey = 'hardest'; diffColor = '#ff9933'; }
-  else if (dist <= 25) { difficultyKey = 'harder'; diffColor = '#ffff33'; }
+  if (difficultyKey === 'extreme') diffColor = '#ff3333';
+  else if (difficultyKey === 'hardest') diffColor = '#ff9933';
+  else if (difficultyKey === 'harder') diffColor = '#ffff33';
   
   const difficultyText = t(`difficulty.${difficultyKey}`);
   ctx.font = '600 14px "Segoe UI", sans-serif';

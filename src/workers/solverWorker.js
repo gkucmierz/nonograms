@@ -5,7 +5,7 @@ const messages = {
     'worker.solved': 'Rozwiązane!',
     'worker.logicRow': 'Logika: Wiersz {row}, Kolumna {col} -> {state}',
     'worker.logicCol': 'Logika: Kolumna {col}, Wiersz {row} -> {state}',
-    'worker.guess': 'Zgadywanie: Wiersz {row}, Kolumna {col}',
+    'worker.stuck': 'Brak logicznego ruchu. Spróbuj zgadnąć lub cofnąć.',
     'worker.done': 'Koniec!',
     'worker.state.filled': 'Pełne',
     'worker.state.empty': 'Puste'
@@ -14,7 +14,7 @@ const messages = {
     'worker.solved': 'Solved!',
     'worker.logicRow': 'Logic: Row {row}, Column {col} -> {state}',
     'worker.logicCol': 'Logic: Column {col}, Row {row} -> {state}',
-    'worker.guess': 'Guessing: Row {row}, Column {col}',
+    'worker.stuck': 'No logical move found. Try guessing or undoing.',
     'worker.done': 'Done!',
     'worker.state.filled': 'Filled',
     'worker.state.empty': 'Empty'
@@ -236,29 +236,9 @@ const handleStep = (playerGrid, solution, locale) => {
     }
   }
 
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      const current = playerGrid[r][c];
-      const target = solution[r][c];
-      let isCorrect = false;
-      if (target === 1 && current === 1) isCorrect = true;
-      if (target === 0 && current === 2) isCorrect = true;
-      if (target === 0 && current === 0) isCorrect = false;
-      if (target === 1 && current === 0) isCorrect = false;
-      if (!isCorrect) {
-        const newState = target === 1 ? 1 : 2;
-        return {
-          type: 'move',
-          r,
-          c,
-          state: newState,
-          statusText: t(locale, 'worker.guess', { row: r + 1, col: c + 1 })
-        };
-      }
-    }
-  }
-
-  return { type: 'done', statusText: t(locale, 'worker.done') };
+  // Check for guess logic - we want to avoid this unless strictly necessary
+  // If no logic move found, return 'stuck' instead of cheating
+  return { type: 'stuck', statusText: t(locale, 'worker.stuck') };
 };
 
 self.onmessage = (event) => {

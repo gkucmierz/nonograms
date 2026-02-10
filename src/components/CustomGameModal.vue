@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
+import { calculateDifficulty } from '@/utils/puzzleUtils';
 
 const emit = defineEmits(['close']);
 const store = usePuzzleStore();
@@ -21,13 +22,7 @@ const handleSnap = () => {
 };
 
 const difficultyLevel = computed(() => {
-  const rate = fillRate.value;
-  const dist = Math.abs(rate - 50);
-  
-  if (dist <= 5) return 'extreme';
-  if (dist <= 15) return 'hardest';
-  if (dist <= 25) return 'harder';
-  return 'easy';
+  return calculateDifficulty(fillRate.value / 100);
 });
 
 const difficultyColor = computed(() => {

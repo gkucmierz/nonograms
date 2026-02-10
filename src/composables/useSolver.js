@@ -78,6 +78,9 @@ export function useSolver() {
             } else if (type === 'done') {
                 isProcessing.value = false;
                 pause();
+            } else if (type === 'stuck') {
+                isProcessing.value = false;
+                pause();
             } else {
                 isProcessing.value = false;
             }
