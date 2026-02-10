@@ -111,17 +111,27 @@ const getRowHintsWidth = () => {
 };
 
 const computeCellSize = () => {
-  const vw = Math.min(window.innerWidth, 900);
   const rootStyles = getComputedStyle(document.documentElement);
   const hintWidth = getRowHintsWidth();
   const gapRaw = rootStyles.getPropertyValue('--gap-size') || '2px';
   const gridPadRaw = rootStyles.getPropertyValue('--grid-padding') || '5px';
   const gap = parseFloat(gapRaw);
   const gridPad = parseFloat(gridPadRaw);
-  const bodyStyles = getComputedStyle(document.body);
-  const bodyPadding = parseFloat(bodyStyles.paddingLeft) + parseFloat(bodyStyles.paddingRight);
-  const availableForGrid = vw - bodyPadding - hintWidth;
+
+  let containerWidth;
+  if (scrollWrapper.value) {
+    containerWidth = scrollWrapper.value.clientWidth;
+  } else {
+    // Fallback if wrapper not ready: window width minus estimated padding
+    // Body padding (40) + Layout padding (40) = 80
+    containerWidth = window.innerWidth - 80;
+  }
+  
+  // Ensure we don't have negative space
+  const availableForGrid = Math.max(0, containerWidth - hintWidth);
+  
   const size = Math.floor((availableForGrid - gridPad * 2 - (store.size - 1) * gap) / store.size);
+  // Keep min 18, max 36
   cellSize.value = Math.max(18, Math.min(36, size));
 };
 
@@ -244,6 +254,15 @@ watch(() => store.size, async () => {
   width: 100%;
   scrollbar-width: none; /* Hide default scrollbar */
 }
+
+/* Desktop: Remove scroll behavior to ensure full grid visibility */
+@media (min-width: 769px) {
+  .game-board-wrapper {
+    overflow-x: visible;
+    align-items: center; /* Center the grid on desktop */
+  }
+}
+
 .game-board-wrapper::-webkit-scrollbar {
   display: none;
 }
