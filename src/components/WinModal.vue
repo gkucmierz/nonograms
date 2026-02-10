@@ -409,6 +409,10 @@ p {
   display: block;
 }
 
+:global(html[data-theme="light"]) .share-icon {
+  filter: invert(1);
+}
+
 .share-download {
   align-self: center;
   padding: 8px 18px;
