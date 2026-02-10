@@ -258,7 +258,7 @@ watch(() => store.size, async () => {
 /* Desktop: Remove scroll behavior to ensure full grid visibility */
 @media (min-width: 769px) {
   .game-board-wrapper {
-    overflow-x: visible;
+    overflow-x: auto; /* Allow scrolling if grid is too large (e.g. 80x80) */
     align-items: center; /* Center the grid on desktop */
   }
 }
