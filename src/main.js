@@ -40,7 +40,11 @@ if ('serviceWorker' in navigator) {
   }
   navigator.serviceWorker.addEventListener('controllerchange', triggerReload)
   const checkForUpdate = () => {
-    navigator.serviceWorker.getRegistration().then((registration) => registration?.update())
+    navigator.serviceWorker.getRegistration().then((registration) => {
+      if (registration) {
+        registration.update()
+      }
+    })
   }
   window.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') checkForUpdate()
