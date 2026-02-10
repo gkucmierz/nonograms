@@ -223,7 +223,7 @@ const shareTo = async (target) => {
 };
 
 onMounted(() => {
-  if (fireworksRef.value && !store.hasUsedGuide) {
+  if (fireworksRef.value) {
     fireworksInstance = new Fireworks(fireworksRef.value, {
       autoresize: true,
       opacity: 0.6,
@@ -242,9 +242,7 @@ onMounted(() => {
     });
     fireworksInstance.start();
   }
-  if (!store.hasUsedGuide) {
-    playFanfare();
-  }
+  playFanfare();
   triggerVibration();
   window.addEventListener('keydown', handleKeyDown);
 });
