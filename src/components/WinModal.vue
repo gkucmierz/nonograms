@@ -212,7 +212,7 @@ const buildShareUrl = (target, text, url) => {
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(url);
   if (target === 'x') {
-    return `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+    return `https://x.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
   }
   if (target === 'facebook') {
     return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
@@ -226,29 +226,48 @@ const buildShareUrl = (target, text, url) => {
 const shareTo = async (target) => {
   if (shareInProgress.value) return;
   shareInProgress.value = true;
+  
+  const text = shareText.value;
+  const url = window.location.href;
+  const shareUrl = buildShareUrl(target, text, url);
+
   try {
-    const blob = await createShareBlob();
-    if (!blob) return;
-    const file = new File([blob], `nonogram-${store.size}x${store.size}.png`, { type: 'image/png' });
-    const text = shareText.value;
-    const url = window.location.href;
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        text,
-        title: t('app.title'),
-        url
-      });
-      return;
+    // Try native share first if available (supports images)
+    if (navigator.share && navigator.canShare) {
+      const blob = await createShareBlob();
+      if (blob) {
+        const file = new File([blob], `nonogram-${store.size}x${store.size}.png`, { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            text,
+            title: t('app.title'),
+            url
+          });
+          return;
+        }
+      }
     }
-    await downloadShareImage();
-    const shareUrl = buildShareUrl(target, text, url);
-    if (shareUrl) {
-      window.open(shareUrl, '_blank', 'noopener');
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      return; // User cancelled native share, do nothing
     }
+    // Other errors -> fall through to fallback
   } finally {
     shareInProgress.value = false;
   }
+
+  // Fallback: Direct Link + Download
+  // Open window immediately if possible (though we awaited above, so it might be blocked, 
+  // but we can't do much about it if we want to try native share first).
+  // Ideally, for Desktop, navigator.share is undefined so we skip the await above.
+  
+  if (shareUrl) {
+    window.open(shareUrl, '_blank', 'noopener');
+  }
+  
+  // Trigger download as "screenshot support"
+  downloadShareImage();
 };
 
 onMounted(() => {
