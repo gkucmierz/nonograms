@@ -678,7 +678,6 @@ const messages = {
     'language.searchLabel': 'ভাষা অনুসন্ধান করুন',
     'language.searchPlaceholder': 'ভাষার নাম লিখুন...',
     'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ru: {
@@ -2668,9 +2667,8 @@ const messages = {
     'theme.dark': 'ダーク',
     'language.searchLabel': '言語を検索',
     'language.searchPlaceholder': '言語名を入力...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': '新しいゲーム',
+    'nav.guide': 'ガイド'
   },
   ko: {
     'app.title': '노노그램',
