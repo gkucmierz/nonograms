@@ -246,10 +246,18 @@ onUnmounted(() => {
 }
 
 .app-version {
-  margin-top: auto;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
   padding: 10px;
   font-size: 0.8rem;
   color: var(--text-muted);
-  opacity: 0.6;
+  opacity: 0.8;
+  background: var(--panel-bg);
+  backdrop-filter: blur(5px);
+  border-top: 1px solid var(--panel-border);
+  z-index: 90;
 }
 </style>
