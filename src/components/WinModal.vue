@@ -4,7 +4,7 @@ import { Fireworks } from 'fireworks-js';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 import { useTimer } from '@/composables/useTimer';
-import { Download } from 'lucide-vue-next';
+import { Download, FileCode } from 'lucide-vue-next';
 import { calculateDifficulty } from '@/utils/puzzleUtils';
 
 const store = usePuzzleStore();
@@ -41,30 +41,43 @@ const playFanfare = async () => {
     }
   }
   masterGain = audioContext.createGain();
-  masterGain.gain.value = 0.18;
+  masterGain.gain.value = 0.25; // Slightly louder but softer tone
   masterGain.connect(audioContext.destination);
-  const notes = [
-    { time: 0.0, dur: 0.18, freqs: [523.25, 659.25, 783.99] },
-    { time: 0.2, dur: 0.18, freqs: [587.33, 740.0, 880.0] },
-    { time: 0.4, dur: 0.22, freqs: [659.25, 830.61, 987.77] },
-    { time: 0.7, dur: 0.35, freqs: [698.46, 880.0, 1046.5] }
-  ];
+
   const now = audioContext.currentTime;
-  notes.forEach(({ time, dur, freqs }) => {
-    freqs.forEach((freq) => {
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      osc.type = 'triangle';
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.0001, now + time);
-      gain.gain.linearRampToValueAtTime(0.8, now + time + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + time + dur);
-      osc.connect(gain);
-      gain.connect(masterGain);
-      osc.start(now + time);
-      osc.stop(now + time + dur + 0.05);
-    });
-  });
+
+  const playNote = (freq, startTime, duration) => {
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    
+    // Mix of sine and triangle for a bell-like quality
+    osc.type = 'sine'; 
+    osc.frequency.value = freq;
+
+    // Envelope for elegant bell/chime sound
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(0.4, startTime + 0.05); // Soft attack
+    gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration); // Long release
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.1);
+  };
+
+  // C Major 7 Arpeggio sequence (C5, E5, G5, B5, C6) - Elegant & Uplifting
+  const sequence = [
+    { freq: 523.25, time: 0.0, dur: 0.8 }, // C5
+    { freq: 659.25, time: 0.1, dur: 0.8 }, // E5
+    { freq: 783.99, time: 0.2, dur: 0.8 }, // G5
+    { freq: 987.77, time: 0.3, dur: 0.8 }, // B5 (Maj7)
+    { freq: 1046.50, time: 0.4, dur: 2.0 }, // C6 (High C resolve)
+    // Add a bass root note at the end for fullness
+    { freq: 523.25, time: 0.4, dur: 2.0 }  // C5
+  ];
+
+  sequence.forEach(note => playNote(note.freq, now + note.time, note.dur));
 };
 
 const triggerVibration = () => {
@@ -189,12 +202,144 @@ const buildShareCanvas = () => {
   return canvas;
 };
 
+const buildShareSVG = () => {
+  const grid = store.playerGrid;
+  if (!grid || !grid.length) return null;
+  
+  const appUrl = 'https://nonograms.7u.pl/';
+  const size = store.size;
+  const maxBoard = 640;
+  const cellSize = Math.max(8, Math.floor(maxBoard / size));
+  const boardSize = cellSize * size;
+  const padding = 28;
+  const headerHeight = 64;
+  const footerHeight = 28;
+  const infoHeight = 40;
+  const width = boardSize + padding * 2;
+  const height = boardSize + padding * 2 + headerHeight + footerHeight + infoHeight;
+
+  // Colors
+  const bgGradientStart = '#1b2a4a';
+  const bgGradientEnd = '#0a1324';
+  const overlayColor = 'rgba(0, 0, 0, 0.35)';
+  const textColor = '#e8fbff';
+  const gridColor = 'rgba(255, 255, 255, 0.06)';
+  const gridLineColor = 'rgba(255, 255, 255, 0.12)';
+  const filledColor = '#00f2fe';
+  const crossColor = 'rgba(255, 255, 255, 0.5)';
+  const urlColor = 'rgba(255, 255, 255, 0.75)';
+
+  // Difficulty Logic
+  const densityPercent = Math.round(store.currentDensity * 100);
+  const difficultyKey = calculateDifficulty(store.currentDensity);
+  let diffColor = '#33ff33';
+  if (difficultyKey === 'extreme') diffColor = '#ff3333';
+  else if (difficultyKey === 'hardest') diffColor = '#ff9933';
+  else if (difficultyKey === 'harder') diffColor = '#ffff33';
+  const difficultyText = t(`difficulty.${difficultyKey}`);
+  const diffLabel = `${t('win.difficulty')} ${difficultyText} (${densityPercent}%)`;
+
+  let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">`;
+  
+  // Background
+  svgContent += `
+    <defs>
+      <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${bgGradientStart}"/>
+        <stop offset="100%" stop-color="${bgGradientEnd}"/>
+      </linearGradient>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#bg)"/>
+    <rect x="12" y="12" width="${width - 24}" height="${height - 24}" fill="${overlayColor}"/>
+  `;
+
+  // Text: Title & Time
+  svgContent += `
+    <text x="${padding}" y="${padding + 28}" font-family="Segoe UI, sans-serif" font-weight="700" font-size="26" fill="${textColor}">${t('app.title')}</text>
+    <text x="${padding}" y="${padding + 56}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="16" fill="${textColor}">${t('win.time')} ${formattedTime.value}</text>
+  `;
+
+  // Text: Difficulty (Right Aligned - manual approx or end anchor)
+  svgContent += `
+    <text x="${width - padding}" y="${padding + 56}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="14" fill="${diffColor}" text-anchor="end">${diffLabel}</text>
+  `;
+
+  const gridX = padding;
+  const gridY = padding + headerHeight;
+
+  // Grid Background
+  svgContent += `<rect x="${gridX}" y="${gridY}" width="${boardSize}" height="${boardSize}" fill="${gridColor}"/>`;
+
+  // Grid Lines
+  let gridLines = '';
+  for (let i = 0; i <= size; i++) {
+    const pos = i * cellSize;
+    // Vertical
+    gridLines += `<line x1="${gridX + pos}" y1="${gridY}" x2="${gridX + pos}" y2="${gridY + boardSize}" stroke="${gridLineColor}" stroke-width="1"/>`;
+    // Horizontal
+    gridLines += `<line x1="${gridX}" y1="${gridY + pos}" x2="${gridX + boardSize}" y2="${gridY + pos}" stroke="${gridLineColor}" stroke-width="1"/>`;
+  }
+  svgContent += gridLines;
+
+  // Cells
+  let cells = '';
+  const lineWidth = Math.max(1.5, Math.floor(cellSize * 0.12));
+  
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const state = grid[r]?.[c];
+      const cx = gridX + c * cellSize;
+      const cy = gridY + r * cellSize;
+      
+      if (state === 1) { // Filled
+        cells += `<rect x="${cx + 1}" y="${cy + 1}" width="${cellSize - 2}" height="${cellSize - 2}" fill="${filledColor}"/>`;
+      } else if (state === 2) { // Cross
+        const d = cellSize * 0.6;
+        const off = cellSize * 0.2;
+        cells += `
+          <path d="M${cx + off} ${cy + off} L${cx + off + d} ${cy + off + d} M${cx + off + d} ${cy + off} L${cx + off} ${cy + off + d}" 
+          stroke="${crossColor}" stroke-width="${lineWidth}" stroke-linecap="round"/>
+        `;
+      }
+    }
+  }
+  svgContent += cells;
+
+  // Guide Usage
+  if (store.guideUsageCount > 0) {
+      const totalCells = store.size * store.size;
+      const percent = Math.min(100, Math.round((store.guideUsageCount / totalCells) * 100));
+      const guideText = t('win.usedGuide', { count: store.guideUsageCount, percent });
+      svgContent += `<text x="${padding}" y="${height - padding - footerHeight + 10}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="14" fill="#ff4d4d">⚠️ ${guideText}</text>`;
+  }
+
+  // URL
+  svgContent += `<text x="${padding}" y="${height - padding + 6}" font-family="Segoe UI, sans-serif" font-weight="500" font-size="14" fill="${urlColor}">${appUrl}</text>`;
+
+  svgContent += '</svg>';
+  return svgContent;
+};
+
 const canvasToBlob = (canvas) => new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), 'image/png'));
 
 const createShareBlob = async () => {
   const canvas = buildShareCanvas();
   if (!canvas) return null;
   return canvasToBlob(canvas);
+};
+
+const downloadShareSVG = () => {
+  const svgString = buildShareSVG();
+  if (!svgString) return;
+  const blob = new Blob([svgString], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `nonogram-${store.size}x${store.size}.svg`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 };
 
 const downloadShareImage = async () => {
@@ -344,6 +489,10 @@ onUnmounted(() => {
           <!-- Download Screenshot (Compact) -->
           <button class="btn-neon secondary share-btn" :disabled="shareInProgress" :aria-label="t('win.shareDownload')" @click="downloadShareImage">
             <Download :size="20" />
+          </button>
+          <!-- Download SVG (Compact) -->
+          <button class="btn-neon secondary share-btn" :disabled="shareInProgress" aria-label="Download SVG" @click="downloadShareSVG">
+            <FileCode :size="20" />
           </button>
         </div>
       </div>
