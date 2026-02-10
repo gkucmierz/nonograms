@@ -240,7 +240,7 @@ watch(isMobileMenuOpen, (val) => {
       <!-- Game Menu -->
       <div class="nav-dropdown">
         <button class="btn-neon nav-btn" @click.stop="toggleGameMenu">
-          <Gamepad2 :size="18" /> NEW GAME
+          <Gamepad2 :size="18" /> {{ t('nav.newGame') }}
         </button>
         <transition name="slide-fade">
           <div v-if="isGameOpen" class="dropdown-menu">
@@ -281,7 +281,7 @@ watch(isMobileMenuOpen, (val) => {
 
       <!-- Guide Button -->
       <button class="btn-neon nav-btn" @click="toggleGuide">
-        <CircleHelp :size="18" /> GUIDE
+        <CircleHelp :size="18" /> {{ t('nav.guide') }}
       </button>
 
       <!-- Language Menu -->
@@ -335,7 +335,7 @@ watch(isMobileMenuOpen, (val) => {
                 <!-- Mobile Game Menu -->
                 <div class="mobile-group">
                     <button class="mobile-item-trigger" @click="toggleGameMenu">
-                        <span class="flex-center gap-10"><Gamepad2 :size="20" /> NEW GAME</span>
+                        <span class="flex-center gap-10"><Gamepad2 :size="20" /> {{ t('nav.newGame') }}</span>
                         <component :is="isGameOpen ? ChevronUp : ChevronDown" :size="16" />
                     </button>
                     <div v-if="isGameOpen" class="mobile-sub-menu">
@@ -375,7 +375,7 @@ watch(isMobileMenuOpen, (val) => {
                 <!-- Mobile Guide -->
                 <div class="mobile-group">
                     <button class="mobile-item-trigger" @click="toggleGuide">
-                         <span class="flex-center gap-10"><CircleHelp :size="20" /> GUIDE</span>
+                         <span class="flex-center gap-10"><CircleHelp :size="20" /> {{ t('nav.guide') }}</span>
                     </button>
                 </div>
 
@@ -386,7 +386,7 @@ watch(isMobileMenuOpen, (val) => {
                              <span class="lang-flag-current mobile-flag">
                                 <span :class="getFlagClass(locale)"></span>
                              </span>
-                             Language
+                             {{ t('language.label') }}
                         </span>
                         <component :is="isLangOpen ? ChevronUp : ChevronDown" :size="16" />
                     </button>
