@@ -21,6 +21,7 @@ const installDismissed = ref(false);
 const isCoarsePointer = ref(false);
 const isStandalone = ref(false);
 const themePreference = ref('system');
+const appVersion = __APP_VERSION__;
 let displayModeMedia = null;
 let prefersColorSchemeMedia = null;
 
@@ -164,6 +165,10 @@ onUnmounted(() => {
       </section>
     </div>
 
+    <footer class="app-version">
+      v{{ appVersion }}
+    </footer>
+
     <!-- Modals Teleport -->
     <Teleport to="body">
       <WinModal v-if="store.isGameWon" />
@@ -237,5 +242,13 @@ onUnmounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.app-version {
+  margin-top: auto;
+  padding: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.6;
 }
 </style>
