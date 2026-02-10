@@ -175,7 +175,11 @@ const buildShareCanvas = () => {
   if (store.guideUsageCount > 0) {
       ctx.fillStyle = '#ff4d4d';
       ctx.font = '600 14px "Segoe UI", sans-serif';
-      const guideText = t('win.usedGuide', { count: store.guideUsageCount });
+      
+      const totalCells = store.size * store.size;
+      const percent = Math.min(100, Math.round((store.guideUsageCount / totalCells) * 100));
+      const guideText = t('win.usedGuide', { count: store.guideUsageCount, percent });
+      
       ctx.fillText(`⚠️ ${guideText}`, padding, height - padding - footerHeight + 10);
   }
 
