@@ -35,8 +35,8 @@ const { t } = useI18n();
 
 <style scoped>
 .guide-panel {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(0, 242, 254, 0.3);
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
     border-radius: 12px;
     padding: 15px;
     margin-bottom: 20px;
@@ -46,6 +46,7 @@ const { t } = useI18n();
     flex-direction: column;
     align-items: center;
     backdrop-filter: blur(5px);
+    box-shadow: var(--panel-shadow);
 }
 
 .status-text {
@@ -53,7 +54,7 @@ const { t } = useI18n();
     text-align: center;
     margin-bottom: 10px;
     font-size: 0.9rem;
-    color: #ccc;
+    color: var(--text-muted);
     min-height: 20px;
     font-style: italic;
 }
