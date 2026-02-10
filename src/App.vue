@@ -9,6 +9,7 @@ import GuidePanel from './components/GuidePanel.vue';
 import WinModal from './components/WinModal.vue';
 import CustomGameModal from './components/CustomGameModal.vue';
 import FixedBar from './components/FixedBar.vue';
+import ReloadPrompt from './components/ReloadPrompt.vue';
 
 // Main App Entry
 const store = usePuzzleStore();
@@ -173,6 +174,7 @@ onUnmounted(() => {
     <Teleport to="body">
       <WinModal v-if="store.isGameWon" />
       <CustomGameModal v-if="showCustomModal" @close="showCustomModal = false" />
+      <ReloadPrompt />
     </Teleport>
   </main>
 </template>
