@@ -40,13 +40,12 @@ export function calculateHints(grid) {
     return { rowHints, colHints };
 }
 
-export function generateRandomGrid(size) {
+export function generateRandomGrid(size, density = 0.5) {
     const grid = [];
     for (let i = 0; i < size; i++) {
         const row = [];
         for (let j = 0; j < size; j++) {
-            // ~25% empty cells
-            row.push(Math.random() > 0.25 ? 1 : 0);
+            row.push(Math.random() < density ? 1 : 0);
         }
         grid.push(row);
     }

@@ -120,15 +120,16 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     hasUsedGuide.value = false;
     elapsedTime.value = 0;
     startTimer();
+    saveState();
   }
 
-  function initCustomGame(customSize) {
+  function initCustomGame(customSize, density = 0.5) {
     stopTimer();
     currentLevelId.value = 'custom';
     size.value = customSize;
     
     // Generate random grid
-    solution.value = generateRandomGrid(customSize);
+    solution.value = generateRandomGrid(customSize, density);
     
     resetGrid();
     isGameWon.value = false;
@@ -275,44 +276,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     return false;
   }
   
-  function initGame(levelId = 'easy') {
-    // If init called without args and we have save, load it?
-    // User might want to start fresh if clicking buttons.
-    // Let's add explicit 'continue' logic or just auto-load on first run.
-    // For now, let's just stick to explicit init, but maybe load on mount if exists?
-    // The user didn't explicitly ask for "Continue", but "features from HTML".
-    // HTML usually auto-saves and loads.
-    
-    stopTimer();
-    currentLevelId.value = levelId;
-    
-    let puzzle = PUZZLES[levelId];
-    if (!puzzle) {
-        puzzle = PUZZLES['easy'];
-    }
-
-    size.value = puzzle.size;
-    solution.value = puzzle.grid;
-    
-    resetGrid();
-    isGameWon.value = false;
-    elapsedTime.value = 0;
-    startTimer();
-    saveState();
-  }
+  // Duplicate initGame removed
   
-  // Modify initCustomGame similarly
-  function initCustomGame(customSize) {
-    stopTimer();
-    currentLevelId.value = 'custom';
-    size.value = customSize;
-    solution.value = generateRandomGrid(customSize);
-    resetGrid();
-    isGameWon.value = false;
-    elapsedTime.value = 0;
-    startTimer();
-    saveState();
-  }
+  // Duplicate initCustomGame removed
 
   // Duplicate toggleCell/setCell removed
 

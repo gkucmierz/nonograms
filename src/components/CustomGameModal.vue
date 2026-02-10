@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 
@@ -8,6 +8,7 @@ const store = usePuzzleStore();
 const { t } = useI18n();
 
 const customSize = ref(10);
+const fillRate = ref(50);
 const errorMsg = ref('');
 
 const snapToStep = (value, step) => {
@@ -19,6 +20,26 @@ const handleSnap = () => {
   customSize.value = snapToStep(Number(customSize.value), 5);
 };
 
+const difficultyLevel = computed(() => {
+  const rate = fillRate.value;
+  const dist = Math.abs(rate - 50);
+  
+  if (dist <= 5) return 'extreme';
+  if (dist <= 15) return 'hardest';
+  if (dist <= 25) return 'harder';
+  return 'easy';
+});
+
+const difficultyColor = computed(() => {
+  switch(difficultyLevel.value) {
+    case 'extreme': return '#ff3333';
+    case 'hardest': return '#ff9933';
+    case 'harder': return '#ffff33';
+    case 'easy': return '#33ff33';
+    default: return '#33ff33';
+  }
+});
+
 const confirm = () => {
   const size = parseInt(customSize.value);
   if (isNaN(size) || size < 5 || size > 80) {
@@ -26,7 +47,7 @@ const confirm = () => {
     return;
   }
   
-  store.initCustomGame(size);
+  store.initCustomGame(size, fillRate.value / 100);
   emit('close');
 };
 </script>
@@ -51,6 +72,29 @@ const confirm = () => {
           <span>5</span>
           <span>80</span>
         </div>
+      </div>
+
+      <p>{{ t('custom.fillRate') }}</p>
+      <div class="input-group">
+        <div class="range-value">{{ fillRate }}%</div>
+        <input 
+          type="range" 
+          v-model="fillRate" 
+          min="10" 
+          max="90"
+          step="5"
+        />
+        <div class="range-scale">
+          <span>10%</span>
+          <span>90%</span>
+        </div>
+      </div>
+
+      <div class="difficulty-indicator">
+        <span class="label">{{ t('custom.difficulty') }}:</span>
+        <span class="value" :style="{ color: difficultyColor }">
+          {{ t(`difficulty.${difficultyLevel}`) }}
+        </span>
       </div>
       
       <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
@@ -87,6 +131,7 @@ const confirm = () => {
   border: 1px solid var(--accent-cyan);
   box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
   animation: slideUp 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 h2 {
@@ -159,6 +204,26 @@ input[type="range"]::-moz-range-thumb {
     justify-content: space-between;
     color: var(--text-muted);
     font-size: 0.85rem;
+}
+
+.difficulty-indicator {
+    margin: 20px 0;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+
+.difficulty-indicator .label {
+    color: var(--text-color);
+}
+
+.difficulty-indicator .value {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px currentColor;
+    transition: color 0.3s ease;
 }
 
 .error {
