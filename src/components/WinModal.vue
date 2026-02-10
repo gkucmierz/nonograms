@@ -88,8 +88,9 @@ const buildShareCanvas = () => {
   const padding = 28;
   const headerHeight = 64;
   const footerHeight = 28;
+  const infoHeight = 40; // New space for difficulty/guide info
   const width = boardSize + padding * 2;
-  const height = boardSize + padding * 2 + headerHeight + footerHeight;
+  const height = boardSize + padding * 2 + headerHeight + footerHeight + infoHeight;
   const scale = window.devicePixelRatio || 1;
   const canvas = document.createElement('canvas');
   canvas.width = width * scale;
@@ -109,6 +110,25 @@ const buildShareCanvas = () => {
   ctx.fillText(t('app.title'), padding, padding + 10);
   ctx.font = '600 16px "Segoe UI", sans-serif';
   ctx.fillText(`${t('win.time')} ${formattedTime.value}`, padding, padding + 34);
+  
+  // Difficulty & Density Info
+  const densityPercent = Math.round(store.currentDensity * 100);
+  const dist = Math.abs(densityPercent - 50);
+  let difficultyKey = 'easy';
+  let diffColor = '#33ff33';
+  if (dist <= 5) { difficultyKey = 'extreme'; diffColor = '#ff3333'; }
+  else if (dist <= 15) { difficultyKey = 'hardest'; diffColor = '#ff9933'; }
+  else if (dist <= 25) { difficultyKey = 'harder'; diffColor = '#ffff33'; }
+  
+  const difficultyText = t(`difficulty.${difficultyKey}`);
+  ctx.font = '600 14px "Segoe UI", sans-serif';
+  
+  // Right aligned difficulty info
+  const diffLabel = `${t('win.difficulty')} ${difficultyText} (${densityPercent}%)`;
+  const diffWidth = ctx.measureText(diffLabel).width;
+  ctx.fillStyle = diffColor;
+  ctx.fillText(diffLabel, width - padding - diffWidth, padding + 34);
+
   const gridX = padding;
   const gridY = padding + headerHeight;
   ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
@@ -152,6 +172,15 @@ const buildShareCanvas = () => {
       }
     }
   }
+
+  // Guide Usage Info (Dirty Flag)
+  if (store.guideUsageCount > 0) {
+      ctx.fillStyle = '#ff4d4d';
+      ctx.font = '600 14px "Segoe UI", sans-serif';
+      const guideText = t('win.usedGuide', { count: store.guideUsageCount });
+      ctx.fillText(`⚠️ ${guideText}`, padding, height - padding - footerHeight + 10);
+  }
+
   ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
   ctx.font = '500 14px "Segoe UI", sans-serif';
   ctx.fillText(appUrl, padding, height - padding + 6);

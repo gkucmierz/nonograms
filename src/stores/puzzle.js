@@ -64,6 +64,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   const playerGrid = ref([]); // 0: empty, 1: filled, 2: cross
   const isGameWon = ref(false);
   const hasUsedGuide = ref(false);
+  const guideUsageCount = ref(0);
+  const currentDifficulty = ref(null); // 'easy', 'medium', 'hard', 'custom' or object { density: 0.5 }
+  const currentDensity = ref(0);
   const size = ref(5);
   const startTime = ref(null);
   const elapsedTime = ref(0);
@@ -118,6 +121,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     resetGrid();
     isGameWon.value = false;
     hasUsedGuide.value = false;
+    guideUsageCount.value = 0;
+    currentDensity.value = totalCellsToFill.value / (size.value * size.value);
     elapsedTime.value = 0;
     startTimer();
     saveState();
@@ -134,8 +139,11 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     resetGrid();
     isGameWon.value = false;
     hasUsedGuide.value = false;
+    guideUsageCount.value = 0;
+    currentDensity.value = density;
     elapsedTime.value = 0;
     startTimer();
+    saveState();
   }
 
   function resetGrid() {
@@ -243,6 +251,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         playerGrid: playerGrid.value,
         isGameWon: isGameWon.value,
         hasUsedGuide: hasUsedGuide.value,
+        guideUsageCount: guideUsageCount.value,
+        currentDensity: currentDensity.value,
         elapsedTime: elapsedTime.value,
         moves: moves.value,
         history: history.value
@@ -260,6 +270,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
             solution.value = parsed.solution;
             playerGrid.value = parsed.playerGrid;
             isGameWon.value = parsed.isGameWon;
+            hasUsedGuide.value = parsed.hasUsedGuide || false;
+            guideUsageCount.value = parsed.guideUsageCount || 0;
+            currentDensity.value = parsed.currentDensity || 0;
             elapsedTime.value = parsed.elapsedTime || 0;
             moves.value = parsed.moves || 0;
             history.value = parsed.history || [];
@@ -287,6 +300,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         resetGrid();
         isGameWon.value = false;
         hasUsedGuide.value = false;
+        guideUsageCount.value = 0;
         elapsedTime.value = 0;
         startTimer();
         saveState();
@@ -298,6 +312,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   function markGuideUsed() {
     if (isGameWon.value) return;
     hasUsedGuide.value = true;
+    guideUsageCount.value++;
     saveState();
   }
 
@@ -326,6 +341,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     undo,
     closeWinModal,
     hasUsedGuide,
+    guideUsageCount,
+    currentDensity,
     markGuideUsed
   };
 

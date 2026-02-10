@@ -213,6 +213,8 @@ input[type="range"]::-moz-range-thumb {
     justify-content: center;
     gap: 10px;
     align-items: center;
+    white-space: nowrap;
+    height: 1.5em; /* Reserve space for one line of text */
 }
 
 .difficulty-indicator .label {
@@ -224,6 +226,9 @@ input[type="range"]::-moz-range-thumb {
     text-transform: uppercase;
     text-shadow: 0 0 10px currentColor;
     transition: color 0.3s ease;
+    display: inline-block;
+    min-width: 120px; /* Reserve space for longest text */
+    text-align: left;
 }
 
 .error {
