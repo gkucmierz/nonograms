@@ -188,8 +188,8 @@ onUnmounted(() => {
 }
 
 .install-banner {
-  background: rgba(0, 242, 254, 0.1);
-  border: 1px solid var(--primary-neon);
+  background: var(--banner-bg);
+  border: 1px solid var(--banner-border);
   border-radius: 8px;
   padding: 10px 20px;
   display: flex;
@@ -198,10 +198,11 @@ onUnmounted(() => {
   width: 90%;
   max-width: 600px;
   margin-bottom: 20px;
+  box-shadow: var(--banner-shadow);
 }
 
 .install-text {
-  color: #fff;
+  color: var(--text-color);
 }
 
 .install-actions {
@@ -213,7 +214,7 @@ onUnmounted(() => {
 .install-close {
   background: transparent;
   border: none;
-  color: #aaa;
+  color: var(--text-muted);
   font-size: 1.5rem;
   cursor: pointer;
 }
