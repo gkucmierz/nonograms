@@ -20,6 +20,7 @@ const searchTerm = ref('');
 const langToCountry = {
   en: 'gb',
   zh: 'cn',
+  'zh-hant': 'tw',
   hi: 'in',
   es: 'es',
   fr: 'fr',
