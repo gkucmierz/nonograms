@@ -63,6 +63,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   const solution = ref([]);
   const playerGrid = ref([]); // 0: empty, 1: filled, 2: cross
   const isGameWon = ref(false);
+  const hasUsedGuide = ref(false);
   const size = ref(5);
   const startTime = ref(null);
   const elapsedTime = ref(0);
@@ -116,6 +117,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     
     resetGrid();
     isGameWon.value = false;
+    hasUsedGuide.value = false;
     elapsedTime.value = 0;
     startTimer();
   }
@@ -130,6 +132,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     
     resetGrid();
     isGameWon.value = false;
+    hasUsedGuide.value = false;
     elapsedTime.value = 0;
     startTimer();
   }
@@ -238,6 +241,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         solution: solution.value,
         playerGrid: playerGrid.value,
         isGameWon: isGameWon.value,
+        hasUsedGuide: hasUsedGuide.value,
         elapsedTime: elapsedTime.value,
         moves: moves.value,
         history: history.value
@@ -316,12 +320,19 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     if (currentLevelId.value === 'custom') {
         resetGrid();
         isGameWon.value = false;
+        hasUsedGuide.value = false;
         elapsedTime.value = 0;
         startTimer();
         saveState();
     } else {
         initGame(currentLevelId.value);
     }
+  }
+
+  function markGuideUsed() {
+    if (isGameWon.value) return;
+    hasUsedGuide.value = true;
+    saveState();
   }
 
   function closeWinModal() {
@@ -347,7 +358,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     loadState, // expose loadState
     moves,
     undo,
-    closeWinModal
+    closeWinModal,
+    hasUsedGuide,
+    markGuideUsed
   };
 
 });

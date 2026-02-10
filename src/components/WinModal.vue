@@ -223,7 +223,7 @@ const shareTo = async (target) => {
 };
 
 onMounted(() => {
-  if (fireworksRef.value) {
+  if (fireworksRef.value && !store.hasUsedGuide) {
     fireworksInstance = new Fireworks(fireworksRef.value, {
       autoresize: true,
       opacity: 0.6,
@@ -242,7 +242,9 @@ onMounted(() => {
     });
     fireworksInstance.start();
   }
-  playFanfare();
+  if (!store.hasUsedGuide) {
+    playFanfare();
+  }
   triggerVibration();
   window.addEventListener('keydown', handleKeyDown);
 });
@@ -276,7 +278,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="share">
+      <div class="share" v-if="!store.hasUsedGuide">
         <div class="share-title">{{ t('win.shareTitle') }}</div>
         <div class="share-buttons">
           <button class="btn-neon secondary share-btn" :disabled="shareInProgress" :aria-label="t('win.shareX')" @click="shareTo('x')">

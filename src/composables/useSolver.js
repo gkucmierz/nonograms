@@ -24,6 +24,7 @@ export function useSolver() {
             return;
         }
         if (isProcessing.value) return;
+        store.markGuideUsed();
         ensureWorker();
         isProcessing.value = true;
 
