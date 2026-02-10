@@ -409,7 +409,7 @@ p {
   display: block;
 }
 
-:global(html[data-theme="light"]) .modal .share-icon {
+:global(html[data-theme="light"]) .share-buttons .share-btn .share-icon {
   filter: invert(1);
 }
 
