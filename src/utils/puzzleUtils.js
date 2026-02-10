@@ -45,8 +45,8 @@ export function generateRandomGrid(size) {
     for (let i = 0; i < size; i++) {
         const row = [];
         for (let j = 0; j < size; j++) {
-            // ~50% chance of being filled
-            row.push(Math.random() > 0.5 ? 1 : 0);
+            // ~60% chance of being filled
+            row.push(Math.random() > 0.4 ? 1 : 0);
         }
         grid.push(row);
     }
