@@ -240,8 +240,8 @@ const messages = {
     'theme.dark': 'Dark',
     'language.searchLabel': 'Search language',
     'language.searchPlaceholder': 'Type language name...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'नया खेल',
+    'nav.guide': 'गाइड'
   },
   zh: {
     'app.title': 'Nonograms',
@@ -367,7 +367,8 @@ const messages = {
     'language.searchLabel': '搜尋語言',
     'language.searchPlaceholder': '輸入語言名稱...',
     'nav.newGame': '新遊戲',
-    'nav.guide': '指南'
+    'nav.guide': '指南',
+    'nav.guide': 'GUIDE'
   },
   hi: {
     'app.title': 'Nonograms',
@@ -428,8 +429,8 @@ const messages = {
     'theme.dark': 'गहरा',
     'language.searchLabel': 'भाषा खोजें',
     'language.searchPlaceholder': 'भाषा का नाम लिखें...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'नया खेल',
+    'nav.guide': 'गाइड'
   },
   es: {
     'app.title': 'Nonograms',
@@ -614,8 +615,8 @@ const messages = {
     'theme.dark': 'داكن',
     'language.searchLabel': 'ابحث عن لغة',
     'language.searchPlaceholder': 'اكتب اسم اللغة...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'لعبة جديدة',
+    'nav.guide': 'دليل'
   },
   bn: {
     'app.title': 'Nonograms',
@@ -677,6 +678,7 @@ const messages = {
     'language.searchLabel': 'ভাষা অনুসন্ধান করুন',
     'language.searchPlaceholder': 'ভাষার নাম লিখুন...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ru: {
@@ -739,6 +741,7 @@ const messages = {
     'language.searchLabel': 'Поиск языка',
     'language.searchPlaceholder': 'Введите название языка...',
     'nav.newGame': 'НОВАЯ ИГРА',
+    'nav.guide': 'РУКОВОДСТВО',
     'nav.guide': 'РУКОВОДСТВО'
   },
   pt: {
@@ -801,6 +804,7 @@ const messages = {
     'language.searchLabel': 'Buscar idioma',
     'language.searchPlaceholder': 'Digite o nome do idioma...',
     'nav.newGame': 'NOVO JOGO',
+    'nav.guide': 'GUIA',
     'nav.guide': 'GUIA'
   },
   ur: {
@@ -863,6 +867,7 @@ const messages = {
     'language.searchLabel': 'زبان تلاش کریں',
     'language.searchPlaceholder': 'زبان کا نام درج کریں...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   }
   ,
@@ -926,6 +931,7 @@ const messages = {
     'language.searchLabel': 'Sprache suchen',
     'language.searchPlaceholder': 'Sprachname eingeben...',
     'nav.newGame': 'NEUES SPIEL',
+    'nav.guide': 'ANLEITUNG',
     'nav.guide': 'ANLEITUNG'
   },
   it: {
@@ -988,6 +994,7 @@ const messages = {
     'language.searchLabel': 'Cerca lingua',
     'language.searchPlaceholder': 'Digita nome della lingua...',
     'nav.newGame': 'NUOVO GIOCO',
+    'nav.guide': 'GUIDA',
     'nav.guide': 'GUIDA'
   },
   nl: {
@@ -1050,6 +1057,7 @@ const messages = {
     'language.searchLabel': 'Zoek taal',
     'language.searchPlaceholder': 'Voer taalnaam in...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   sv: {
@@ -1101,6 +1109,7 @@ const messages = {
     'language.searchLabel': 'Sök språk',
     'language.searchPlaceholder': 'Skriv språknamn...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   da: {
@@ -1152,6 +1161,7 @@ const messages = {
     'language.searchLabel': 'Søg efter sprog',
     'language.searchPlaceholder': 'Skriv sprogets navn...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   fi: {
@@ -1203,6 +1213,7 @@ const messages = {
     'language.searchLabel': 'Etsi kieltä',
     'language.searchPlaceholder': 'Kirjoita kielen nimi...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   no: {
@@ -1254,6 +1265,7 @@ const messages = {
     'language.searchLabel': 'Søk etter språk',
     'language.searchPlaceholder': 'Skriv språknavn...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   cs: {
@@ -1305,6 +1317,7 @@ const messages = {
     'language.searchLabel': 'Hledat jazyk',
     'language.searchPlaceholder': 'Zadejte název jazyka...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   sk: {
@@ -1356,6 +1369,7 @@ const messages = {
     'language.searchLabel': 'Hľadať jazyk',
     'language.searchPlaceholder': 'Zadajte názov jazyka...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   hu: {
@@ -1407,6 +1421,7 @@ const messages = {
     'language.searchLabel': 'Nyelv keresése',
     'language.searchPlaceholder': 'Írd be a nyelv nevét...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ro: {
@@ -1458,6 +1473,7 @@ const messages = {
     'language.searchLabel': 'Caută limbă',
     'language.searchPlaceholder': 'Introduceți numele limbii...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   bg: {
@@ -1509,6 +1525,7 @@ const messages = {
     'language.searchLabel': 'Търсене на език',
     'language.searchPlaceholder': 'Въведете име на език...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   el: {
@@ -1560,6 +1577,7 @@ const messages = {
     'language.searchLabel': 'Αναζήτηση γλώσσας',
     'language.searchPlaceholder': 'Πληκτρολογήστε όνομα γλώσσας...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   uk: {
@@ -1611,6 +1629,7 @@ const messages = {
     'language.searchLabel': 'Пошук мови',
     'language.searchPlaceholder': 'Введіть назву мови...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   be: {
@@ -1662,6 +1681,7 @@ const messages = {
     'language.searchLabel': 'Пошук мовы',
     'language.searchPlaceholder': 'Увядзіце назву мовы...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   sr: {
@@ -1713,6 +1733,7 @@ const messages = {
     'language.searchLabel': 'Претрага језика',
     'language.searchPlaceholder': 'Унесите назив језика...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   hr: {
@@ -1764,6 +1785,7 @@ const messages = {
     'language.searchLabel': 'Pretraži jezik',
     'language.searchPlaceholder': 'Unesite naziv jezika...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   sl: {
@@ -1815,6 +1837,7 @@ const messages = {
     'language.searchLabel': 'Iskanje jezika',
     'language.searchPlaceholder': 'Vnesite ime jezika...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   lt: {
@@ -1866,6 +1889,7 @@ const messages = {
     'language.searchLabel': 'Ieškoti kalbos',
     'language.searchPlaceholder': 'Įveskite kalbos pavadinimą...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   lv: {
@@ -1917,6 +1941,7 @@ const messages = {
     'language.searchLabel': 'Meklēt valodu',
     'language.searchPlaceholder': 'Ierakstiet valodas nosaukumu...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   et: {
@@ -1968,6 +1993,7 @@ const messages = {
     'language.searchLabel': 'Otsi keelt',
     'language.searchPlaceholder': 'Sisesta keele nimi...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ga: {
@@ -2019,6 +2045,7 @@ const messages = {
     'language.searchLabel': 'Cuardaigh teanga',
     'language.searchPlaceholder': 'Iontráil ainm teanga...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   is: {
@@ -2070,6 +2097,7 @@ const messages = {
     'language.searchLabel': 'Leita að tungumáli',
     'language.searchPlaceholder': 'Sláðu inn heiti tungumáls...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   mt: {
@@ -2121,6 +2149,7 @@ const messages = {
     'language.searchLabel': 'Fittex lingwa',
     'language.searchPlaceholder': 'Daħħal isem il-lingwa...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   sq: {
@@ -2172,6 +2201,7 @@ const messages = {
     'language.searchLabel': 'Kërko gjuhë',
     'language.searchPlaceholder': 'Shkruani emrin e gjuhës...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   mk: {
@@ -2223,6 +2253,7 @@ const messages = {
     'language.searchLabel': 'Пребарај јазик',
     'language.searchPlaceholder': 'Внесете име на јазик...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   bs: {
@@ -2274,6 +2305,7 @@ const messages = {
     'language.searchLabel': 'Pretraži jezik',
     'language.searchPlaceholder': 'Unesite naziv jezika...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   tr: {
@@ -2325,6 +2357,7 @@ const messages = {
     'language.searchLabel': 'Dil ara',
     'language.searchPlaceholder': 'Dil adını yazın...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ca: {
@@ -2376,6 +2409,7 @@ const messages = {
     'language.searchLabel': 'Cerca idioma',
     'language.searchPlaceholder': 'Escriu el nom de l’idioma...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   gl: {
@@ -2427,6 +2461,7 @@ const messages = {
     'language.searchLabel': 'Buscar idioma',
     'language.searchPlaceholder': 'Escribe o nome do idioma...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   cy: {
@@ -2478,6 +2513,7 @@ const messages = {
     'language.searchLabel': 'Chwilio am iaith',
     'language.searchPlaceholder': 'Teipiwch enw iaith...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   gd: {
@@ -2529,6 +2565,7 @@ const messages = {
     'language.searchLabel': 'Lorg cànan',
     'language.searchPlaceholder': 'Cuir a-steach ainm cànain...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   eu: {
@@ -2580,6 +2617,7 @@ const messages = {
     'language.searchLabel': 'Bilatu hizkuntza',
     'language.searchPlaceholder': 'Idatzi hizkuntzaren izena...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ja: {
@@ -2631,6 +2669,7 @@ const messages = {
     'language.searchLabel': '言語を検索',
     'language.searchPlaceholder': '言語名を入力...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ko: {
@@ -2682,6 +2721,7 @@ const messages = {
     'language.searchLabel': '언어 검색',
     'language.searchPlaceholder': '언어 이름 입력...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   id: {
@@ -2733,6 +2773,7 @@ const messages = {
     'language.searchLabel': 'Cari bahasa',
     'language.searchPlaceholder': 'Ketik nama bahasa...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   vi: {
@@ -2784,6 +2825,7 @@ const messages = {
     'language.searchLabel': 'Tìm ngôn ngữ',
     'language.searchPlaceholder': 'Nhập tên ngôn ngữ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   th: {
@@ -2835,6 +2877,7 @@ const messages = {
     'language.searchLabel': 'ค้นหาภาษา',
     'language.searchPlaceholder': 'พิมพ์ชื่อภาษา...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ms: {
@@ -2886,6 +2929,7 @@ const messages = {
     'language.searchLabel': 'Cari bahasa',
     'language.searchPlaceholder': 'Taip nama bahasa...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   fa: {
@@ -2937,6 +2981,7 @@ const messages = {
     'language.searchLabel': 'جستجوی زبان',
     'language.searchPlaceholder': 'نام زبان را بنویسید...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   he: {
@@ -2988,6 +3033,7 @@ const messages = {
     'language.searchLabel': 'חפש שפה',
     'language.searchPlaceholder': 'הקלד שם שפה...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   az: {
@@ -3039,6 +3085,7 @@ const messages = {
     'language.searchLabel': 'Dili axtar',
     'language.searchPlaceholder': 'Dil adını yazın...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   hy: {
@@ -3090,6 +3137,7 @@ const messages = {
     'language.searchLabel': 'Փնտրել լեզուն',
     'language.searchPlaceholder': 'Գրեք լեզվի անունը...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   uz: {
@@ -3141,6 +3189,7 @@ const messages = {
     'language.searchLabel': 'Tilni qidirish',
     'language.searchPlaceholder': 'Til nomini yozing...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   kk: {
@@ -3192,6 +3241,7 @@ const messages = {
     'language.searchLabel': 'Tildi izdeu',
     'language.searchPlaceholder': 'Til atauyn jaz...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   gu: {
@@ -3243,6 +3293,7 @@ const messages = {
     'language.searchLabel': 'ભાષા શોધો',
     'language.searchPlaceholder': 'ભાષાનું નામ લખો...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   kn: {
@@ -3294,6 +3345,7 @@ const messages = {
     'language.searchLabel': 'ಭಾಷೆ ಹುಡುಕಿ',
     'language.searchPlaceholder': 'ಭಾಷೆಯ ಹೆಸರನ್ನು ಟೈಪ್ ಮಾಡಿ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   mr: {
@@ -3345,6 +3397,7 @@ const messages = {
     'language.searchLabel': 'भाषा शोधा',
     'language.searchPlaceholder': 'भाषेचे नाव लिहा...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   pa: {
@@ -3396,6 +3449,7 @@ const messages = {
     'language.searchLabel': 'ਭਾਸ਼ਾ ਖੋਜੋ',
     'language.searchPlaceholder': 'ਭਾਸ਼ਾ ਦਾ ਨਾਮ ਲਿਖੋ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ta: {
@@ -3447,6 +3501,7 @@ const messages = {
     'language.searchLabel': 'மொழியைத் தேடு',
     'language.searchPlaceholder': 'மொழி பெயரை உள்ளிடவும்...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   te: {
@@ -3498,6 +3553,7 @@ const messages = {
     'language.searchLabel': 'భాషను వెతకండి',
     'language.searchPlaceholder': 'భాష పేరు టైప్ చేయండి...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ne: {
@@ -3549,6 +3605,7 @@ const messages = {
     'language.searchLabel': 'भाषा खोज्नुहोस्',
     'language.searchPlaceholder': 'भाषाको नाम लेख्नुहोस्...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   my: {
@@ -3600,6 +3657,7 @@ const messages = {
     'language.searchLabel': 'ဘာသာစကားရှာပါ',
     'language.searchPlaceholder': 'ဘာသာစကားအမည်ရိုက်ထည့်ပါ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   km: {
@@ -3651,6 +3709,7 @@ const messages = {
     'language.searchLabel': 'ស្វែងរកភាសា',
     'language.searchPlaceholder': 'វាយឈ្មោះភាសា...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   lo: {
@@ -3702,6 +3761,7 @@ const messages = {
     'language.searchLabel': 'ຄົ້ນຫາພາສາ',
     'language.searchPlaceholder': 'ພິມຊື່ພາສາ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   mn: {
@@ -3753,6 +3813,7 @@ const messages = {
     'language.searchLabel': 'Хэл хайх',
     'language.searchPlaceholder': 'Хэлний нэрийг бичнэ үү...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   bo: {
@@ -3804,6 +3865,7 @@ const messages = {
     'language.searchLabel': 'སྐད་ཡིག་འཚོལ',
     'language.searchPlaceholder': 'སྐད་ཡིག་གི་མིང་འབྲི...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   af: {
@@ -3855,6 +3917,7 @@ const messages = {
     'language.searchLabel': 'Soek taal',
     'language.searchPlaceholder': 'Tik taalnaam...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   sw: {
@@ -3906,6 +3969,7 @@ const messages = {
     'language.searchLabel': 'Tafuta lugha',
     'language.searchPlaceholder': 'Andika jina la lugha...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   am: {
@@ -3957,6 +4021,7 @@ const messages = {
     'language.searchLabel': 'ቋንቋ ይፈልጉ',
     'language.searchPlaceholder': 'የቋንቋ ስም ይተይቡ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   yo: {
@@ -4008,6 +4073,7 @@ const messages = {
     'language.searchLabel': 'Wá èdè',
     'language.searchPlaceholder': 'Tẹ orukọ èdè...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ig: {
@@ -4059,6 +4125,7 @@ const messages = {
     'language.searchLabel': 'Chọọ asụsụ',
     'language.searchPlaceholder': 'Pịnye aha asụsụ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   so: {
@@ -4110,6 +4177,7 @@ const messages = {
     'language.searchLabel': 'Raadi luqad',
     'language.searchPlaceholder': 'Qor magaca luqadda...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   rw: {
@@ -4161,6 +4229,7 @@ const messages = {
     'language.searchLabel': 'Shakisha ururimi',
     'language.searchPlaceholder': 'Andika izina ry\'ururimi...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   rn: {
@@ -4212,6 +4281,7 @@ const messages = {
     'language.searchLabel': 'Rondera ururimi',
     'language.searchPlaceholder': 'Andika izina ry\'ururimi...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   wo: {
@@ -4263,6 +4333,7 @@ const messages = {
     'language.searchLabel': 'Seet làkk',
     'language.searchPlaceholder': 'Bind turu làkk...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   om: {
@@ -4314,6 +4385,7 @@ const messages = {
     'language.searchLabel': 'Afaan barbaadi',
     'language.searchPlaceholder': 'Maqaa afaanii barreessi...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ti: {
@@ -4365,6 +4437,7 @@ const messages = {
     'language.searchLabel': 'ቋንቋ ድለ',
     'language.searchPlaceholder': 'ስም ቋንቋ ጽሓፍ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ht: {
@@ -4416,6 +4489,7 @@ const messages = {
     'language.searchLabel': 'Chèche lang',
     'language.searchPlaceholder': 'Ekri non lang lan...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ceb: {
@@ -4467,6 +4541,7 @@ const messages = {
     'language.searchLabel': 'Pangitaa ang pinulongan',
     'language.searchPlaceholder': 'Isulat ang ngalan sa pinulongan...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ilo: {
@@ -4518,6 +4593,7 @@ const messages = {
     'language.searchLabel': 'Biroken ti pagsasao',
     'language.searchPlaceholder': 'I-type ti nagan ti pagsasao...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   jv: {
@@ -4569,6 +4645,7 @@ const messages = {
     'language.searchLabel': 'Goleki basa',
     'language.searchPlaceholder': 'Ketik jeneng basa...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ku: {
@@ -4620,6 +4697,7 @@ const messages = {
     'language.searchLabel': 'Li ziman bigere',
     'language.searchPlaceholder': 'Navê ziman binivîse...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ckb: {
@@ -4671,6 +4749,7 @@ const messages = {
     'language.searchLabel': 'گەڕان بۆ زمان',
     'language.searchPlaceholder': 'ناوی زمان بنووسە...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   },
   ps: {
@@ -4722,6 +4801,7 @@ const messages = {
     'language.searchLabel': 'ژبه وپلټئ',
     'language.searchPlaceholder': 'د ژبې نوم ولیکئ...',
     'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE',
     'nav.guide': 'GUIDE'
   }
 };
