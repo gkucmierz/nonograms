@@ -240,8 +240,8 @@ const messages = {
     'theme.dark': 'Dark',
     'language.searchLabel': 'Search language',
     'language.searchPlaceholder': 'Type language name...',
-    'nav.newGame': 'नया खेल',
-    'nav.guide': 'गाइड'
+    'nav.newGame': 'NEW GAME',
+    'nav.guide': 'GUIDE'
   },
   zh: {
     'app.title': 'Nonograms',
@@ -367,8 +367,7 @@ const messages = {
     'language.searchLabel': '搜尋語言',
     'language.searchPlaceholder': '輸入語言名稱...',
     'nav.newGame': '新遊戲',
-    'nav.guide': '指南',
-    'nav.guide': 'GUIDE'
+    'nav.guide': '指南'
   },
   hi: {
     'app.title': 'Nonograms',
@@ -677,8 +676,8 @@ const messages = {
     'theme.dark': 'গাঢ়',
     'language.searchLabel': 'ভাষা অনুসন্ধান করুন',
     'language.searchPlaceholder': 'ভাষার নাম লিখুন...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'নতুন খেলা',
+    'nav.guide': 'নির্দেশিকা'
   },
   ru: {
     'app.title': 'Nonograms',
@@ -740,7 +739,6 @@ const messages = {
     'language.searchLabel': 'Поиск языка',
     'language.searchPlaceholder': 'Введите название языка...',
     'nav.newGame': 'НОВАЯ ИГРА',
-    'nav.guide': 'РУКОВОДСТВО',
     'nav.guide': 'РУКОВОДСТВО'
   },
   pt: {
@@ -803,7 +801,6 @@ const messages = {
     'language.searchLabel': 'Buscar idioma',
     'language.searchPlaceholder': 'Digite o nome do idioma...',
     'nav.newGame': 'NOVO JOGO',
-    'nav.guide': 'GUIA',
     'nav.guide': 'GUIA'
   },
   ur: {
@@ -865,9 +862,8 @@ const messages = {
     'theme.dark': 'گہرا',
     'language.searchLabel': 'زبان تلاش کریں',
     'language.searchPlaceholder': 'زبان کا نام درج کریں...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'نیا کھیل',
+    'nav.guide': 'رہنما'
   }
   ,
   de: {
@@ -930,7 +926,6 @@ const messages = {
     'language.searchLabel': 'Sprache suchen',
     'language.searchPlaceholder': 'Sprachname eingeben...',
     'nav.newGame': 'NEUES SPIEL',
-    'nav.guide': 'ANLEITUNG',
     'nav.guide': 'ANLEITUNG'
   },
   it: {
@@ -993,7 +988,6 @@ const messages = {
     'language.searchLabel': 'Cerca lingua',
     'language.searchPlaceholder': 'Digita nome della lingua...',
     'nav.newGame': 'NUOVO GIOCO',
-    'nav.guide': 'GUIDA',
     'nav.guide': 'GUIDA'
   },
   nl: {
@@ -1055,9 +1049,8 @@ const messages = {
     'theme.dark': 'Donker',
     'language.searchLabel': 'Zoek taal',
     'language.searchPlaceholder': 'Voer taalnaam in...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NIEUW SPEL',
+    'nav.guide': 'HANDLEIDING'
   },
   sv: {
     'app.title': 'Nonograms',
@@ -1107,8 +1100,7 @@ const messages = {
     'theme.dark': 'Mörkt',
     'language.searchLabel': 'Sök språk',
     'language.searchPlaceholder': 'Skriv språknamn...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
+    'nav.newGame': 'NYTT SPEL',
     'nav.guide': 'GUIDE'
   },
   da: {
@@ -1159,9 +1151,8 @@ const messages = {
     'theme.dark': 'Mørkt',
     'language.searchLabel': 'Søg efter sprog',
     'language.searchPlaceholder': 'Skriv sprogets navn...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NYT SPIL',
+    'nav.guide': 'VEJLEDNING'
   },
   fi: {
     'app.title': 'Nonograms',
@@ -1211,9 +1202,8 @@ const messages = {
     'theme.dark': 'Tumma',
     'language.searchLabel': 'Etsi kieltä',
     'language.searchPlaceholder': 'Kirjoita kielen nimi...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'UUSI PELI',
+    'nav.guide': 'OPAS'
   },
   no: {
     'app.title': 'Nonograms',
@@ -1263,9 +1253,8 @@ const messages = {
     'theme.dark': 'Mørkt',
     'language.searchLabel': 'Søk etter språk',
     'language.searchPlaceholder': 'Skriv språknavn...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NYTT SPILL',
+    'nav.guide': 'VEILEDER'
   },
   cs: {
     'app.title': 'Nonograms',
@@ -1315,9 +1304,8 @@ const messages = {
     'theme.dark': 'Tmavé',
     'language.searchLabel': 'Hledat jazyk',
     'language.searchPlaceholder': 'Zadejte název jazyka...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVÁ HRA',
+    'nav.guide': 'NÁVOD'
   },
   sk: {
     'app.title': 'Nonograms',
@@ -1367,9 +1355,8 @@ const messages = {
     'theme.dark': 'Tmavý',
     'language.searchLabel': 'Hľadať jazyk',
     'language.searchPlaceholder': 'Zadajte názov jazyka...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVÁ HRA',
+    'nav.guide': 'NÁVOD'
   },
   hu: {
     'app.title': 'Nonograms',
@@ -1419,9 +1406,8 @@ const messages = {
     'theme.dark': 'Sötét',
     'language.searchLabel': 'Nyelv keresése',
     'language.searchPlaceholder': 'Írd be a nyelv nevét...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ÚJ JÁTÉK',
+    'nav.guide': 'ÚTMUTATÓ'
   },
   ro: {
     'app.title': 'Nonograms',
@@ -1471,9 +1457,8 @@ const messages = {
     'theme.dark': 'Întunecat',
     'language.searchLabel': 'Caută limbă',
     'language.searchPlaceholder': 'Introduceți numele limbii...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'JOC NOU',
+    'nav.guide': 'GHID'
   },
   bg: {
     'app.title': 'Nonograms',
@@ -1523,9 +1508,8 @@ const messages = {
     'theme.dark': 'Тъмна',
     'language.searchLabel': 'Търсене на език',
     'language.searchPlaceholder': 'Въведете име на език...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'НОВА ИГРА',
+    'nav.guide': 'РЪКОВОДСТВО'
   },
   el: {
     'app.title': 'Nonograms',
@@ -1575,9 +1559,8 @@ const messages = {
     'theme.dark': 'Σκούρο',
     'language.searchLabel': 'Αναζήτηση γλώσσας',
     'language.searchPlaceholder': 'Πληκτρολογήστε όνομα γλώσσας...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ΝΕΟ ΠΑΙΧΝΙΔΙ',
+    'nav.guide': 'ΟΔΗΓΟΣ'
   },
   uk: {
     'app.title': 'Nonograms',
@@ -1627,9 +1610,8 @@ const messages = {
     'theme.dark': 'Темна',
     'language.searchLabel': 'Пошук мови',
     'language.searchPlaceholder': 'Введіть назву мови...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'НОВА ГРА',
+    'nav.guide': 'ІНСТРУКЦІЯ'
   },
   be: {
     'app.title': 'Nonograms',
@@ -1679,9 +1661,8 @@ const messages = {
     'theme.dark': 'Цёмная',
     'language.searchLabel': 'Пошук мовы',
     'language.searchPlaceholder': 'Увядзіце назву мовы...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'НОВАЯ ГУЛЬНЯ',
+    'nav.guide': 'КІРАЎНІЦТВА'
   },
   sr: {
     'app.title': 'Nonograms',
@@ -1731,9 +1712,8 @@ const messages = {
     'theme.dark': 'Тамна',
     'language.searchLabel': 'Претрага језика',
     'language.searchPlaceholder': 'Унесите назив језика...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'НОВА ИГРА',
+    'nav.guide': 'ВОДИЧ'
   },
   hr: {
     'app.title': 'Nonograms',
@@ -1783,9 +1763,8 @@ const messages = {
     'theme.dark': 'Tamna',
     'language.searchLabel': 'Pretraži jezik',
     'language.searchPlaceholder': 'Unesite naziv jezika...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVA IGRA',
+    'nav.guide': 'VODIČ'
   },
   sl: {
     'app.title': 'Nonograms',
@@ -1835,9 +1814,8 @@ const messages = {
     'theme.dark': 'Temna',
     'language.searchLabel': 'Iskanje jezika',
     'language.searchPlaceholder': 'Vnesite ime jezika...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVA IGRA',
+    'nav.guide': 'VODNIK'
   },
   lt: {
     'app.title': 'Nonograms',
@@ -1887,9 +1865,8 @@ const messages = {
     'theme.dark': 'Tamsi',
     'language.searchLabel': 'Ieškoti kalbos',
     'language.searchPlaceholder': 'Įveskite kalbos pavadinimą...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NAUJAS ŽAIDIMAS',
+    'nav.guide': 'VADOVAS'
   },
   lv: {
     'app.title': 'Nonograms',
@@ -1939,9 +1916,8 @@ const messages = {
     'theme.dark': 'Tumša',
     'language.searchLabel': 'Meklēt valodu',
     'language.searchPlaceholder': 'Ierakstiet valodas nosaukumu...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'JAUNA SPĒLE',
+    'nav.guide': 'CEĻVEDIS'
   },
   et: {
     'app.title': 'Nonograms',
@@ -1991,9 +1967,8 @@ const messages = {
     'theme.dark': 'Tume',
     'language.searchLabel': 'Otsi keelt',
     'language.searchPlaceholder': 'Sisesta keele nimi...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'UUS MÄNG',
+    'nav.guide': 'JUHEND'
   },
   ga: {
     'app.title': 'Nonograms',
@@ -2043,9 +2018,8 @@ const messages = {
     'theme.dark': 'Dorcha',
     'language.searchLabel': 'Cuardaigh teanga',
     'language.searchPlaceholder': 'Iontráil ainm teanga...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'CLUICHE NUA',
+    'nav.guide': 'TREOIR'
   },
   is: {
     'app.title': 'Nonograms',
@@ -2095,9 +2069,8 @@ const messages = {
     'theme.dark': 'Dökkt',
     'language.searchLabel': 'Leita að tungumáli',
     'language.searchPlaceholder': 'Sláðu inn heiti tungumáls...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NÝR LEIKUR',
+    'nav.guide': 'LEIÐBEININGAR'
   },
   mt: {
     'app.title': 'Nonograms',
@@ -2147,9 +2120,8 @@ const messages = {
     'theme.dark': 'Skur',
     'language.searchLabel': 'Fittex lingwa',
     'language.searchPlaceholder': 'Daħħal isem il-lingwa...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'LOGĦBA ĠDIDA',
+    'nav.guide': 'GWIDA'
   },
   sq: {
     'app.title': 'Nonograms',
@@ -2199,9 +2171,8 @@ const messages = {
     'theme.dark': 'I errët',
     'language.searchLabel': 'Kërko gjuhë',
     'language.searchPlaceholder': 'Shkruani emrin e gjuhës...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'LOJË E RE',
+    'nav.guide': 'UDHËZUES'
   },
   mk: {
     'app.title': 'Nonograms',
@@ -2251,9 +2222,8 @@ const messages = {
     'theme.dark': 'Темна',
     'language.searchLabel': 'Пребарај јазик',
     'language.searchPlaceholder': 'Внесете име на јазик...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'НОВА ИГРА',
+    'nav.guide': 'ВОДИЧ'
   },
   bs: {
     'app.title': 'Nonograms',
@@ -2303,9 +2273,8 @@ const messages = {
     'theme.dark': 'Tamna',
     'language.searchLabel': 'Pretraži jezik',
     'language.searchPlaceholder': 'Unesite naziv jezika...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVA IGRA',
+    'nav.guide': 'VODIČ'
   },
   tr: {
     'app.title': 'Nonograms',
@@ -2355,9 +2324,8 @@ const messages = {
     'theme.dark': 'Koyu',
     'language.searchLabel': 'Dil ara',
     'language.searchPlaceholder': 'Dil adını yazın...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'YENİ OYUN',
+    'nav.guide': 'REHBER'
   },
   ca: {
     'app.title': 'Nonograms',
@@ -2407,9 +2375,8 @@ const messages = {
     'theme.dark': 'Fosc',
     'language.searchLabel': 'Cerca idioma',
     'language.searchPlaceholder': 'Escriu el nom de l’idioma...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVA PARTIDA',
+    'nav.guide': 'GUIA'
   },
   gl: {
     'app.title': 'Nonograms',
@@ -2459,9 +2426,8 @@ const messages = {
     'theme.dark': 'Escuro',
     'language.searchLabel': 'Buscar idioma',
     'language.searchPlaceholder': 'Escribe o nome do idioma...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOVO XOGO',
+    'nav.guide': 'GUÍA'
   },
   cy: {
     'app.title': 'Nonograms',
@@ -2511,9 +2477,8 @@ const messages = {
     'theme.dark': 'Tywyll',
     'language.searchLabel': 'Chwilio am iaith',
     'language.searchPlaceholder': 'Teipiwch enw iaith...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'GÊM NEWYDD',
+    'nav.guide': 'CANLLAW'
   },
   gd: {
     'app.title': 'Nonograms',
@@ -2563,9 +2528,8 @@ const messages = {
     'theme.dark': 'Dorcha',
     'language.searchLabel': 'Lorg cànan',
     'language.searchPlaceholder': 'Cuir a-steach ainm cànain...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'GEAMA ÙR',
+    'nav.guide': 'STIÙIREADH'
   },
   eu: {
     'app.title': 'Nonograms',
@@ -2615,9 +2579,8 @@ const messages = {
     'theme.dark': 'Ilun',
     'language.searchLabel': 'Bilatu hizkuntza',
     'language.searchPlaceholder': 'Idatzi hizkuntzaren izena...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'JOKO BERRIA',
+    'nav.guide': 'GIDA'
   },
   ja: {
     'app.title': 'ノノグラム',
@@ -2718,9 +2681,8 @@ const messages = {
     'theme.dark': '다크',
     'language.searchLabel': '언어 검색',
     'language.searchPlaceholder': '언어 이름 입력...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': '새 게임',
+    'nav.guide': '가이드'
   },
   id: {
     'app.title': 'Nonograms',
@@ -2770,9 +2732,8 @@ const messages = {
     'theme.dark': 'Gelap',
     'language.searchLabel': 'Cari bahasa',
     'language.searchPlaceholder': 'Ketik nama bahasa...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'PERMAINAN BARU',
+    'nav.guide': 'PANDUAN'
   },
   vi: {
     'app.title': 'Nonograms',
@@ -2822,9 +2783,8 @@ const messages = {
     'theme.dark': 'Tối',
     'language.searchLabel': 'Tìm ngôn ngữ',
     'language.searchPlaceholder': 'Nhập tên ngôn ngữ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'TRÒ CHƠI MỚI',
+    'nav.guide': 'HƯỚNG DẪN'
   },
   th: {
     'app.title': 'Nonograms',
@@ -2874,9 +2834,8 @@ const messages = {
     'theme.dark': 'มืด',
     'language.searchLabel': 'ค้นหาภาษา',
     'language.searchPlaceholder': 'พิมพ์ชื่อภาษา...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'เกมใหม่',
+    'nav.guide': 'คู่มือ'
   },
   ms: {
     'app.title': 'Nonograms',
@@ -2926,9 +2885,8 @@ const messages = {
     'theme.dark': 'Gelap',
     'language.searchLabel': 'Cari bahasa',
     'language.searchPlaceholder': 'Taip nama bahasa...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'PERMAINAN BARU',
+    'nav.guide': 'PANDUAN'
   },
   fa: {
     'app.title': 'Nonograms',
@@ -2978,9 +2936,8 @@ const messages = {
     'theme.dark': 'تاریک',
     'language.searchLabel': 'جستجوی زبان',
     'language.searchPlaceholder': 'نام زبان را بنویسید...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'بازی جدید',
+    'nav.guide': 'راهنما'
   },
   he: {
     'app.title': 'Nonograms',
@@ -3030,9 +2987,8 @@ const messages = {
     'theme.dark': 'כהה',
     'language.searchLabel': 'חפש שפה',
     'language.searchPlaceholder': 'הקלד שם שפה...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'משחק חדש',
+    'nav.guide': 'מדריך'
   },
   az: {
     'app.title': 'Nonograms',
@@ -3082,9 +3038,8 @@ const messages = {
     'theme.dark': 'Qaranlıq',
     'language.searchLabel': 'Dili axtar',
     'language.searchPlaceholder': 'Dil adını yazın...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'YENİ OYUN',
+    'nav.guide': 'BƏLƏDÇİ'
   },
   hy: {
     'app.title': 'Nonograms',
@@ -3134,9 +3089,8 @@ const messages = {
     'theme.dark': 'Մութ',
     'language.searchLabel': 'Փնտրել լեզուն',
     'language.searchPlaceholder': 'Գրեք լեզվի անունը...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ՆՈՐ ԽԱՂ',
+    'nav.guide': 'ՈՒՂԵՑՈՒՅՑ'
   },
   uz: {
     'app.title': 'Nonograms',
@@ -3186,9 +3140,8 @@ const messages = {
     'theme.dark': 'Qorong‘u',
     'language.searchLabel': 'Tilni qidirish',
     'language.searchPlaceholder': 'Til nomini yozing...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'YANGI O\'YIN',
+    'nav.guide': 'QO\'LLANMA'
   },
   kk: {
     'app.title': 'Nonograms',
@@ -3238,9 +3191,8 @@ const messages = {
     'theme.dark': 'Qarañğy',
     'language.searchLabel': 'Tildi izdeu',
     'language.searchPlaceholder': 'Til atauyn jaz...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ЖАҢА ОЙЫН',
+    'nav.guide': 'НҰСҚАУЛЫҚ'
   },
   gu: {
     'app.title': 'Nonograms',
@@ -3290,9 +3242,8 @@ const messages = {
     'theme.dark': 'ડાર્ક',
     'language.searchLabel': 'ભાષા શોધો',
     'language.searchPlaceholder': 'ભાષાનું નામ લખો...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'નવી રમત',
+    'nav.guide': 'માર્ગદર્શિકા'
   },
   kn: {
     'app.title': 'Nonograms',
@@ -3342,9 +3293,8 @@ const messages = {
     'theme.dark': 'ಕತ್ತಲೆ',
     'language.searchLabel': 'ಭಾಷೆ ಹುಡುಕಿ',
     'language.searchPlaceholder': 'ಭಾಷೆಯ ಹೆಸರನ್ನು ಟೈಪ್ ಮಾಡಿ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ಹೊಸ ಆಟ',
+    'nav.guide': 'ಮಾರ್ಗದರ್ಶಿ'
   },
   mr: {
     'app.title': 'Nonograms',
@@ -3394,9 +3344,8 @@ const messages = {
     'theme.dark': 'डार्क',
     'language.searchLabel': 'भाषा शोधा',
     'language.searchPlaceholder': 'भाषेचे नाव लिहा...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'नवीन खेळ',
+    'nav.guide': 'मार्गदर्शक'
   },
   pa: {
     'app.title': 'Nonograms',
@@ -3446,9 +3395,8 @@ const messages = {
     'theme.dark': 'ਡਾਰਕ',
     'language.searchLabel': 'ਭਾਸ਼ਾ ਖੋਜੋ',
     'language.searchPlaceholder': 'ਭਾਸ਼ਾ ਦਾ ਨਾਮ ਲਿਖੋ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ਨਵੀਂ ਖੇਡ',
+    'nav.guide': 'ਗਾਈਡ'
   },
   ta: {
     'app.title': 'Nonograms',
@@ -3498,9 +3446,8 @@ const messages = {
     'theme.dark': 'இருள்',
     'language.searchLabel': 'மொழியைத் தேடு',
     'language.searchPlaceholder': 'மொழி பெயரை உள்ளிடவும்...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'புதிய விளையாட்டு',
+    'nav.guide': 'வழிகாட்டி'
   },
   te: {
     'app.title': 'Nonograms',
@@ -3550,9 +3497,8 @@ const messages = {
     'theme.dark': 'డార్క్',
     'language.searchLabel': 'భాషను వెతకండి',
     'language.searchPlaceholder': 'భాష పేరు టైప్ చేయండి...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'కొత్త ఆట',
+    'nav.guide': 'గైడ్'
   },
   ne: {
     'app.title': 'Nonograms',
@@ -3602,9 +3548,8 @@ const messages = {
     'theme.dark': 'डार्क',
     'language.searchLabel': 'भाषा खोज्नुहोस्',
     'language.searchPlaceholder': 'भाषाको नाम लेख्नुहोस्...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'नयाँ खेल',
+    'nav.guide': 'गाइड'
   },
   my: {
     'app.title': 'Nonograms',
@@ -3654,9 +3599,8 @@ const messages = {
     'theme.dark': 'အမှောင်',
     'language.searchLabel': 'ဘာသာစကားရှာပါ',
     'language.searchPlaceholder': 'ဘာသာစကားအမည်ရိုက်ထည့်ပါ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ဂိမ်းအသစ်',
+    'nav.guide': 'လမ်းညွှန်'
   },
   km: {
     'app.title': 'Nonograms',
@@ -3706,9 +3650,8 @@ const messages = {
     'theme.dark': 'ងងឹត',
     'language.searchLabel': 'ស្វែងរកភាសា',
     'language.searchPlaceholder': 'វាយឈ្មោះភាសា...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ល្បែងថ្មី',
+    'nav.guide': 'ការណែនាំ'
   },
   lo: {
     'app.title': 'Nonograms',
@@ -3758,9 +3701,8 @@ const messages = {
     'theme.dark': 'ມືດ',
     'language.searchLabel': 'ຄົ້ນຫາພາສາ',
     'language.searchPlaceholder': 'ພິມຊື່ພາສາ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ເກມໃໝ່',
+    'nav.guide': 'ຄຳແນະນຳ'
   },
   mn: {
     'app.title': 'Nonograms',
@@ -3810,9 +3752,8 @@ const messages = {
     'theme.dark': 'Харанхуй',
     'language.searchLabel': 'Хэл хайх',
     'language.searchPlaceholder': 'Хэлний нэрийг бичнэ үү...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ШИНЭ ТОГЛООМ',
+    'nav.guide': 'ЗААВАР'
   },
   bo: {
     'app.title': 'Nonograms',
@@ -3862,9 +3803,8 @@ const messages = {
     'theme.dark': 'ནག་པོ',
     'language.searchLabel': 'སྐད་ཡིག་འཚོལ',
     'language.searchPlaceholder': 'སྐད་ཡིག་གི་མིང་འབྲི...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'རྩེད་མོ་གསར་པ།',
+    'nav.guide': 'ལམ་སྟོན།'
   },
   af: {
     'app.title': 'Nonograms',
@@ -3914,9 +3854,8 @@ const messages = {
     'theme.dark': 'Donker',
     'language.searchLabel': 'Soek taal',
     'language.searchPlaceholder': 'Tik taalnaam...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NUWE SPEL',
+    'nav.guide': 'GIDS'
   },
   sw: {
     'app.title': 'Nonograms',
@@ -3966,9 +3905,8 @@ const messages = {
     'theme.dark': 'Giza',
     'language.searchLabel': 'Tafuta lugha',
     'language.searchPlaceholder': 'Andika jina la lugha...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'MCHEZO MPYA',
+    'nav.guide': 'MUONGOZO'
   },
   am: {
     'app.title': 'Nonograms',
@@ -4018,9 +3956,8 @@ const messages = {
     'theme.dark': 'ጨለማ',
     'language.searchLabel': 'ቋንቋ ይፈልጉ',
     'language.searchPlaceholder': 'የቋንቋ ስም ይተይቡ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'አዲስ ጨዋታ',
+    'nav.guide': 'መመሪያ'
   },
   yo: {
     'app.title': 'Nonograms',
@@ -4070,9 +4007,8 @@ const messages = {
     'theme.dark': 'Dúdú',
     'language.searchLabel': 'Wá èdè',
     'language.searchPlaceholder': 'Tẹ orukọ èdè...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ERE TITUN',
+    'nav.guide': 'ITỌSỌNA'
   },
   ig: {
     'app.title': 'Nonograms',
@@ -4122,9 +4058,8 @@ const messages = {
     'theme.dark': 'Ọchịchịrị',
     'language.searchLabel': 'Chọọ asụsụ',
     'language.searchPlaceholder': 'Pịnye aha asụsụ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'EGWUREGWU OHUU',
+    'nav.guide': 'NDUZI'
   },
   so: {
     'app.title': 'Nonograms',
@@ -4174,9 +4109,8 @@ const messages = {
     'theme.dark': 'Madoow',
     'language.searchLabel': 'Raadi luqad',
     'language.searchPlaceholder': 'Qor magaca luqadda...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'CIYAAR CUSUB',
+    'nav.guide': 'HAGAHA'
   },
   rw: {
     'app.title': 'Nonograms',
@@ -4226,9 +4160,8 @@ const messages = {
     'theme.dark': 'Umwijima',
     'language.searchLabel': 'Shakisha ururimi',
     'language.searchPlaceholder': 'Andika izina ry\'ururimi...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'UMUKINO MUSHYA',
+    'nav.guide': 'IYOBORA'
   },
   rn: {
     'app.title': 'Nonograms',
@@ -4278,9 +4211,8 @@ const messages = {
     'theme.dark': 'Umwijima',
     'language.searchLabel': 'Rondera ururimi',
     'language.searchPlaceholder': 'Andika izina ry\'ururimi...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'UMUKINO MUSHYA',
+    'nav.guide': 'IYOBORA'
   },
   wo: {
     'app.title': 'Nonograms',
@@ -4330,9 +4262,8 @@ const messages = {
     'theme.dark': 'Lëndëm',
     'language.searchLabel': 'Seet làkk',
     'language.searchPlaceholder': 'Bind turu làkk...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'JEU BU BESS',
+    'nav.guide': 'GINDIT'
   },
   om: {
     'app.title': 'Nonograms',
@@ -4382,9 +4313,8 @@ const messages = {
     'theme.dark': 'Dukkana',
     'language.searchLabel': 'Afaan barbaadi',
     'language.searchPlaceholder': 'Maqaa afaanii barreessi...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'TAPHA HAARAA',
+    'nav.guide': 'QAJEELE'
   },
   ti: {
     'app.title': 'Nonograms',
@@ -4434,9 +4364,8 @@ const messages = {
     'theme.dark': 'ጸልማት',
     'language.searchLabel': 'ቋንቋ ድለ',
     'language.searchPlaceholder': 'ስም ቋንቋ ጽሓፍ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'ሓatsush ጸወታ',
+    'nav.guide': 'መምርሒ'
   },
   ht: {
     'app.title': 'Nonograms',
@@ -4486,9 +4415,8 @@ const messages = {
     'theme.dark': 'Fènwa',
     'language.searchLabel': 'Chèche lang',
     'language.searchPlaceholder': 'Ekri non lang lan...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'NOUVO JWÈT',
+    'nav.guide': 'GID'
   },
   ceb: {
     'app.title': 'Nonograms',
@@ -4538,9 +4466,8 @@ const messages = {
     'theme.dark': 'Ngitngit',
     'language.searchLabel': 'Pangitaa ang pinulongan',
     'language.searchPlaceholder': 'Isulat ang ngalan sa pinulongan...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'BAG-ONG DULA',
+    'nav.guide': 'GIYA'
   },
   ilo: {
     'app.title': 'Nonograms',
@@ -4590,9 +4517,8 @@ const messages = {
     'theme.dark': 'Nasipnget',
     'language.searchLabel': 'Biroken ti pagsasao',
     'language.searchPlaceholder': 'I-type ti nagan ti pagsasao...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'BARO A AY-AYAM',
+    'nav.guide': 'GIYA'
   },
   jv: {
     'app.title': 'Nonograms',
@@ -4642,9 +4568,8 @@ const messages = {
     'theme.dark': 'Peteng',
     'language.searchLabel': 'Goleki basa',
     'language.searchPlaceholder': 'Ketik jeneng basa...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'PERMAINAN ANYAR',
+    'nav.guide': 'PANDUAN'
   },
   ku: {
     'app.title': 'Nonograms',
@@ -4694,9 +4619,8 @@ const messages = {
     'theme.dark': 'Tarî',
     'language.searchLabel': 'Li ziman bigere',
     'language.searchPlaceholder': 'Navê ziman binivîse...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'LÎSTIKA NÛ',
+    'nav.guide': 'RÊBER'
   },
   ckb: {
     'app.title': 'Nonograms',
@@ -4746,9 +4670,8 @@ const messages = {
     'theme.dark': 'تاریک',
     'language.searchLabel': 'گەڕان بۆ زمان',
     'language.searchPlaceholder': 'ناوی زمان بنووسە...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'یاری نوێ',
+    'nav.guide': 'ڕێنمایی'
   },
   ps: {
     'app.title': 'Nonograms',
@@ -4798,9 +4721,8 @@ const messages = {
     'theme.dark': 'تور',
     'language.searchLabel': 'ژبه وپلټئ',
     'language.searchPlaceholder': 'د ژبې نوم ولیکئ...',
-    'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE',
-    'nav.guide': 'GUIDE'
+    'nav.newGame': 'نوې لوبه',
+    'nav.guide': 'لارښود'
   }
 };
 
