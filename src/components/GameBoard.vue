@@ -118,6 +118,8 @@ const computeCellSize = () => {
   const gap = parseFloat(gapRaw);
   const gridPad = parseFloat(gridPadRaw);
 
+  const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+
   let containerWidth;
   if (scrollWrapper.value) {
     containerWidth = scrollWrapper.value.clientWidth;
@@ -131,8 +133,15 @@ const computeCellSize = () => {
   const availableForGrid = Math.max(0, containerWidth - hintWidth);
   
   const size = Math.floor((availableForGrid - gridPad * 2 - (store.size - 1) * gap) / store.size);
-  // Keep min 18, max 36
-  cellSize.value = Math.max(18, Math.min(36, size));
+  
+  if (isDesktop) {
+      // Desktop: Allow overflow, use comfortable size
+      cellSize.value = 30;
+  } else {
+      // Mobile: Fit to screen
+      // Keep min 18, max 36
+      cellSize.value = Math.max(18, Math.min(36, size));
+  }
 };
 
 const handleGlobalMouseUp = () => {
@@ -258,8 +267,15 @@ watch(() => store.size, async () => {
 /* Desktop: Remove scroll behavior to ensure full grid visibility */
 @media (min-width: 769px) {
   .game-board-wrapper {
-    overflow-x: auto; /* Allow scrolling if grid is too large (e.g. 80x80) */
-    align-items: center; /* Center the grid on desktop */
+    overflow: visible;
+    width: max-content;
+    min-width: 100%;
+    margin: 0 auto; /* Center the wrapper safely */
+    align-items: flex-start; /* Prevent cropping when centered */
+  }
+  
+  .game-container {
+      /* margin: 0 auto; - wrapper handles centering now */
   }
 }
 

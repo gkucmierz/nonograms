@@ -186,7 +186,7 @@ onUnmounted(() => {
 .game-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch; /* was center */
   gap: 20px;
   width: 100%;
   padding-bottom: 50px;
@@ -202,7 +202,7 @@ onUnmounted(() => {
   align-items: center;
   width: 90%;
   max-width: 600px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto; /* Center it manually */
   box-shadow: var(--banner-shadow);
 }
 
@@ -227,17 +227,24 @@ onUnmounted(() => {
 .game-layout {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 20px;
   width: 100%;
-  max-width: 1200px;
   padding: 0 20px;
 }
 
+/* Center children (except board section which handles itself) */
+.game-layout > *:not(.board-section) {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px; /* Keep constraint for panels */
+    width: 100%;
+}
+
 .board-section {
-  display: flex;
-  justify-content: center;
+  display: block;
   width: 100%;
+  overflow-x: visible;
 }
 
 .fade-enter-active,
