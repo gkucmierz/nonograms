@@ -180,7 +180,14 @@ const solveLineLogic = (lineState, hints) => {
     const len = hints[i];
     const starts = [];
     for (let start = 0; start <= n - len; start++) {
-      if (!canPlacePrefix(start, i)) continue;
+      if (i === 0) {
+        if (!canPlacePrefix(start, 0)) continue;
+      } else {
+        if (start === 0) continue;
+        if (lineState[start - 1] === 1) continue;
+        if (!canPlacePrefix(start - 1, i)) continue;
+      }
+
       if (hasCross(start, start + len)) continue;
       if (start + len < n && lineState[start + len] === 1) continue;
       const nextPos = start + len < n ? start + len + 1 : start + len;

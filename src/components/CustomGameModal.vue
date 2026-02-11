@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 import { calculateDifficulty } from '@/utils/puzzleUtils';
@@ -11,6 +11,26 @@ const { t } = useI18n();
 const customSize = ref(10);
 const fillRate = ref(50);
 const errorMsg = ref('');
+
+onMounted(() => {
+  const savedSize = localStorage.getItem('nonograms_custom_size');
+  if (savedSize && !isNaN(savedSize)) {
+    customSize.value = Math.max(5, Math.min(80, Number(savedSize)));
+  }
+  
+  const savedFillRate = localStorage.getItem('nonograms_custom_fill_rate');
+  if (savedFillRate && !isNaN(savedFillRate)) {
+    fillRate.value = Math.max(10, Math.min(90, Number(savedFillRate)));
+  }
+});
+
+watch(customSize, (newVal) => {
+  localStorage.setItem('nonograms_custom_size', newVal);
+});
+
+watch(fillRate, (newVal) => {
+  localStorage.setItem('nonograms_custom_fill_rate', newVal);
+});
 
 const snapToStep = (value, step) => {
   const rounded = Math.round(value / step) * step;
