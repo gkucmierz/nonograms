@@ -190,6 +190,7 @@ onUnmounted(() => {
   gap: 20px;
   width: 100%;
   padding-bottom: 50px;
+  padding-top: 100px; /* Space for fixed NavBar */
 }
 
 .install-banner {
@@ -204,6 +205,9 @@ onUnmounted(() => {
   max-width: 600px;
   margin: 0 auto 20px auto; /* Center it manually */
   box-shadow: var(--banner-shadow);
+  position: sticky;
+  left: 0;
+  right: 0;
 }
 
 .install-text {
@@ -239,6 +243,9 @@ onUnmounted(() => {
     margin-right: auto;
     max-width: 1200px; /* Keep constraint for panels */
     width: 100%;
+    position: sticky;
+    left: 0;
+    right: 0;
 }
 
 .board-section {
