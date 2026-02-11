@@ -2,6 +2,34 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { generateRandomGrid } from '@/utils/puzzleUtils';
 
+// Helper: Calculate hints for a line (row or column)
+function calculateHints(line) {
+  const hints = [];
+  let currentRun = 0;
+  
+  for (const cell of line) {
+    if (cell === 1) {
+      currentRun++;
+    } else {
+      if (currentRun > 0) {
+        hints.push(currentRun);
+        currentRun = 0;
+      }
+    }
+  }
+  if (currentRun > 0) {
+    hints.push(currentRun);
+  }
+  return hints.length > 0 ? hints : [0];
+}
+
+// Helper: Validate if a line matches its hints
+function validateLine(line, targetHints) {
+  const currentHints = calculateHints(line);
+  if (currentHints.length !== targetHints.length) return false;
+  return currentHints.every((h, i) => h === targetHints[i]);
+}
+
 // Definicje zagadek (Static Puzzles)
 const PUZZLES = {
   easy: {
@@ -249,20 +277,32 @@ export const usePuzzleStore = defineStore('puzzle', () => {
 
   function checkWin() {
     let correct = true;
+    
+    // Calculate expected hints from solution (truth)
+    // We do this dynamically to ensure we always check against the rules of the board
+    const solutionRows = solution.value;
+    const solutionCols = Array(size.value).fill().map((_, c) => solution.value.map(r => r[c]));
+    
+    // Check Rows
     for (let r = 0; r < size.value; r++) {
+      const targetHints = calculateHints(solutionRows[r]);
+      const playerLine = playerGrid.value[r];
+      if (!validateLine(playerLine, targetHints)) {
+        correct = false;
+        break;
+      }
+    }
+    
+    if (correct) {
+      // Check Columns
       for (let c = 0; c < size.value; c++) {
-        const playerCell = playerGrid.value[r][c];
-        const solutionCell = solution.value[r][c];
-        
-        const isFilled = playerCell === 1;
-        const shouldBeFilled = solutionCell === 1;
-        
-        if (isFilled !== shouldBeFilled) {
+        const targetHints = calculateHints(solutionCols[c]);
+        const playerLine = playerGrid.value.map(row => row[c]);
+        if (!validateLine(playerLine, targetHints)) {
           correct = false;
           break;
         }
       }
-      if (!correct) break;
     }
     
     if (correct) {
