@@ -14,6 +14,7 @@ const fillRate = ref(50);
 const errorMsg = ref('');
 const difficultyCanvas = ref(null);
 const isDragging = ref(false);
+const cachedBackground = ref(null);
 
 const drawMap = () => {
   const canvas = difficultyCanvas.value;
@@ -25,46 +26,42 @@ const drawMap = () => {
   // Clear
   ctx.clearRect(0, 0, width, height);
 
-  // Draw Gradient Background
-  // Optimization: Create an image data once if static, but here it's small enough.
-  const imgData = ctx.createImageData(width, height);
-  const data = imgData.data;
+  // Use cached background if available
+  if (cachedBackground.value) {
+      ctx.putImageData(cachedBackground.value, 0, 0);
+  } else {
+      // Draw Gradient Background (Heavy calculation)
+      const imgData = ctx.createImageData(width, height);
+      const data = imgData.data;
 
-  // Ranges:
-  // X: Fill Rate 10% -> 90%
-  // Y: Size 5 -> 80
-  
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      // Map x, y to fillRate, size
-      // y=0 -> size 80 (top), y=height -> size 5 (bottom)
-      // x=0 -> fill 10%, x=width -> fill 90%
+      // Ranges:
+      // X: Fill Rate 10% -> 90%
+      // Y: Size 5 -> 80
       
-      const normalizedX = x / width;
-      const normalizedY = 1 - (y / height); // 0 at bottom, 1 at top
-      
-      const fRate = 0.1 + normalizedX * 0.8; // 0.1 to 0.9
-      const sSize = 5 + normalizedY * 75;    // 5 to 80
-      
-      const { value } = calculateDifficulty(fRate, sSize);
-      
-      // Color Mapping:
-      // Green (0%) -> Yellow (50%) -> Red (100%)
-      // Hue: 120 -> 0
-      const hue = 120 * (1 - value / 100);
-      
-      // Convert HSL to RGB (Simplified)
-      // Saturation 100%, Lightness 50%
-      const [r, g, b] = hslToRgb(hue / 360, 1, 0.5);
-      
-      const index = (y * width + x) * 4;
-      data[index] = r;
-      data[index + 1] = g;
-      data[index + 2] = b;
-      data[index + 3] = 255; // Alpha
-    }
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const normalizedX = x / width;
+          const normalizedY = 1 - (y / height); // 0 at bottom, 1 at top
+          
+          const fRate = 0.1 + normalizedX * 0.8; // 0.1 to 0.9
+          const sSize = 5 + normalizedY * 75;    // 5 to 80
+          
+          const { value } = calculateDifficulty(fRate, sSize);
+          
+          // Color Mapping
+          const hue = 120 * (1 - value / 100);
+          const [r, g, b] = hslToRgb(hue / 360, 1, 0.5);
+          
+          const index = (y * width + x) * 4;
+          data[index] = r;
+          data[index + 1] = g;
+          data[index + 2] = b;
+          data[index + 3] = 255; // Alpha
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+      cachedBackground.value = imgData;
   }
-  ctx.putImageData(imgData, 0, 0);
 
   // Draw current position
   // Map current fillRate/size to x,y
@@ -166,6 +163,8 @@ const showAdvanced = ref(false);
 const toggleAdvanced = () => {
     showAdvanced.value = !showAdvanced.value;
     if (showAdvanced.value) {
+        // Reset cache when opening to ensure size is correct if canvas resized
+        cachedBackground.value = null; 
         nextTick(drawMap);
     }
 };
