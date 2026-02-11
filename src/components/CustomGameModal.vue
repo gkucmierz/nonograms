@@ -3,8 +3,9 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 import { calculateDifficulty } from '@/utils/puzzleUtils';
+import { HelpCircle } from 'lucide-vue-next';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'open-simulation']);
 const store = usePuzzleStore();
 const { t } = useI18n();
 
@@ -284,7 +285,12 @@ const confirm = () => {
       </div>
 
       <div class="difficulty-indicator">
-        <div class="label">{{ t('custom.difficulty') }}</div>
+        <div class="label-row">
+            <div class="label">{{ t('custom.difficulty') }}</div>
+            <button class="help-btn" @click="emit('open-simulation')" :title="t('custom.simulationHelp') || 'How is this calculated?'">
+                <HelpCircle class="icon-sm" />
+            </button>
+        </div>
         <div class="difficulty-row">
             <div class="level" :style="{ color: difficultyColor }">{{ t(`difficulty.${difficultyInfo.level}`) }}</div>
             <div class="percentage" :style="{ color: difficultyColor }">({{ difficultyInfo.value }}%)</div>
@@ -455,6 +461,34 @@ input[type="range"]::-moz-range-thumb {
     flex-direction: column;
     align-items: center;
     gap: 5px;
+}
+
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.help-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.3s, background 0.3s;
+}
+
+.help-btn:hover {
+    color: var(--accent-cyan);
+    background: rgba(0, 242, 255, 0.1);
+}
+
+.icon-sm {
+    width: 16px;
+    height: 16px;
 }
 
 .difficulty-row {

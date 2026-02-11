@@ -8,6 +8,7 @@ import StatusPanel from './components/StatusPanel.vue';
 import GuidePanel from './components/GuidePanel.vue';
 import WinModal from './components/WinModal.vue';
 import CustomGameModal from './components/CustomGameModal.vue';
+import SimulationView from './components/SimulationView.vue';
 import FixedBar from './components/FixedBar.vue';
 import ReloadPrompt from './components/ReloadPrompt.vue';
 
@@ -15,6 +16,7 @@ import ReloadPrompt from './components/ReloadPrompt.vue';
 const store = usePuzzleStore();
 const { t, locale, setLocale, locales } = useI18n();
 const showCustomModal = ref(false);
+const showSimulation = ref(false);
 const showGuide = ref(false);
 const deferredPrompt = ref(null);
 const canInstall = ref(false);
@@ -173,7 +175,8 @@ onUnmounted(() => {
     <!-- Modals Teleport -->
     <Teleport to="body">
       <WinModal v-if="store.isGameWon" />
-      <CustomGameModal v-if="showCustomModal" @close="showCustomModal = false" />
+      <CustomGameModal v-if="showCustomModal" @close="showCustomModal = false" @open-simulation="showSimulation = true" />
+      <SimulationView v-if="showSimulation" @close="showSimulation = false" />
       <ReloadPrompt />
     </Teleport>
   </main>
