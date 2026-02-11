@@ -44,6 +44,7 @@ export function useNonogram() {
   };
 
   const stopDrag = () => {
+    store.endInteraction();
     isDragging.value = false;
     dragMode.value = null;
   };

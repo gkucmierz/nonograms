@@ -75,6 +75,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   
   // History for undo
   const history = ref([]);
+  const currentTransaction = ref(null);
   
   // Progress State
   const totalCellsToFill = computed(() => {
@@ -150,18 +151,39 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     playerGrid.value = Array(size.value).fill().map(() => Array(size.value).fill(0));
     moves.value = 0;
     history.value = [];
+    currentTransaction.value = null;
   }
   
-  function pushHistory() {
-      const gridCopy = playerGrid.value.map(row => [...row]);
-      history.value.push(gridCopy);
-      if (history.value.length > 50) history.value.shift();
+  function startInteraction() {
+      currentTransaction.value = [];
+  }
+
+  function endInteraction() {
+      if (currentTransaction.value && currentTransaction.value.length > 0) {
+          history.value.push(currentTransaction.value);
+          if (history.value.length > 50) history.value.shift();
+          saveState();
+      }
+      currentTransaction.value = null;
   }
 
   function undo() {
       if (history.value.length === 0 || isGameWon.value) return;
-      const previousState = history.value.pop();
-      playerGrid.value = previousState;
+      
+      const transaction = history.value.pop();
+      
+      // Handle legacy history (full grid snapshot)
+      if (!Array.isArray(transaction) || (transaction.length > 0 && Array.isArray(transaction[0]))) {
+          playerGrid.value = transaction;
+      } else {
+          // Handle new history (list of changes)
+          // Revert changes in reverse order
+          for (let i = transaction.length - 1; i >= 0; i--) {
+              const { r, c, oldVal } = transaction[i];
+              playerGrid.value[r][c] = oldVal;
+          }
+      }
+      
       moves.value++; 
       saveState();
   }
@@ -169,8 +191,6 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   function toggleCell(r, c, isRightClick = false) {
     if (isGameWon.value) return;
     
-    pushHistory();
-
     const currentState = playerGrid.value[r][c];
     let newState;
     
@@ -182,20 +202,48 @@ export const usePuzzleStore = defineStore('puzzle', () => {
       newState = currentState === 1 ? 0 : 1;
     }
     
-    playerGrid.value[r][c] = newState; // This triggers reactivity
+    if (currentState === newState) return;
+
+    // Apply change
+    playerGrid.value[r][c] = newState; 
+    
+    // Record history
+    const change = { r, c, oldVal: currentState, newVal: newState };
+    if (currentTransaction.value) {
+        currentTransaction.value.push(change);
+    } else {
+        // Atomic change if no interaction started
+        history.value.push([change]);
+        if (history.value.length > 50) history.value.shift();
+        saveState();
+    }
+
     moves.value++;
     checkWin();
-    saveState();
+    // saveState(); // Moved to endInteraction or atomic block
   }
   
   function setCell(r, c, state) {
      if (isGameWon.value) return;
-     if (playerGrid.value[r][c] !== state) {
-         pushHistory();
+     const currentState = playerGrid.value[r][c];
+     
+     if (currentState !== state) {
+         // Apply change
          playerGrid.value[r][c] = state;
+         
+         // Record history
+         const change = { r, c, oldVal: currentState, newVal: state };
+         if (currentTransaction.value) {
+             currentTransaction.value.push(change);
+         } else {
+             history.value.push([change]);
+             if (history.value.length > 50) history.value.shift();
+             saveState();
+         }
+         
          moves.value++;
          checkWin();
-         saveState();
+         // saveState(); // Moved to endInteraction or atomic block
      }
   }
 
@@ -343,7 +391,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     hasUsedGuide,
     guideUsageCount,
     currentDensity,
-    markGuideUsed
+    markGuideUsed,
+    startInteraction,
+    endInteraction
   };
 
 });
