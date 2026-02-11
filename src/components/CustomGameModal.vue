@@ -305,7 +305,7 @@ const confirm = () => {
 
       <div class="advanced-toggle">
           <button class="btn-text" @click="toggleAdvanced">
-              {{ showAdvanced ? 'Ukryj mapę trudności' : 'Pokaż mapę trudności' }}
+              {{ showAdvanced ? t('custom.hideMap') : t('custom.showMap') }}
           </button>
       </div>
       
