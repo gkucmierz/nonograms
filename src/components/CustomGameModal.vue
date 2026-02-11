@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 import { calculateDifficulty } from '@/utils/puzzleUtils';
@@ -140,6 +140,9 @@ const updateFromEvent = (e) => {
 const startDrag = (e) => {
     isDragging.value = true;
     updateFromEvent(e);
+    // Add global listeners for mouse to handle dragging outside canvas
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', stopDrag);
 };
 
 const onDrag = (e) => {
@@ -149,7 +152,14 @@ const onDrag = (e) => {
 
 const stopDrag = () => {
     isDragging.value = false;
+    window.removeEventListener('mousemove', onDrag);
+    window.removeEventListener('mouseup', stopDrag);
 };
+
+onUnmounted(() => {
+    window.removeEventListener('mousemove', onDrag);
+    window.removeEventListener('mouseup', stopDrag);
+});
 
 const showAdvanced = ref(false);
 
@@ -271,12 +281,9 @@ const confirm = () => {
         <div class="map-section" v-if="showAdvanced">
             <canvas 
                 ref="difficultyCanvas" 
-                width="200" 
-                height="200"
+                width="400" 
+                height="400"
                 @mousedown="startDrag"
-                @mousemove="onDrag"
-                @mouseup="stopDrag"
-                @mouseleave="stopDrag"
                 @touchstart.prevent="startDrag"
                 @touchmove.prevent="onDrag"
                 @touchend="stopDrag"
@@ -371,11 +378,21 @@ const confirm = () => {
 }
 
 canvas {
+    width: 400px;
+    height: 400px;
     border: 2px solid var(--panel-border);
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
     cursor: crosshair;
     background: #000;
+}
+
+@media (max-width: 600px) {
+    canvas {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+    }
 }
 
 h2 {
