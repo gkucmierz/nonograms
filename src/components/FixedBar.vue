@@ -1,11 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
-import { useTimer } from '@/composables/useTimer';
+import { formatTime } from '@/utils/timeUtils';
 import { useI18n } from '@/composables/useI18n';
 
 const store = usePuzzleStore();
-const { formatTime } = useTimer();
 const { t } = useI18n();
 
 const isVisible = ref(false);

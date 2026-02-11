@@ -1,89 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { generateRandomGrid } from '@/utils/puzzleUtils';
-
-// Helper: Calculate hints for a line (row or column)
-function calculateHints(line) {
-  const hints = [];
-  let currentRun = 0;
-  
-  for (const cell of line) {
-    if (cell === 1) {
-      currentRun++;
-    } else {
-      if (currentRun > 0) {
-        hints.push(currentRun);
-        currentRun = 0;
-      }
-    }
-  }
-  if (currentRun > 0) {
-    hints.push(currentRun);
-  }
-  return hints.length > 0 ? hints : [0];
-}
-
-// Helper: Validate if a line matches its hints
-function validateLine(line, targetHints) {
-  const currentHints = calculateHints(line);
-  if (currentHints.length !== targetHints.length) return false;
-  return currentHints.every((h, i) => h === targetHints[i]);
-}
-
-// Definicje zagadek (Static Puzzles)
-const PUZZLES = {
-  easy: {
-    id: 'easy',
-    name: 'Uśmiech',
-    size: 5,
-    grid: [
-      [0, 1, 0, 1, 0],
-      [0, 1, 0, 1, 0],
-      [0, 0, 0, 0, 0],
-      [1, 0, 0, 0, 1],
-      [0, 1, 1, 1, 0]
-    ]
-  },
-  medium: {
-    id: 'medium',
-    name: 'Domek',
-    size: 10,
-    grid: [
-      [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-      [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 1, 1, 0, 0, 0, 0, 1, 1, 0],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-      [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-      [1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [0, 1, 1, 1, 1, 1, 1, 1, 1, 0]
-    ]
-  },
-  hard: {
-    id: 'hard',
-    name: 'Statek',
-    size: 15,
-    grid: [
-      [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-      [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],
-      [0,0,0,0,1,1,1,1,1,1,1,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-      [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-      [0,0,1,1,1,1,1,1,1,1,1,1,1,0,0],
-      [0,0,0,1,1,1,1,1,1,1,1,1,0,0,0],
-      [0,0,0,0,1,1,1,1,1,1,1,0,0,0,0],
-      [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0]
-    ]
-  }
-};
+import { generateRandomGrid, calculateHints, calculateLineHints, validateLine } from '@/utils/puzzleUtils';
+import { PUZZLES } from '@/constants/puzzles';
 
 export const usePuzzleStore = defineStore('puzzle', () => {
   // State
@@ -285,7 +203,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     
     // Check Rows
     for (let r = 0; r < size.value; r++) {
-      const targetHints = calculateHints(solutionRows[r]);
+      const targetHints = calculateLineHints(solutionRows[r]);
       const playerLine = playerGrid.value[r];
       if (!validateLine(playerLine, targetHints)) {
         correct = false;
@@ -296,7 +214,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     if (correct) {
       // Check Columns
       for (let c = 0; c < size.value; c++) {
-        const targetHints = calculateHints(solutionCols[c]);
+        const targetHints = calculateLineHints(solutionCols[c]);
         const playerLine = playerGrid.value.map(row => row[c]);
         if (!validateLine(playerLine, targetHints)) {
           correct = false;
@@ -377,12 +295,6 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     return false;
   }
   
-  // Duplicate initGame removed
-  
-  // Duplicate initCustomGame removed
-
-  // Duplicate toggleCell/setCell removed
-
   function resetGame() {
     if (currentLevelId.value === 'custom') {
         resetGrid();

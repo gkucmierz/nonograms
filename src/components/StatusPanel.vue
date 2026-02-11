@@ -1,12 +1,11 @@
 <script setup>
 import { computed } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
-import { useTimer } from '@/composables/useTimer';
+import { formatTime } from '@/utils/timeUtils';
 import { useI18n } from '@/composables/useI18n';
 import { RotateCcw, RefreshCw, Eye, Undo } from 'lucide-vue-next';
 
 const store = usePuzzleStore();
-const { formatTime } = useTimer();
 const { t } = useI18n();
 
 const formattedTime = computed(() => formatTime(store.elapsedTime));

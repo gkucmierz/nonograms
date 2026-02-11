@@ -1,3 +1,29 @@
+export function calculateLineHints(line) {
+  const hints = [];
+  let currentRun = 0;
+  
+  for (const cell of line) {
+    if (cell === 1) {
+      currentRun++;
+    } else {
+      if (currentRun > 0) {
+        hints.push(currentRun);
+        currentRun = 0;
+      }
+    }
+  }
+  if (currentRun > 0) {
+    hints.push(currentRun);
+  }
+  return hints.length > 0 ? hints : [0];
+}
+
+export function validateLine(line, targetHints) {
+  const currentHints = calculateLineHints(line);
+  if (currentHints.length !== targetHints.length) return false;
+  return currentHints.every((h, i) => h === targetHints[i]);
+}
+
 export function calculateHints(grid) {
     if (!grid || grid.length === 0) return { rowHints: [], colHints: [] };
     
@@ -7,34 +33,16 @@ export function calculateHints(grid) {
 
     // Row Hints
     for (let r = 0; r < size; r++) {
-        const hints = [];
-        let count = 0;
-        for (let c = 0; c < size; c++) {
-            if (grid[r][c] === 1) {
-                count++;
-            } else if (count > 0) {
-                hints.push(count);
-                count = 0;
-            }
-        }
-        if (count > 0) hints.push(count);
-        rowHints.push(hints.length > 0 ? hints : [0]);
+        rowHints.push(calculateLineHints(grid[r]));
     }
 
     // Col Hints
     for (let c = 0; c < size; c++) {
-        const hints = [];
-        let count = 0;
+        const col = [];
         for (let r = 0; r < size; r++) {
-            if (grid[r][c] === 1) {
-                count++;
-            } else if (count > 0) {
-                hints.push(count);
-                count = 0;
-            }
+            col.push(grid[r][c]);
         }
-        if (count > 0) hints.push(count);
-        colHints.push(hints.length > 0 ? hints : [0]);
+        colHints.push(calculateLineHints(col));
     }
 
     return { rowHints, colHints };
@@ -68,7 +76,7 @@ export function calculateDifficulty(density, size = 10) {
         45: [2, 0, 0, 0, 1, 82, 100, 100, 100],
         50: [2, 0, 0, 0, 1, 73, 100, 100, 100],
         60: [0, 0, 0, 0, 0, 35, 100, 100, 100],
-        70: [0, 0, 0, 0, 0, 16, 100, 100, 100],
+        71: [0, 0, 0, 0, 0, 16, 100, 100, 100],
         80: [0, 0, 0, 0, 0, 1, 100, 100, 100]
     };
 
