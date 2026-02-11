@@ -106,7 +106,19 @@ const messages = {
     'language.searchLabel': 'Wyszukaj język',
     'language.searchPlaceholder': 'Wpisz nazwę języka...',
     'nav.newGame': 'NOWA GRA',
-    'nav.guide': 'PRZEWODNIK'
+    'nav.guide': 'PRZEWODNIK',
+    'custom.simulationHelp': 'Jak to jest obliczane?',
+    'simulation.title': 'Symulacja Trudności',
+    'simulation.status.ready': 'Gotowy',
+    'simulation.status.stopped': 'Zatrzymano',
+    'simulation.status.completed': 'Zakończono',
+    'simulation.status.simulating': 'Symulacja {size}x{size} @ {density}%',
+    'simulation.start': 'Start Symulacji',
+    'simulation.stop': 'Stop',
+    'simulation.table.size': 'Rozmiar',
+    'simulation.table.density': 'Gęstość',
+    'simulation.table.solved': 'Rozwiązano (Logika)',
+    'simulation.empty': 'Naciśnij Start, aby uruchomić symulację Monte Carlo'
   },
   en: {
     'app.title': 'Nonograms',
@@ -265,7 +277,19 @@ const messages = {
     'language.searchLabel': 'Search language',
     'language.searchPlaceholder': 'Type language name...',
     'nav.newGame': 'NEW GAME',
-    'nav.guide': 'GUIDE'
+    'nav.guide': 'GUIDE',
+    'custom.simulationHelp': 'How is this calculated?',
+    'simulation.title': 'Difficulty Simulation',
+    'simulation.status.ready': 'Ready',
+    'simulation.status.stopped': 'Stopped',
+    'simulation.status.completed': 'Completed',
+    'simulation.status.simulating': 'Simulating {size}x{size} @ {density}%',
+    'simulation.start': 'Start Simulation',
+    'simulation.stop': 'Stop',
+    'simulation.table.size': 'Size',
+    'simulation.table.density': 'Density',
+    'simulation.table.solved': 'Solved (Logic)',
+    'simulation.empty': 'Press Start to run Monte Carlo simulation'
   },
   zh: {
     'app.title': 'Nonograms',

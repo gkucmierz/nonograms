@@ -3,9 +3,11 @@
 import { ref, computed } from 'vue';
 import { generateRandomGrid, calculateHints } from '@/utils/puzzleUtils';
 import { solvePuzzle } from '@/utils/solver';
+import { useI18n } from '@/composables/useI18n';
 import { X, Play, Square, RotateCcw } from 'lucide-vue-next';
 
 const emit = defineEmits(['close']);
+const { t } = useI18n();
 
 const SIZES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]; 
 const DENSITIES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
@@ -13,11 +15,16 @@ const SAMPLES_PER_POINT = 10; // Reduced for web performance demo
 
 const isRunning = ref(false);
 const progress = ref(0);
-const currentStatus = ref('Ready');
+const currentStatus = ref('');
 const results = ref([]);
 const simulationSpeed = ref(1); // 1 = Normal, 2 = Fast (less render updates)
 
 let stopRequested = false;
+
+const displayStatus = computed(() => {
+    if (!currentStatus.value) return t('simulation.status.ready');
+    return currentStatus.value;
+});
 
 const startSimulation = async () => {
     if (isRunning.value) return;
@@ -32,12 +39,15 @@ const startSimulation = async () => {
     for (const size of SIZES) {
         for (const density of DENSITIES) {
             if (stopRequested) {
-                currentStatus.value = 'Stopped';
+                currentStatus.value = t('simulation.status.stopped');
                 isRunning.value = false;
                 return;
             }
 
-            currentStatus.value = `Simulating ${size}x${size} @ ${(density * 100).toFixed(0)}%`;
+            currentStatus.value = t('simulation.status.simulating', { 
+                size: size, 
+                density: (density * 100).toFixed(0) 
+            });
             
             let totalSolved = 0;
             
@@ -66,7 +76,7 @@ const startSimulation = async () => {
     }
 
     isRunning.value = false;
-    currentStatus.value = 'Completed';
+    currentStatus.value = t('simulation.status.completed');
 };
 
 const stopSimulation = () => {
@@ -86,7 +96,7 @@ const getRowColor = (solved) => {
   <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal glass-panel">
       <div class="header">
-        <h2>Difficulty Simulation</h2>
+        <h2>{{ t('simulation.title') }}</h2>
         <button class="close-btn" @click="emit('close')">
             <X />
         </button>
@@ -95,7 +105,7 @@ const getRowColor = (solved) => {
       <div class="content">
         <div class="controls">
             <div class="status-bar">
-                <div class="status-text">{{ currentStatus }}</div>
+                <div class="status-text">{{ displayStatus }}</div>
                 <div class="progress-track">
                     <div class="progress-fill" :style="{ width: progress + '%' }"></div>
                 </div>
@@ -103,10 +113,10 @@ const getRowColor = (solved) => {
             
             <div class="actions">
                 <button v-if="!isRunning" class="btn-neon" @click="startSimulation">
-                    <Play class="icon" /> Start Simulation
+                    <Play class="icon" /> {{ t('simulation.start') }}
                 </button>
                 <button v-else class="btn-neon secondary" @click="stopSimulation">
-                    <Square class="icon" /> Stop
+                    <Square class="icon" /> {{ t('simulation.stop') }}
                 </button>
             </div>
         </div>
@@ -115,9 +125,9 @@ const getRowColor = (solved) => {
             <table class="results-table">
                 <thead>
                     <tr>
-                        <th>Size</th>
-                        <th>Density</th>
-                        <th>Solved (Logic)</th>
+                        <th>{{ t('simulation.table.size') }}</th>
+                        <th>{{ t('simulation.table.density') }}</th>
+                        <th>{{ t('simulation.table.solved') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,7 +139,7 @@ const getRowColor = (solved) => {
                 </tbody>
             </table>
             <div v-if="results.length === 0" class="empty-state">
-                Press Start to run Monte Carlo simulation
+                {{ t('simulation.empty') }}
             </div>
         </div>
       </div>
