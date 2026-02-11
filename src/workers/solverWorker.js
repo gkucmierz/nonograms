@@ -115,7 +115,7 @@ const solveLineLogic = (lineState, hints) => {
       return result;
     }
     const len = hints[hintCount - 1];
-    const maxStart = pos - len;
+    const maxStart = pos - len - 1;
     for (let start = maxStart; start >= 0; start--) {
       if (hasCross(start, start + len)) continue;
       if (start + len < pos && lineState[start + len] === 1) continue;
