@@ -231,7 +231,8 @@ const buildShareSVG = () => {
 
   // Difficulty Logic
   const densityPercent = Math.round(store.currentDensity * 100);
-  const difficultyKey = calculateDifficulty(store.currentDensity);
+  const diffInfo = calculateDifficulty(store.currentDensity, store.size);
+  const difficultyKey = diffInfo.level;
   let diffColor = '#33ff33';
   if (difficultyKey === 'extreme') diffColor = '#ff3333';
   else if (difficultyKey === 'hardest') diffColor = '#ff9933';

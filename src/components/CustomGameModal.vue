@@ -41,12 +41,12 @@ const handleSnap = () => {
   customSize.value = snapToStep(Number(customSize.value), 5);
 };
 
-const difficultyLevel = computed(() => {
-  return calculateDifficulty(fillRate.value / 100);
+const difficultyInfo = computed(() => {
+  return calculateDifficulty(fillRate.value / 100, customSize.value);
 });
 
 const difficultyColor = computed(() => {
-  switch(difficultyLevel.value) {
+  switch(difficultyInfo.value.level) {
     case 'extreme': return '#ff3333';
     case 'hardest': return '#ff9933';
     case 'harder': return '#ffff33';
@@ -97,7 +97,7 @@ const confirm = () => {
           v-model="fillRate" 
           min="10" 
           max="90"
-          step="5"
+          step="1"
         />
         <div class="range-scale">
           <span>10%</span>
@@ -106,10 +106,9 @@ const confirm = () => {
       </div>
 
       <div class="difficulty-indicator">
-        <span class="label">{{ t('custom.difficulty') }}:</span>
-        <span class="value" :style="{ color: difficultyColor }">
-          {{ t(`difficulty.${difficultyLevel}`) }}
-        </span>
+        <div class="label">{{ t('custom.difficulty') }}</div>
+        <div class="level" :style="{ color: difficultyColor }">{{ t(`difficulty.${difficultyInfo.level}`) }}</div>
+        <div class="percentage" :style="{ color: difficultyColor }">{{ difficultyInfo.value }}%</div>
       </div>
       
       <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
@@ -219,12 +218,30 @@ input[type="range"]::-moz-range-thumb {
     justify-content: space-between;
     color: var(--text-muted);
     font-size: 0.85rem;
+.difficulty-indicator {
+    margin: 20px 0 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
-.difficulty-indicator {
-    margin: 20px 0;
-    font-size: 1.2rem;
-    display: flex;
+.label {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.level {
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.percentage {
+    font-size: 1rem;
+    font-weight: bold;
+}   display: flex;
     justify-content: center;
     gap: 10px;
     align-items: center;

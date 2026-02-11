@@ -52,24 +52,36 @@ export function generateRandomGrid(size, density = 0.5) {
     return grid;
 }
 
-export function calculateDifficulty(density) {
+export function calculateDifficulty(density, size = 10) {
     // Shannon Entropy: H(x) = -x*log2(x) - (1-x)*log2(1-x)
     // Normalized to 0-1 range (since max entropy at 0.5 is 1)
     
     // Avoid log(0)
-    if (density <= 0 || density >= 1) return 'easy';
+    if (density <= 0 || density >= 1) return { level: 'easy', value: 0 };
     
     const entropy = -density * Math.log2(density) - (1 - density) * Math.log2(1 - density);
     
-    // Thresholds based on entropy
-    // 0.5 density -> entropy 1.0 (Extreme)
-    // 0.4/0.6 density -> entropy ~0.97 (Extreme)
-    // 0.3/0.7 density -> entropy ~0.88 (Hardest)
-    // 0.2/0.8 density -> entropy ~0.72 (Harder)
-    // <0.2/>0.8 density -> entropy <0.72 (Easy)
+    // Difficulty score combines entropy (complexity) and size (scale)
+    // We use sqrt(size) to dampen the effect of very large grids, 
+    // ensuring that density still plays a major role.
+    // Normalized against max size (80)
+    const sizeFactor = Math.sqrt(size / 80);
+    const score = entropy * sizeFactor * 100;
+    const value = Math.round(score);
+    
+    // Thresholds
+    let level = 'easy';
+    if (value >= 80) level = 'extreme';
+    else if (value >= 60) level = 'hardest';
+    else if (value >= 40) level = 'harder';
+    else if (value >= 20) level = 'medium'; // Using 'medium' key if available, or we need to add it?
+    // Wait, useI18n only has: easy, harder, hardest, extreme.
+    // Let's stick to those keys but adjust ranges.
+    
+    if (value >= 75) level = 'extreme';
+    else if (value >= 50) level = 'hardest';
+    else if (value >= 25) level = 'harder';
+    else level = 'easy';
 
-    if (entropy >= 0.96) return 'extreme'; // approx 38% - 62%
-    if (entropy >= 0.85) return 'hardest'; // approx 28% - 38% & 62% - 72%
-    if (entropy >= 0.65) return 'harder';  // approx 17% - 28% & 72% - 83%
-    return 'easy';
+    return { level, value };
 }
