@@ -91,15 +91,33 @@ const solveLineLogic = (lineState, hints) => {
       return result;
     }
     const len = hints[hintIndex];
+    // maxStart logic: we need enough space for this block (len) + subsequent blocks/gaps (suffixMin[hintIndex+1])
+    // suffixMin[hintIndex] = len + (m - hintIndex - 1) + suffixMin[hintIndex+1]
+    // Actually suffixMin[hintIndex] already includes everything needed from here to end.
+    // So if we place block at start, end is start + len.
+    // Total space needed is suffixMin[hintIndex].
+    // So start can go up to n - suffixMin[hintIndex].
     const maxStart = n - suffixMin[hintIndex];
+    
     for (let start = pos; start <= maxStart; start++) {
-      if (hasFilled(pos, start)) continue;
-      if (hasCross(start, start + len)) continue;
-      if (start + len < n && lineState[start + len] === 1) continue;
-      const nextPos = start + len < n ? start + len + 1 : start + len;
-      if (canPlaceSuffix(nextPos, hintIndex + 1)) {
-        memoSuffix[pos][hintIndex] = true;
-        return true;
+      if (hasFilled(pos, start)) continue; // Must be empty before this block
+      if (hasCross(start, start + len)) continue; // Block space must be free of crosses
+      
+      // If not the last block, we need a gap after
+      if (hintIndex < m - 1) {
+          if (start + len < n && lineState[start + len] === 1) continue; // Gap must not be filled
+          // We can assume gap is at start + len. Next block starts at least at start + len + 1
+          const nextPos = start + len + 1;
+          if (canPlaceSuffix(nextPos, hintIndex + 1)) {
+            memoSuffix[pos][hintIndex] = true;
+            return true;
+          }
+      } else {
+          // Last block
+          // Check if we can fill the rest with empty
+          if (hasFilled(start + len, n)) continue;
+          memoSuffix[pos][hintIndex] = true;
+          return true;
       }
     }
     memoSuffix[pos][hintIndex] = false;
@@ -115,16 +133,42 @@ const solveLineLogic = (lineState, hints) => {
       return result;
     }
     const len = hints[hintCount - 1];
-    const maxStart = pos - len - 1;
+    
+    // Logic for prefix:
+    // We are placing the (hintCount-1)-th block ending at 'start + len' <= pos.
+    // So 'start' <= pos - len.
+    // But we also need to ensure there is space for previous blocks.
+    // However, the simple constraint is just iterating backwards.
+    
+    // maxStart: if this is the only block, maxStart = pos - len.
+    // If there are previous blocks, we need a gap before this block.
+    // So previous block ended at start - 1.
+    // Actually the recursive call will handle space check.
+    // But for the gap check:
+    // If we place block at 'start', we need lineState[start-1] != 1 (if start > 0).
+    // And we recursively check canPlacePrefix(start-1, count-1).
+    // But if start=0 and count > 1, impossible.
+    
+    const maxStart = pos - len; // Simplified, loop condition handles rest
+    
     for (let start = maxStart; start >= 0; start--) {
       if (hasCross(start, start + len)) continue;
-      if (start + len < pos && lineState[start + len] === 1) continue;
-      if (hasFilled(start + len, pos)) continue;
-      if (start > 0 && lineState[start - 1] === 1) continue;
-      const prevPos = start > 0 ? start - 1 : 0;
-      if (canPlacePrefix(prevPos, hintCount - 1)) {
-        memoPrefix[pos][hintCount] = true;
-        return true;
+      if (hasFilled(start + len, pos)) continue; // Must be empty after this block up to pos
+      
+      // Check gap before
+      if (hintCount > 1) {
+          if (start === 0) continue; // No space for previous blocks
+          if (lineState[start - 1] === 1) continue; // Gap must not be filled
+          const prevPos = start - 1;
+          if (canPlacePrefix(prevPos, hintCount - 1)) {
+            memoPrefix[pos][hintCount] = true;
+            return true;
+          }
+      } else {
+          // First block
+          if (hasFilled(0, start)) continue; // Before first block must be empty
+          memoPrefix[pos][hintCount] = true;
+          return true;
       }
     }
     memoPrefix[pos][hintCount] = false;
