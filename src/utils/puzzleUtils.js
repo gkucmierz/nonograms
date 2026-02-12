@@ -125,28 +125,37 @@ export function calculateDifficulty(density, size = 10) {
     let level;
 
     // "Hardest" threshold is 99% solvability.
+    // We calculate a base value first, then adjust for solvability.
+    
+    const densityFactor = 1 - 2 * Math.abs(density - 0.5);
+    const complexity = size * (0.4 + 0.6 * densityFactor);
+    
     if (solvedPct < 99) {
-        // Extreme: Requires guessing
-        level = 'extreme';
-        // Map 0-99% solved to value 85-100
-        value = 85 + ((99 - solvedPct) / 99) * 15;
+        // Requires guessing / advanced logic.
+        // Base penalty for low solvability: 85 to 100
+        const penaltyBase = 85 + ((99 - solvedPct) / 99) * 15;
+        
+        // Scale penalty by size. 
+        // Small grids (e.g. 5x5) are trivial even if "unsolvable" by simple logic.
+        // Large grids (e.g. 20x20) are truly extreme if unsolvable.
+        const sizeFactor = Math.min(1, size / 20);
+        
+        value = penaltyBase * sizeFactor;
+        
+        // Ensure difficulty doesn't drop below structural complexity
+        value = Math.max(value, complexity);
     } else {
         // Solvable (>= 99%)
-        // Density factor: 0.5 is hardest (1), 0.1/0.9 is easiest (0.2)
-        const densityFactor = 1 - 2 * Math.abs(density - 0.5);
-        
         // Complexity based on Size and Density
         // Max size 80.
         // Formula: size * (0.4 + 0.6 * densityFactor)
-        // Max: 80 * 1 = 80.
-        const complexity = size * (0.4 + 0.6 * densityFactor);
-        
         value = Math.min(85, complexity);
-        
-        if (value < 25) level = 'easy';
-        else if (value < 55) level = 'harder';
-        else level = 'hardest';
     }
+        
+    if (value < 25) level = 'easy';
+    else if (value < 55) level = 'harder';
+    else if (value < 85) level = 'hardest';
+    else level = 'extreme';
 
     return { level, value: Math.round(value) };
 }
