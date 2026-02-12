@@ -63,21 +63,20 @@ export function generateRandomGrid(size, density = 0.5) {
 export function calculateDifficulty(density, size = 10) {
     // Data derived from Monte Carlo Simulation (Logical Solver)
     // Format: { size: [solved_pct_at_0.1, ..., solved_pct_at_0.9] }
-    // Densities: 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9
     const SIM_DATA = {
-        5:  [89, 74, 74, 81, 97, 98, 99, 100, 100],
-        10: [57, 20, 16, 54, 92, 100, 100, 100, 100],
-        15: [37, 10, 2, 12, 68, 100, 100, 100, 100],
-        20: [23, 3, 1, 2, 37, 100, 100, 100, 100],
-        25: [16, 0, 0, 1, 19, 99, 100, 100, 100],
-        30: [8, 0, 0, 0, 5, 99, 100, 100, 100],
-        35: [6, 0, 0, 0, 4, 91, 100, 100, 100],
-        40: [3, 0, 0, 0, 2, 91, 100, 100, 100],
-        45: [2, 0, 0, 0, 1, 82, 100, 100, 100],
-        50: [2, 0, 0, 0, 1, 73, 100, 100, 100],
-        60: [0, 0, 0, 0, 0, 35, 100, 100, 100],
-        71: [0, 0, 0, 0, 0, 16, 100, 100, 100],
-        80: [0, 0, 0, 0, 0, 1, 100, 100, 100]
+        5: [86, 73, 74, 80, 88, 98, 99, 99, 100],
+        10: [57, 22, 19, 44, 86, 99, 100, 100, 100],
+        15: [37, 7, 2, 12, 70, 99, 100, 100, 100],
+        20: [23, 3, 0, 3, 40, 99, 100, 100, 100],
+        25: [13, 1, 0, 1, 19, 99, 100, 100, 100],
+        30: [8, 1, 0, 0, 4, 100, 100, 100, 100],
+        35: [5, 0, 0, 0, 3, 99, 100, 100, 100],
+        40: [3, 0, 0, 0, 1, 96, 100, 100, 100],
+        45: [2, 0, 0, 0, 1, 83, 100, 100, 100],
+        50: [1, 0, 0, 0, 0, 62, 100, 100, 100],
+        60: [0, 0, 0, 0, 0, 18, 100, 100, 100],
+        70: [0, 0, 0, 0, 0, 14, 100, 100, 100],
+        80: [0, 0, 0, 0, 0, 4, 100, 100, 100]
     };
 
     // Helper to get interpolated value from array
@@ -122,17 +121,32 @@ export function calculateDifficulty(density, size = 10) {
 
     const solvedPct = getSimulatedSolvedPct(size, density);
     
-    // Difficulty Score: Inverse of Solved Percent
-    // 100% Solved -> 0 Difficulty
-    // 0% Solved -> 100 Difficulty
-    const value = Math.round(100 - solvedPct);
-    
-    // Thresholds
-    let level = 'easy';
-    if (value >= 90) level = 'extreme';     // < 10% Solved
-    else if (value >= 60) level = 'hardest'; // < 40% Solved
-    else if (value >= 30) level = 'harder';  // < 70% Solved
-    else level = 'easy';                     // > 70% Solved
+    let value;
+    let level;
 
-    return { level, value };
+    // "Hardest" threshold is 99% solvability.
+    if (solvedPct < 99) {
+        // Extreme: Requires guessing
+        level = 'extreme';
+        // Map 0-99% solved to value 85-100
+        value = 85 + ((99 - solvedPct) / 99) * 15;
+    } else {
+        // Solvable (>= 99%)
+        // Density factor: 0.5 is hardest (1), 0.1/0.9 is easiest (0.2)
+        const densityFactor = 1 - 2 * Math.abs(density - 0.5);
+        
+        // Complexity based on Size and Density
+        // Max size 80.
+        // Formula: size * (0.4 + 0.6 * densityFactor)
+        // Max: 80 * 1 = 80.
+        const complexity = size * (0.4 + 0.6 * densityFactor);
+        
+        value = Math.min(85, complexity);
+        
+        if (value < 25) level = 'easy';
+        else if (value < 55) level = 'harder';
+        else level = 'hardest';
+    }
+
+    return { level, value: Math.round(value) };
 }

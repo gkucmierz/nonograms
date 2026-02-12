@@ -9,9 +9,9 @@ import { X, Play, Square, RotateCcw } from 'lucide-vue-next';
 const emit = defineEmits(['close']);
 const { t } = useI18n();
 
-const SIZES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]; 
+const SIZES = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80]; 
 const DENSITIES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
-const SAMPLES_PER_POINT = 10; // Reduced for web performance demo
+const SAMPLES_PER_POINT = 50; // Increased for better accuracy
 
 const isRunning = ref(false);
 const progress = ref(0);
