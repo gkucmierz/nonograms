@@ -15,4 +15,9 @@ jobs:
 
       - name: Build and deploy with Docker Compose
         run: |
+          # Próba zatrzymania i usunięcia starego kontenera (ignoruje błąd jeśli nie istnieje)
+          docker compose down --remove-orphans || true
+          docker rm -f nonograms-app || true
+          
+          # Start nowej wersji
           docker compose up -d --build
