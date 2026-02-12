@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { generateRandomGrid, calculateHints } from '@/utils/puzzleUtils';
 import { solvePuzzle } from '@/utils/solver';
 import { useI18n } from '@/composables/useI18n';
@@ -20,6 +20,20 @@ const results = ref([]);
 const simulationSpeed = ref(1); // 1 = Normal, 2 = Fast (less render updates)
 
 let stopRequested = false;
+
+const onKeyDown = (e) => {
+    if (e.key === 'Escape') {
+        emit('close');
+    }
+};
+
+onMounted(() => {
+    window.addEventListener('keydown', onKeyDown);
+});
+
+onUnmounted(() => {
+    window.removeEventListener('keydown', onKeyDown);
+});
 
 const displayStatus = computed(() => {
     if (!currentStatus.value) return t('simulation.status.ready');
