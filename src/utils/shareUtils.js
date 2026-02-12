@@ -4,7 +4,7 @@ export function buildShareCanvas(data, t, formattedTime) {
   const { grid, size, currentDensity, guideUsageCount } = data;
   if (!grid || !grid.length) return null;
   
-  const appUrl = 'https://nonograms.7u.pl/';
+  const appUrl = typeof __APP_HOMEPAGE__ !== 'undefined' ? __APP_HOMEPAGE__ : '';
   const maxBoard = 640;
   const cellSize = Math.max(8, Math.floor(maxBoard / size));
   const boardSize = cellSize * size;
@@ -119,7 +119,7 @@ export function buildShareSVG(data, t, formattedTime) {
   const { grid, size, currentDensity, guideUsageCount } = data;
   if (!grid || !grid.length) return null;
   
-  const appUrl = 'https://nonograms.7u.pl/';
+  const appUrl = typeof __APP_HOMEPAGE__ !== 'undefined' ? __APP_HOMEPAGE__ : '';
   const maxBoard = 640;
   const cellSize = Math.max(8, Math.floor(maxBoard / size));
   const boardSize = cellSize * size;
