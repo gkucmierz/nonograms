@@ -23,6 +23,7 @@ const canInstall = ref(false);
 const installDismissed = ref(false);
 const isCoarsePointer = ref(false);
 const isStandalone = ref(false);
+const isIos = ref(false);
 const themePreference = ref('system');
 const appVersion = __APP_VERSION__;
 let displayModeMedia = null;
@@ -109,6 +110,7 @@ onMounted(() => {
   }
   if (typeof window !== 'undefined') {
     isCoarsePointer.value = window.matchMedia('(pointer: coarse)').matches;
+    isIos.value = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase());
     const storedTheme = typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null;
     if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
       themePreference.value = storedTheme;
@@ -160,10 +162,13 @@ onUnmounted(() => {
     />
     <FixedBar />
 
-    <div v-if="canInstall && !installDismissed" class="install-banner">
-      <div class="install-text">{{ t('pwa.installTitle') }}</div>
+    <div v-if="(canInstall || (isIos && !isStandalone)) && !installDismissed" class="install-banner">
+      <div class="install-text">
+        <span v-if="isIos && !isStandalone">{{ t('pwa.installIos') }}</span>
+        <span v-else>{{ t('pwa.installTitle') }}</span>
+      </div>
       <div class="install-actions">
-        <button class="btn-neon secondary install-btn" @click="handleInstall">
+        <button v-if="!isIos" class="btn-neon secondary install-btn" @click="handleInstall">
           {{ installLabel }}
         </button>
         <button class="install-close" @click="installDismissed = true">×</button>

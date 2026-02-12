@@ -215,12 +215,20 @@ onUnmounted(() => {
   width: fit-content;
   max-width: min(92vw, 560px);
   min-width: 280px;
+  max-height: 90vh;
+  overflow-y: auto;
   border: 1px solid var(--primary-accent);
   box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
   animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   z-index: 1001;
   overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px), (max-height: 600px) {
+  .modal {
+    padding: 20px;
+  }
 }
 
 h2 {

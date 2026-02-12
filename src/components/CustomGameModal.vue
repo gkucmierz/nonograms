@@ -340,10 +340,18 @@ const confirm = () => {
   text-align: center;
   max-width: 800px;
   width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   border: 1px solid var(--accent-cyan);
   box-shadow: 0 0 50px rgba(0, 242, 255, 0.2);
   animation: slideUp 0.3s ease;
   transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 768px), (max-height: 600px) {
+  .modal {
+    padding: 20px;
+  }
 }
 
 .modal-content {
