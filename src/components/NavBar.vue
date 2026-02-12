@@ -321,8 +321,10 @@ watch(isMobileMenuOpen, (val) => {
         </transition>
       </div>
     </div>
+  </nav>
 
-    <!-- Mobile Menu Overlay -->
+  <!-- Mobile Menu Overlay -->
+  <Teleport to="body">
     <transition name="fade">
         <div v-if="isMobileMenuOpen" class="mobile-menu-overlay">
             <div class="mobile-menu-header">
@@ -402,7 +404,7 @@ watch(isMobileMenuOpen, (val) => {
                               />
                          </div>
                         <div class="lang-list mobile-lang-list">
-                             <button
+                              <button
                                 v-for="lang in filteredLanguages"
                                 :key="lang.code"
                                 class="mobile-sub-item"
@@ -420,7 +422,7 @@ watch(isMobileMenuOpen, (val) => {
             </div>
         </div>
     </transition>
-  </nav>
+  </Teleport>
 </template>
 
 <style scoped>
