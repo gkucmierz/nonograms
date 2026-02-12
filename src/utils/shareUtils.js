@@ -227,7 +227,11 @@ export function buildShareSVG(data, t, formattedTime) {
   }
 
   // URL
-  svgContent += `<text x="${padding}" y="${height - padding + 6}" font-family="Segoe UI, sans-serif" font-weight="500" font-size="14" fill="${urlColor}">${appUrl}</text>`;
+  svgContent += `
+    <a href="${appUrl}" target="_blank">
+      <text x="${padding}" y="${height - padding + 6}" font-family="Segoe UI, sans-serif" font-weight="500" font-size="14" fill="${urlColor}" style="text-decoration: underline; cursor: pointer;">${appUrl}</text>
+    </a>
+  `;
 
   svgContent += '</svg>';
   return svgContent;
