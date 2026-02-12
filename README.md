@@ -1,7 +1,5 @@
 # Nonograms
 
-Link do aplikacji: https://nonograms.7u.pl
-
 ## English Description
 
 Nonograms is a modern, fast, and accessible logic puzzle game (also known as Picross or Griddlers). Solve pixel-art puzzles by marking cells according to numeric clues for rows and columns. The app features:
