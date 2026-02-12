@@ -1,6 +1,6 @@
 {
   "name": "vue-nonograms-solid",
-  "version": "1.12.5",
+  "version": "1.12.6",
   "homepage": "https://nonograms.7u.pl/",
   "type": "module",
   "scripts": {
