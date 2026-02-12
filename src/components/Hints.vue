@@ -32,7 +32,11 @@ defineProps({
       v-for="(group, index) in hints" 
       :key="index" 
       class="hint-group"
-      :class="{ 'is-active': index === activeIndex }"
+      :class="{
+        'is-active': index === activeIndex,
+        'guide-right': orientation === 'col' && (index + 1) % 5 === 0 && index !== size - 1,
+        'guide-bottom': orientation === 'row' && (index + 1) % 5 === 0 && index !== size - 1
+      }"
     >
       <span 
         v-for="(num, idx) in group" 
@@ -110,5 +114,13 @@ defineProps({
     background: rgba(79, 172, 254, 0.2);
     border-color: rgba(79, 172, 254, 0.8);
     box-shadow: 0 0 12px rgba(79, 172, 254, 0.35);
+}
+
+/* Guide lines every 5 */
+.hint-group.guide-right {
+    border-right: 2px solid rgba(0, 242, 255, 0.5);
+}
+.hint-group.guide-bottom {
+    border-bottom: 2px solid rgba(0, 242, 255, 0.5);
 }
 </style>
