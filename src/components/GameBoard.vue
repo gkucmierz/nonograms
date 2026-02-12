@@ -272,6 +272,7 @@ watch(() => store.size, async () => {
     min-width: 100%;
     margin: 0 auto; /* Center the wrapper safely */
     align-items: flex-start; /* Prevent cropping when centered */
+    padding-right: 40px;
   }
   
   .game-container {
