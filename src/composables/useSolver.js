@@ -9,8 +9,8 @@ export function useSolver() {
     const isPlaying = ref(false);
     const isProcessing = ref(false);
     const speedIndex = ref(0);
-    const speeds = [1000, 500, 250, 125, 62];
-    const speedLabels = ['x1', 'x2', 'x4', 'x8', 'x16'];
+    const speeds = [1000, 500, 250, 125, 62, 31, 16];
+    const speedLabels = ['x1', 'x2', 'x4', 'x8', 'x16', 'x32', 'x64'];
     const statusText = ref(t('guide.waiting'));
     
     let intervalId = null;
