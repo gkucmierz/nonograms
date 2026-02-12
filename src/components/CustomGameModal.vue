@@ -156,7 +156,6 @@ const stopDrag = () => {
 onUnmounted(() => {
     window.removeEventListener('mousemove', onDrag);
     window.removeEventListener('mouseup', stopDrag);
-    window.removeEventListener('keydown', onKeyDown);
 });
 
 const showAdvanced = ref(false);
@@ -168,16 +167,6 @@ const toggleAdvanced = () => {
         cachedBackground.value = null; 
         nextTick(drawMap);
     }
-};
-
-const handleClose = () => {
-  emit('close');
-};
-
-const onKeyDown = (e) => {
-  if (e.key === 'Escape') {
-    handleClose();
-  }
 };
 
 onMounted(() => {
@@ -192,7 +181,6 @@ onMounted(() => {
   }
   
   // Don't draw map initially if hidden
-  window.addEventListener('keydown', onKeyDown);
 });
 
 watch([customSize, fillRate], () => {

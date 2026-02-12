@@ -23,6 +23,8 @@ let stopRequested = false;
 
 const onKeyDown = (e) => {
     if (e.key === 'Escape') {
+        e.stopImmediatePropagation?.();
+        e.preventDefault?.();
         emit('close');
     }
 };

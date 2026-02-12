@@ -28,6 +28,8 @@ const handleClose = () => {
 
 const handleKeyDown = (e) => {
   if (e.key === 'Escape') {
+    e.stopImmediatePropagation?.();
+    e.preventDefault?.();
     handleClose();
   }
 };

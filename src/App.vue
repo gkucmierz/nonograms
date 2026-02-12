@@ -28,6 +28,21 @@ const appVersion = __APP_VERSION__;
 let displayModeMedia = null;
 let prefersColorSchemeMedia = null;
 
+const onKeyDownGlobal = (e) => {
+  if (e.key !== 'Escape') return;
+  if (showSimulation.value) {
+    showSimulation.value = false;
+    return;
+  }
+  if (showCustomModal.value) {
+    showCustomModal.value = false;
+    return;
+  }
+  if (store.isGameWon) {
+    store.closeWinModal();
+  }
+};
+
 const installLabel = computed(() => {
   return isCoarsePointer.value ? t('pwa.installMobile') : t('pwa.installDesktop');
 });
@@ -114,6 +129,7 @@ onMounted(() => {
     } else if (displayModeMedia?.addListener) {
       displayModeMedia.addListener(updateStandalone);
     }
+    window.addEventListener('keydown', onKeyDownGlobal);
   }
 });
 
@@ -131,6 +147,7 @@ onUnmounted(() => {
   } else if (displayModeMedia?.removeListener) {
     displayModeMedia.removeListener(updateStandalone);
   }
+  window.removeEventListener('keydown', onKeyDownGlobal);
 });
 </script>
 
