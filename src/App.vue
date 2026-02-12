@@ -110,7 +110,8 @@ onMounted(() => {
   }
   if (typeof window !== 'undefined') {
     isCoarsePointer.value = window.matchMedia('(pointer: coarse)').matches;
-    isIos.value = /ipad|iphone|ipod/.test(navigator.userAgent.toLowerCase());
+    const ua = navigator.userAgent.toLowerCase();
+    isIos.value = /ipad|iphone|ipod/.test(ua) || (ua.includes('mac') && navigator.maxTouchPoints > 1);
     const storedTheme = typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null;
     if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
       themePreference.value = storedTheme;
