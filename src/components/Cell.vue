@@ -43,21 +43,30 @@ const handlePointerDown = (e) => {
   const now = Date.now();
   if (now - lastTap < 300) {
     // Double tap -> X (Force)
+    clearLongPress();
     emit('start-drag', props.r, props.c, true, true);
     lastTap = 0;
   } else {
     // Single tap / Start drag -> Fill
     emit('start-drag', props.r, props.c, false, false);
     lastTap = now;
+
+    // Start Long Press Timer
+    clearLongPress();
+    longPressTimer = setTimeout(() => {
+        if (navigator.vibrate) navigator.vibrate(50);
+        // Switch to Cross (Right click logic, force=true to overwrite the just-placed Fill)
+        emit('start-drag', props.r, props.c, true, true);
+    }, 500);
   }
 };
 
 const handlePointerUp = (e) => {
-  // Handled in pointerdown
+  clearLongPress();
 };
 
 const handlePointerCancel = (e) => {
-  // Handled in pointerdown
+  clearLongPress();
 };
 </script>
 

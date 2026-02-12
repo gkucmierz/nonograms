@@ -27,17 +27,28 @@ let dragStartLeft = 0;
 const checkScroll = () => {
   const el = scrollWrapper.value;
   if (!el) return;
+  
+  const content = el.firstElementChild;
+  const contentWidth = content ? content.offsetWidth : el.scrollWidth;
   const sw = el.scrollWidth;
   const cw = el.clientWidth;
   
   // Only show custom scrollbar on mobile/tablet (width < 768px) and if content overflows
   const isMobile = window.innerWidth <= 768;
-  showScrollbar.value = isMobile && (sw > cw + 1);
+  // Use contentWidth to check for overflow, as scrollWidth might be misleading
+  showScrollbar.value = isMobile && (contentWidth > cw + 1);
   
   if (showScrollbar.value) {
     // Thumb width percentage = (viewport / total) * 100
-    const ratio = cw / sw;
+    // Use contentWidth for more accurate ratio
+    const ratio = cw / contentWidth;
     thumbWidth.value = Math.max(10, ratio * 100);
+    
+    // Hide if content fits or almost fits (prevent useless scrollbar)
+    // Increased tolerance to 95%
+    if (ratio >= 0.95) {
+      showScrollbar.value = false;
+    }
   }
 };
 
@@ -175,21 +186,38 @@ const handleGridLeave = () => {
   activeCol.value = null;
 };
 
+const handleResize = () => {
+  computeCellSize();
+  checkScroll();
+  // Re-check after potential layout animation/transition
+  setTimeout(() => {
+    computeCellSize();
+    checkScroll();
+  }, 300);
+};
+
 onMounted(() => {
   nextTick(() => {
     computeCellSize();
+    checkScroll();
+    // Extra check for slow layout/font loading or orientation changes
+    setTimeout(() => {
+      computeCellSize();
+      checkScroll();
+    }, 300);
   });
   isFinePointer.value = window.matchMedia('(pointer: fine)').matches;
-  window.addEventListener('resize', computeCellSize);
-  window.addEventListener('resize', checkScroll);
+  
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('orientationchange', handleResize);
   window.addEventListener('mouseup', handleGlobalMouseUp);
   window.addEventListener('pointerup', handleGlobalPointerUp);
   window.addEventListener('touchend', handleGlobalPointerUp, { passive: true });
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', computeCellSize);
-  window.removeEventListener('resize', checkScroll);
+  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('orientationchange', handleResize);
   window.removeEventListener('mouseup', handleGlobalMouseUp);
   window.removeEventListener('pointerup', handleGlobalPointerUp);
   window.removeEventListener('touchend', handleGlobalPointerUp);
@@ -199,6 +227,10 @@ watch(() => store.size, async () => {
   await nextTick();
   computeCellSize();
   checkScroll();
+  setTimeout(() => {
+    computeCellSize();
+    checkScroll();
+  }, 300);
 });
 </script>
 

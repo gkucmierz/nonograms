@@ -1,10 +1,10 @@
 {
   "name": "vue-nonograms-solid",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "homepage": "https://nonograms.7u.pl/",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest"
