@@ -164,15 +164,23 @@ onUnmounted(() => {
     <FixedBar />
 
     <div v-if="(canInstall || (isIos && !isStandalone)) && !installDismissed" class="install-banner">
-      <div class="install-text">
-        <span v-if="isIos && !isStandalone">{{ t('pwa.installIos') }}</span>
-        <span v-else>{{ t('pwa.installTitle') }}</span>
+      <div class="install-content">
+        <img src="/pwa-192x192.png" alt="App Icon" class="install-icon" />
+        <div class="install-text">
+          <div class="install-title">{{ t('app.title') }}</div>
+          <div class="install-desc">
+            <span v-if="isIos && !isStandalone">{{ t('pwa.installIos') }}</span>
+            <span v-else>{{ t('pwa.installTitle') }}</span>
+          </div>
+        </div>
       </div>
       <div class="install-actions">
         <button v-if="!isIos" class="btn-neon secondary install-btn" @click="handleInstall">
           {{ installLabel }}
         </button>
-        <button class="install-close" @click="installDismissed = true">×</button>
+        <button class="install-close" @click="installDismissed = true" aria-label="Close">
+          ✕
+        </button>
       </div>
     </div>
 
@@ -209,7 +217,7 @@ onUnmounted(() => {
 .game-container {
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* was center */
+  align-items: stretch;
   gap: 20px;
   width: 100%;
   padding-bottom: 50px;
@@ -217,38 +225,111 @@ onUnmounted(() => {
 }
 
 .install-banner {
-  background: var(--banner-bg);
-  border: 1px solid var(--banner-border);
-  border-radius: 8px;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  max-width: 600px;
-  margin: 0 auto 20px auto; /* Center it manually */
-  box-shadow: var(--banner-shadow);
-  position: sticky;
+  position: fixed;
+  bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--neon-cyan);
+  box-shadow: 0 -4px 30px rgba(0, 242, 254, 0.15);
+  padding: 16px 20px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 2000;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  .install-banner {
+    width: 400px;
+    bottom: 24px;
+    right: 24px;
+    left: auto;
+    border-radius: 12px;
+    border: 1px solid var(--neon-cyan);
+    padding-bottom: 16px;
+  }
+}
+
+.install-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.install-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .install-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.install-title {
+  font-weight: bold;
+  color: var(--neon-cyan);
+  font-size: 1.1rem;
+}
+
+.install-desc {
+  font-size: 0.9rem;
   color: var(--text-color);
+  line-height: 1.3;
 }
 
 .install-actions {
   display: flex;
-  gap: 10px;
   align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.install-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 0.95rem;
+  justify-content: center;
 }
 
 .install-close {
   background: transparent;
   border: none;
   color: var(--text-muted);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.install-close:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-color);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .game-layout {
