@@ -486,8 +486,8 @@ onUnmounted(() => {
                     max="99" 
                 />
                 <div class="threshold-preview">
-                    <span>Low Density</span>
-                    <span>High Density</span>
+                    <span>{{ t('image.lowDensity') }}</span>
+                    <span>{{ t('image.highDensity') }}</span>
                 </div>
             </div>
             
