@@ -33,7 +33,72 @@ Za każdym razem, gdy zmienisz kod JS/Vue:
 
 ---
 
-## Android (Google Play)
+## Generowanie Certyfikatów (dla Ionic Appflow / CI/CD)
+
+Jeśli używasz **Ionic Appflow** do budowania aplikacji w chmurze, musisz wygenerować i wgrać odpowiednie certyfikaty podpisywania.
+
+### Android (Google Play)
+
+Potrzebujesz pliku **Keystore (.jks lub .keystore)**.
+
+1.  **Opcja A (Terminal - jeśli masz Javę/JDK):**
+    Uruchom w terminalu:
+    ```bash
+    keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-key-alias
+    ```
+    *   Zostaniesz poproszony o hasło do magazynu kluczy (zapamiętaj je!).
+    *   Podaj dane (Imię, Organizacja itp.).
+    *   Na koniec potwierdź (`yes`).
+
+2.  **Opcja B (Android Studio):**
+    *   Otwórz projekt Androida w Android Studio (`npx cap open android`).
+    *   Menu: **Build** -> **Generate Signed Bundle / APK**.
+    *   Wybierz **Android App Bundle** -> Next.
+    *   Pod polem "Key store path" kliknij **Create new...**.
+    *   Wypełnij formularz (ścieżka, hasła, alias).
+    *   Zakończ kreatora.
+
+3.  **W Appflow:**
+    *   Wgraj wygenerowany plik `.jks`.
+    *   Podaj:
+        *   **Keystore Password**: hasło, które ustawiłeś.
+        *   **Key Alias**: nazwa aliasu (np. `my-key-alias` lub to co wpisałeś).
+        *   **Key Password**: hasło do klucza (zazwyczaj to samo co do keystore).
+
+### iOS (App Store)
+
+Potrzebujesz certyfikatu **.p12** oraz profilu **.mobileprovision**.
+Wymagany jest dostęp do komputera Mac i konta Apple Developer.
+
+1.  **Certyfikat Dystrybucyjny (.p12):**
+    *   Otwórz aplikację **Dostęp do pęku kluczy (Keychain Access)** na Macu.
+    *   Menu: **Asystent certyfikatów** -> **Poproś urząd certyfikacji o certyfikat**.
+    *   Wpisz swój email, wybierz "Zapisz na dysku" i kontynuuj -> Zapisz plik `.certSigningRequest` (CSR).
+    *   Zaloguj się na [developer.apple.com](https://developer.apple.com).
+    *   Idź do **Certificates, Identifiers & Profiles** -> **Certificates**.
+    *   Kliknij **+**, wybierz **iOS Distribution (App Store and Ad Hoc)**.
+    *   Wgraj swój plik CSR.
+    *   Pobierz wygenerowany certyfikat `.cer`.
+    *   Kliknij dwukrotnie w pobrany plik `.cer`, aby dodać go do Pęku kluczy.
+    *   W Pęku kluczy znajdź ten certyfikat (np. "iPhone Distribution: Twoja Nazwa"), rozwiń go strzałką, aby widzieć "Klucz prywatny".
+    *   Zaznacz **oba** (certyfikat i klucz prywatny), kliknij prawym -> **Eksportuj 2 rzeczy**.
+    *   Zapisz jako plik `.p12` i ustaw hasło eksportu (zapamiętaj je!).
+
+2.  **Profil Aprowizacji (.mobileprovision):**
+    *   Na [developer.apple.com](https://developer.apple.com) idź do **Profiles**.
+    *   Kliknij **+**, wybierz **App Store** (pod Distribution).
+    *   Wybierz App ID swojej aplikacji (musi pasować do Bundle ID w projekcie).
+    *   Wybierz certyfikat, który przed chwilą stworzyłeś.
+    *   Nazwij profil (np. "Nonograms App Store") i pobierz plik `.mobileprovision`.
+
+3.  **W Appflow:**
+    *   Wgraj plik `.p12`.
+    *   Wgraj plik `.mobileprovision`.
+    *   Podaj hasło do pliku `.p12`.
+
+---
+
+## Android (Lokalnie)
 
 ### 1. Uruchomienie projektu
 Otwórz projekt w Android Studio:
@@ -58,7 +123,7 @@ W Android Studio:
 
 ---
 
-## iOS (App Store)
+## iOS (Lokalnie)
 
 ### 1. Uruchomienie projektu
 Otwórz projekt w Xcode:
