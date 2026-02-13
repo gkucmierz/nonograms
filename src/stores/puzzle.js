@@ -118,13 +118,15 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     elapsedTime.value = 0;
     startTimer();
     saveState();
+  }
+
   function resetGrid() {
     const rows = solution.value.length;
     const cols = solution.value[0].length;
     playerGrid.value = Array(rows).fill().map(() => Array(cols).fill(0));
     history.value = [];
     moves.value = 0;
-  } currentTransaction.value = null;
+    currentTransaction.value = null;
   }
   
   function startInteraction() {

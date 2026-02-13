@@ -18,6 +18,7 @@ const imageLoaded = ref(false);
 const processing = ref(false);
 const processingProgress = ref(0);
 const isCameraOpen = ref(false);
+const hasMultipleCameras = ref(false);
 const stream = ref(null);
 const facingMode = ref('environment');
 
@@ -319,6 +320,12 @@ const startCamera = async () => {
             }
         };
         stream.value = await navigator.mediaDevices.getUserMedia(constraints);
+
+        // Check available devices
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        hasMultipleCameras.value = videoDevices.length > 1;
+
         // Wait for next tick or ensure videoRef is available
         setTimeout(() => {
             if (videoRef.value) {
@@ -401,7 +408,7 @@ onUnmounted(() => {
             <button class="camera-btn capture" @click="capturePhoto">
                 <div class="shutter"></div>
             </button>
-            <button class="camera-btn secondary" @click="switchCamera">
+            <button v-if="hasMultipleCameras" class="camera-btn secondary" @click="switchCamera">
                 <RefreshCw :size="24" />
             </button>
         </div>
