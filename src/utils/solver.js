@@ -18,7 +18,7 @@ const memo = new Map();
  * @param {number[]} hints - Array of block lengths
  * @returns {number[]} - Updated line (or null if contradiction/impossible - though shouldn't happen for valid puzzles)
  */
-function solveLine(currentLine, hints) {
+export function solveLine(currentLine, hints) {
     const length = currentLine.length;
     
     // If no hints, all must be empty
@@ -57,6 +57,8 @@ function solveLine(currentLine, hints) {
                     break;
                 }
             }
+            // Cannot skip a filled cell - if we pass a '1', it becomes uncovered
+            if (currentLine[currentIdx] === 1) return null;
             currentIdx++;
         }
         if (leftPositions.length <= hIndex) return null; // Impossible
@@ -81,6 +83,8 @@ function solveLine(currentLine, hints) {
                     break;
                 }
             }
+            // Cannot skip a filled cell
+            if (reversedLine[currentIdx] === 1) return null;
             currentIdx++;
         }
         if (rightPositionsReversed.length <= hIndex) return null;
