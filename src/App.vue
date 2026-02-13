@@ -8,6 +8,7 @@ import StatusPanel from './components/StatusPanel.vue';
 import GuidePanel from './components/GuidePanel.vue';
 import WinModal from './components/WinModal.vue';
 import CustomGameModal from './components/CustomGameModal.vue';
+import ImageImportModal from './components/ImageImportModal.vue';
 import SimulationView from './components/SimulationView.vue';
 import FixedBar from './components/FixedBar.vue';
 import ReloadPrompt from './components/ReloadPrompt.vue';
@@ -16,6 +17,7 @@ import ReloadPrompt from './components/ReloadPrompt.vue';
 const store = usePuzzleStore();
 const { t, locale, setLocale, locales } = useI18n();
 const showCustomModal = ref(false);
+const showImageImportModal = ref(false);
 const showSimulation = ref(false);
 const showGuide = ref(false);
 const deferredPrompt = ref(null);
@@ -37,6 +39,10 @@ const onKeyDownGlobal = (e) => {
   }
   if (showCustomModal.value) {
     showCustomModal.value = false;
+    return;
+  }
+  if (showImageImportModal.value) {
+    showImageImportModal.value = false;
     return;
   }
   if (store.isGameWon) {
@@ -158,6 +164,7 @@ onUnmounted(() => {
   <main class="game-container">
     <NavBar 
       @open-custom="showCustomModal = true" 
+      @open-image-import="showImageImportModal = true"
       @toggle-guide="showGuide = !showGuide"
       @set-theme="setThemePreference"
     />
@@ -207,6 +214,10 @@ onUnmounted(() => {
     <Teleport to="body">
       <WinModal v-if="store.isGameWon" />
       <CustomGameModal v-if="showCustomModal" @close="showCustomModal = false" @open-simulation="showSimulation = true" />
+      <ImageImportModal 
+        v-if="showImageImportModal" 
+        @close="showImageImportModal = false"
+      />
       <SimulationView v-if="showSimulation" @close="showSimulation = false" />
       <ReloadPrompt />
     </Teleport>

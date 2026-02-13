@@ -93,6 +93,26 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     saveState();
   }
 
+  function initFromImage(grid) {
+    stopTimer();
+    currentLevelId.value = 'custom_image';
+    size.value = grid.length;
+    solution.value = grid;
+    
+    resetGrid();
+    isGameWon.value = false;
+    hasUsedGuide.value = false;
+    guideUsageCount.value = 0;
+    
+    // Calculate density
+    const totalFilled = grid.flat().filter(c => c === 1).length;
+    currentDensity.value = totalFilled / (size.value * size.value);
+    
+    elapsedTime.value = 0;
+    startTimer();
+    saveState();
+  }
+
   function resetGrid() {
     playerGrid.value = Array(size.value).fill().map(() => Array(size.value).fill(0));
     moves.value = 0;
@@ -332,6 +352,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     progressPercentage,
     initGame,
     initCustomGame,
+    initFromImage,
     toggleCell,
     setCell,
     resetGame,

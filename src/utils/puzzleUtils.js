@@ -27,19 +27,20 @@ export function validateLine(line, targetHints) {
 export function calculateHints(grid) {
     if (!grid || grid.length === 0) return { rowHints: [], colHints: [] };
     
-    const size = grid.length;
+    const rows = grid.length;
+    const cols = grid[0].length;
     const rowHints = [];
     const colHints = [];
 
     // Row Hints
-    for (let r = 0; r < size; r++) {
+    for (let r = 0; r < rows; r++) {
         rowHints.push(calculateLineHints(grid[r]));
     }
 
     // Col Hints
-    for (let c = 0; c < size; c++) {
+    for (let c = 0; c < cols; c++) {
         const col = [];
-        for (let r = 0; r < size; r++) {
+        for (let r = 0; r < rows; r++) {
             col.push(grid[r][c]);
         }
         colHints.push(calculateLineHints(col));

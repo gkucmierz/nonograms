@@ -2,12 +2,12 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
-import { Gamepad2, Palette, CircleHelp, Sun, Moon, Menu, X, ChevronDown, ChevronUp, Monitor } from 'lucide-vue-next';
+import { Gamepad2, Palette, CircleHelp, Sun, Moon, Menu, X, ChevronDown, ChevronUp, Monitor, Image as ImageIcon } from 'lucide-vue-next';
 
 const store = usePuzzleStore();
 const { t, locale, setLocale, locales } = useI18n();
 
-const emit = defineEmits(['open-custom', 'toggle-guide', 'set-theme']);
+const emit = defineEmits(['open-custom', 'open-image-import', 'toggle-guide', 'set-theme']);
 
 const isGameOpen = ref(false);
 const isThemeOpen = ref(false);
@@ -180,6 +180,12 @@ const openCustom = () => {
   closeMobileMenu();
 };
 
+const openImageImport = () => {
+  emit('open-image-import');
+  isGameOpen.value = false;
+  closeMobileMenu();
+};
+
 const setTheme = (theme) => {
   emit('set-theme', theme);
   isThemeOpen.value = false;
@@ -254,7 +260,10 @@ watch(isMobileMenuOpen, (val) => {
               {{ lvl.label }}
             </button>
             <button class="dropdown-item" @click="openCustom">
-              {{ t('level.custom') }}
+              {{ t('level.custom_random') }}
+            </button>
+            <button class="dropdown-item" @click="openImageImport">
+              {{ t('level.custom_image') }}
             </button>
           </div>
         </transition>
@@ -351,7 +360,10 @@ watch(isMobileMenuOpen, (val) => {
                             {{ lvl.label }}
                           </button>
                           <button class="mobile-sub-item" @click="openCustom">
-                            {{ t('level.custom') }}
+                            {{ t('level.custom_random') }}
+                          </button>
+                          <button class="mobile-sub-item" @click="openImageImport">
+                            {{ t('level.custom_image') }}
                           </button>
                     </div>
                 </div>

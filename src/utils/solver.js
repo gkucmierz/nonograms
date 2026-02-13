@@ -218,14 +218,15 @@ function canFitRest(line, startIndex, hints, hintIndex) {
  * Solves the puzzle using logical iteration.
  * @param {number[][]} rowHints 
  * @param {number[][]} colHints 
- * @returns {object} { solvedGrid: number[][], percentSolved: number }
+ * @param {number[][]} initialGrid - Optional starting state
+ * @returns {object} { grid: number[][], changed: boolean }
  */
-export function solvePuzzle(rowHints, colHints) {
+function solveLogically(rowHints, colHints, initialGrid) {
     const rows = rowHints.length;
     const cols = colHints.length;
     
-    // Initialize grid with -1
-    let grid = Array(rows).fill(null).map(() => Array(cols).fill(-1));
+    // Initialize grid with -1 if not provided
+    let grid = initialGrid ? initialGrid.map(row => [...row]) : Array(rows).fill(null).map(() => Array(cols).fill(-1));
     
     let changed = true;
     let iterations = 0;
@@ -238,12 +239,15 @@ export function solvePuzzle(rowHints, colHints) {
         // Rows
         for (let r = 0; r < rows; r++) {
             const newLine = solveLine(grid[r], rowHints[r]);
-            if (newLine) {
-                for (let c = 0; c < cols; c++) {
-                    if (grid[r][c] !== newLine[c]) {
-                        grid[r][c] = newLine[c];
-                        changed = true;
-                    }
+            if (!newLine) return { grid, contradiction: true }; // Contradiction found
+            
+            for (let c = 0; c < cols; c++) {
+                if (grid[r][c] !== newLine[c]) {
+                    // If we try to overwrite a known value with a different one -> Contradiction
+                    if (grid[r][c] !== -1 && grid[r][c] !== newLine[c]) return { grid, contradiction: true };
+                    
+                    grid[r][c] = newLine[c];
+                    changed = true;
                 }
             }
         }
@@ -252,27 +256,167 @@ export function solvePuzzle(rowHints, colHints) {
         for (let c = 0; c < cols; c++) {
             const currentCol = grid.map(row => row[c]);
             const newCol = solveLine(currentCol, colHints[c]);
-            if (newCol) {
-                for (let r = 0; r < rows; r++) {
-                    if (grid[r][c] !== newCol[r]) {
-                        grid[r][c] = newCol[r];
-                        changed = true;
-                    }
+            if (!newCol) return { grid, contradiction: true }; // Contradiction found
+            
+            for (let r = 0; r < rows; r++) {
+                if (grid[r][c] !== newCol[r]) {
+                    if (grid[r][c] !== -1 && grid[r][c] !== newCol[r]) return { grid, contradiction: true };
+                    
+                    grid[r][c] = newCol[r];
+                    changed = true;
                 }
             }
         }
     }
     
-    // Calculate solved %
+    return { grid, changed: iterations > 1, iterations, contradiction: false };
+}
+
+/**
+ * Main solver function that attempts to solve the puzzle using logic and lookahead.
+ * @param {number[][]} rowHints 
+ * @param {number[][]} colHints 
+ * @param {function} onProgress - Optional callback for progress reporting (percent)
+ * @returns {object} result
+ */
+export function solvePuzzle(rowHints, colHints, onProgress) {
+    const rows = rowHints.length;
+    const cols = colHints.length;
+    const totalCells = rows * cols;
+    
+    // 1. Basic Logical Solve
+    let { grid, iterations, contradiction } = solveLogically(rowHints, colHints);
+    
+    // Count solved
     let solvedCount = 0;
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            if (grid[r][c] !== -1) solvedCount++;
+    grid.forEach(r => r.forEach(c => { if(c !== -1) solvedCount++; }));
+    let percentSolved = (solvedCount / totalCells) * 100;
+    
+    if (onProgress) onProgress(Math.floor(percentSolved));
+
+    // Difficulty calculation
+    // Base: complexity of grid
+    let difficultyScore = 0;
+    
+    // If simple logic failed to solve completely, try Lookahead (Smash)
+    let lookaheadUsed = false;
+    
+    if (percentSolved < 100 && !contradiction) {
+        // Lookahead loop
+        // Find an unknown cell, try 0 and 1. If one leads to contradiction, the other is true.
+        let progress = true;
+        while (progress && percentSolved < 100) {
+            progress = false;
+            
+            // Find unknown cells (optimize: sort by most constrained?)
+            // For now, just scan.
+            let candidates = [];
+            for(let r=0; r<rows; r++) {
+                for(let c=0; c<cols; c++) {
+                    if (grid[r][c] === -1) candidates.push({r, c});
+                }
+            }
+            
+            // Limit candidates for performance (e.g., first 50 or heuristic)
+            // But we need to solve it...
+            // Let's try top 20 candidates? Or all?
+            // "Parallel web workers" allows us to be heavier, but 80x80 is 6400 cells.
+            // We can't try all 6400 in every pass.
+            // Heuristic: pick cells in rows/cols that are nearly full.
+            
+            let checkedCount = 0;
+            const totalCandidates = candidates.length;
+            let lastReportedPercent = -1;
+
+            for (const {r, c} of candidates) {
+                checkedCount++;
+                
+                // Report progress inside the heavy loop
+                if (onProgress) {
+                    const currentScanPercent = Math.floor((checkedCount / totalCandidates) * 100);
+                    // Report every 1% change or at least every 10 items to avoid flooding but keep it responsive
+                    if (currentScanPercent > lastReportedPercent || checkedCount % 10 === 0) {
+                        lastReportedPercent = currentScanPercent;
+                        onProgress(currentScanPercent);
+                    }
+                }
+                
+                // Try assuming 1
+                // We need to clone the grid for simulation
+                const gridCopy1 = grid.map(row => [...row]);
+                gridCopy1[r][c] = 1;
+                const res1 = solveLogically(rowHints, colHints, gridCopy1);
+                
+                // Try assuming 0
+                const gridCopy0 = grid.map(row => [...row]);
+                gridCopy0[r][c] = 0;
+                const res0 = solveLogically(rowHints, colHints, gridCopy0);
+                
+                let deduced = null;
+                
+                if (res1.contradiction && !res0.contradiction) {
+                    deduced = 0; // Must be 0
+                } else if (!res1.contradiction && res0.contradiction) {
+                    deduced = 1; // Must be 1
+                }
+                
+                if (deduced !== null) {
+                    grid[r][c] = deduced;
+                    progress = true;
+                    lookaheadUsed = true;
+                    difficultyScore += 5; // Penalty for requiring lookahead
+                    
+                    // Run logic again to propagate this new info
+                    const updated = solveLogically(rowHints, colHints, grid);
+                    if (updated.contradiction) break; // Should not happen if logic is sound
+                    grid = updated.grid;
+                    
+                    break; // Restart loop to use new info
+                }
+            }
+            
+            // Recalculate percent (this is for loop exit condition)
+            solvedCount = 0;
+            grid.forEach(row => row.forEach(c => { if(c !== -1) solvedCount++; }));
+            percentSolved = (solvedCount / totalCells) * 100;
+            // Note: we don't report percentSolved here because we want the spinner to show SCAN progress (0-100% of current pass)
+            // If we reported percentSolved, the user might see the spinner jump from 100% (scan done) to 5% (solved amount), which is confusing.
         }
     }
     
-    return {
-        solvedGrid: grid,
-        percentSolved: (solvedCount / (rows * cols)) * 100
+    // Final Difficulty Calculation
+    // Factors:
+    // 1. Size (rows * cols)
+    // 2. Iterations (how many passes of line logic)
+    // 3. Lookahead (did we need it?)
+    
+    const effectiveSize = Math.sqrt(rows * cols);
+    // iterations is usually 2-20. 
+    // difficultyScore accumulates lookahead steps.
+    
+    // Normalize iterations
+    const iterScore = Math.min(20, iterations) * 2;
+    
+    // Base difficulty
+    let totalScore = effectiveSize + iterScore + difficultyScore;
+    
+    // If not fully solved, massive penalty
+    if (percentSolved < 100) {
+        // Unsolvable by logic+lookahead
+        // This is "Extreme" or "Guessing Required"
+        totalScore = 100; // Cap at max
+    } else {
+        // Solved
+        // Normalize score 0-100 (approximately)
+        // Max theoretical "normal" score ~ 80 (size 80) + 40 (iter) + 20 (lookahead) = 140?
+        // Let's scale it.
+        totalScore = Math.min(100, totalScore);
+    }
+    
+    return { 
+        percentSolved, 
+        difficultyScore: totalScore, 
+        lookaheadUsed,
+        iterations 
     };
 }
