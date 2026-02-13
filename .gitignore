@@ -14,3 +14,9 @@ dist-ssr/
 *.njsproj
 *.sln
 *.sw?
+
+# Security keys and certificates
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
