@@ -11,6 +11,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   const isGameWon = ref(false);
   const hasUsedGuide = ref(false);
   const guideUsageCount = ref(0);
+  const hasUsedBoost = ref(false);
+  const boostUsageCount = ref(0);
   const currentDifficulty = ref(null); // 'easy', 'medium', 'hard', 'custom' or object { density: 0.5 }
   const currentDensity = ref(0);
   const size = ref(5);
@@ -72,6 +74,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     isGameWon.value = false;
     hasUsedGuide.value = false;
     guideUsageCount.value = 0;
+    hasUsedBoost.value = false;
+    boostUsageCount.value = 0;
     currentDensity.value = totalCellsToFill.value / (size.value * size.value);
     elapsedTime.value = 0;
     startTimer();
@@ -90,6 +94,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     isGameWon.value = false;
     hasUsedGuide.value = false;
     guideUsageCount.value = 0;
+    hasUsedBoost.value = false;
+    boostUsageCount.value = 0;
     currentDensity.value = density;
     elapsedTime.value = 0;
     startTimer();
@@ -110,6 +116,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     isGameWon.value = false;
     hasUsedGuide.value = false;
     guideUsageCount.value = 0;
+    hasUsedBoost.value = false;
+    boostUsageCount.value = 0;
     
     // Calculate density
     const totalFilled = grid.flat().filter(c => c === 1).length;
@@ -256,6 +264,17 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     }
     
     if (correct) {
+      // Auto-fill remaining empty cells with X (2)
+      const rows = solution.value.length;
+      const cols = solution.value[0].length;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (playerGrid.value[r][c] === 0) {
+            playerGrid.value[r][c] = 2;
+          }
+        }
+      }
+      
       isGameWon.value = true;
       stopTimer();
     }
@@ -290,6 +309,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         isGameWon: isGameWon.value,
         hasUsedGuide: hasUsedGuide.value,
         guideUsageCount: guideUsageCount.value,
+        hasUsedBoost: hasUsedBoost.value,
+        boostUsageCount: boostUsageCount.value,
         currentDensity: currentDensity.value,
         elapsedTime: elapsedTime.value,
         moves: moves.value,
@@ -310,6 +331,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
             isGameWon.value = parsed.isGameWon;
             hasUsedGuide.value = parsed.hasUsedGuide || false;
             guideUsageCount.value = parsed.guideUsageCount || 0;
+            hasUsedBoost.value = parsed.hasUsedBoost || false;
+            boostUsageCount.value = parsed.boostUsageCount || 0;
             currentDensity.value = parsed.currentDensity || 0;
             elapsedTime.value = parsed.elapsedTime || 0;
             moves.value = parsed.moves || 0;
@@ -345,6 +368,13 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     if (isGameWon.value) return;
     hasUsedGuide.value = true;
     guideUsageCount.value++;
+    saveState();
+  }
+
+  function markBoostUsed() {
+    if (isGameWon.value) return;
+    hasUsedBoost.value = true;
+    boostUsageCount.value++;
     saveState();
   }
 

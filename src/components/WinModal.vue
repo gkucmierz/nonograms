@@ -47,7 +47,9 @@ const getShareData = () => ({
   grid: store.playerGrid,
   size: store.size,
   currentDensity: store.currentDensity,
-  guideUsageCount: store.guideUsageCount
+  guideUsageCount: store.guideUsageCount,
+  hasUsedBoost: store.hasUsedBoost,
+  boostUsageCount: store.boostUsageCount
 });
 
 const downloadShareSVG = () => {

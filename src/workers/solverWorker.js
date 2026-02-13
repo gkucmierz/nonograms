@@ -7,6 +7,7 @@ const messages = {
     'worker.logicRow': 'Logika: Wiersz {row}, Kolumna {col} -> {state}',
     'worker.logicCol': 'Logika: Kolumna {col}, Wiersz {row} -> {state}',
     'worker.stuck': 'Brak logicznego ruchu. Spróbuj zgadnąć lub cofnąć.',
+    'worker.boosted': 'Boost (DFS): Wiersz {row}, Kolumna {col} -> {state}',
     'worker.done': 'Koniec!',
     'worker.state.filled': 'Pełne',
     'worker.state.empty': 'Puste'
@@ -16,6 +17,7 @@ const messages = {
     'worker.logicRow': 'Logic: Row {row}, Column {col} -> {state}',
     'worker.logicCol': 'Logic: Column {col}, Row {row} -> {state}',
     'worker.stuck': 'No logical move found. Try guessing or undoing.',
+    'worker.boosted': 'Boost (DFS): Row {row}, Column {col} -> {state}',
     'worker.done': 'Done!',
     'worker.state.filled': 'Filled',
     'worker.state.empty': 'Empty'
@@ -79,7 +81,12 @@ const isSolved = (grid, solution) => {
       const solutionCell = solution[r][c];
       const isFilled = playerCell === 1;
       const shouldBeFilled = solutionCell === 1;
+      
+      // Check correctness
       if (isFilled !== shouldBeFilled) return false;
+      
+      // Check completeness (must be fully resolved to 1 or 2)
+      if (playerCell === 0) return false;
     }
   }
   return true;
@@ -131,9 +138,36 @@ const handleStep = (playerGrid, solution, locale) => {
   return { type: 'stuck', statusText: t(locale, 'worker.stuck') };
 };
 
+const handleBoost = (playerGrid, solution, locale) => {
+  const size = solution.length;
+  // Find first unknown cell and reveal it
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (playerGrid[r][c] === 0) {
+        const correctState = solution[r][c] === 1 ? 1 : 2;
+        const stateLabel = t(locale, correctState === 1 ? 'worker.state.filled' : 'worker.state.empty');
+        return {
+          type: 'move',
+          r,
+          c,
+          state: correctState,
+          statusText: t(locale, 'worker.boosted', { row: r + 1, col: c + 1, state: stateLabel })
+        };
+      }
+    }
+  }
+  return { type: 'done', statusText: t(locale, 'worker.solved') };
+};
+
 self.onmessage = (event) => {
-  const { id, playerGrid, solution, locale } = event.data;
+  const { id, playerGrid, solution, locale, action } = event.data;
   const resolved = resolveLocale(locale);
-  const result = handleStep(playerGrid, solution, resolved);
-  self.postMessage({ id, ...result });
+  
+  if (action === 'boost') {
+      const result = handleBoost(playerGrid, solution, resolved);
+      self.postMessage({ id, ...result });
+  } else {
+      const result = handleStep(playerGrid, solution, resolved);
+      self.postMessage({ id, ...result });
+  }
 };

@@ -8,6 +8,7 @@ export function useSolver() {
     
     const isPlaying = ref(false);
     const isProcessing = ref(false);
+    const isStuck = ref(false);
     const speedIndex = ref(0);
     const speeds = [1000, 500, 250, 125, 62, 31, 16];
     const speedLabels = ['x1', 'x2', 'x4', 'x8', 'x16', 'x32', 'x64'];
@@ -25,6 +26,7 @@ export function useSolver() {
         }
         if (isProcessing.value) return;
         store.markGuideUsed();
+        isStuck.value = false;
         ensureWorker();
         isProcessing.value = true;
 
@@ -62,6 +64,19 @@ export function useSolver() {
         }
     }
 
+    function boost() {
+        if (store.isGameWon || isProcessing.value) return;
+        store.markBoostUsed();
+        isStuck.value = false;
+        ensureWorker();
+        isProcessing.value = true;
+
+        const playerGrid = store.playerGrid.map(row => row.slice());
+        const solution = store.solution.map(row => row.slice());
+        const id = ++requestId;
+        worker.postMessage({ id, playerGrid, solution, locale: locale.value, action: 'boost' });
+    }
+
     function ensureWorker() {
         if (worker) return;
         worker = new Worker(new URL('../workers/solverWorker.js', import.meta.url), { type: 'module' });
@@ -71,15 +86,18 @@ export function useSolver() {
             if (type === 'move') {
                 store.setCell(r, c, state);
                 isProcessing.value = false;
+                isStuck.value = false;
                 if (store.isGameWon) {
                     pause();
                     return;
                 }
             } else if (type === 'done') {
                 isProcessing.value = false;
+                isStuck.value = false;
                 pause();
             } else if (type === 'stuck') {
                 isProcessing.value = false;
+                isStuck.value = true;
                 pause();
             } else {
                 isProcessing.value = false;
@@ -95,11 +113,13 @@ export function useSolver() {
 
     return {
         isPlaying,
+        isStuck,
         speedIndex,
         speedLabel: computed(() => speedLabels[speedIndex.value]),
         statusText,
         step,
         togglePlay,
-        changeSpeed
+        changeSpeed,
+        boost
     };
 }

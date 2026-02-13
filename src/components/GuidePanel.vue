@@ -4,11 +4,13 @@ import { useI18n } from '@/composables/useI18n';
 
 const { 
     isPlaying, 
+    isStuck,
     speedLabel, 
     statusText, 
     step, 
     togglePlay, 
-    changeSpeed 
+    changeSpeed,
+    boost
 } = useSolver();
 const { t } = useI18n();
 </script>
@@ -28,6 +30,10 @@ const { t } = useI18n();
       
       <button class="btn-neon small" @click="changeSpeed">
         {{ t('guide.speed') }}: {{ speedLabel }}
+      </button>
+
+      <button v-if="isStuck" class="btn-neon small boost-btn" @click="boost">
+        ⚡ Boost (DFS)
       </button>
     </div>
   </div>
@@ -67,5 +73,16 @@ const { t } = useI18n();
 .btn-neon.small {
     padding: 5px 15px;
     font-size: 0.8rem;
+}
+
+.boost-btn {
+    border-color: #ffd700;
+    color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.boost-btn:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 </style>

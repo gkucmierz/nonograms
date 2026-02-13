@@ -1,7 +1,7 @@
 import { calculateDifficulty } from '@/utils/puzzleUtils';
 
 export function buildShareCanvas(data, t, formattedTime) {
-  const { grid, size, currentDensity, guideUsageCount } = data;
+  const { grid, size, currentDensity, guideUsageCount, hasUsedBoost } = data;
   if (!grid || !grid.length) return null;
   
   const appUrl = typeof __APP_HOMEPAGE__ !== 'undefined' ? __APP_HOMEPAGE__ : '';
@@ -11,7 +11,7 @@ export function buildShareCanvas(data, t, formattedTime) {
   const padding = 28;
   const headerHeight = 64;
   const footerHeight = 28;
-  const infoHeight = 40; // New space for difficulty/guide info
+  const infoHeight = (guideUsageCount > 0 && hasUsedBoost) ? 65 : 40;
   const width = boardSize + padding * 2;
   const height = boardSize + padding * 2 + headerHeight + footerHeight + infoHeight;
   const scale = window.devicePixelRatio || 1;
@@ -97,7 +97,12 @@ export function buildShareCanvas(data, t, formattedTime) {
     }
   }
 
-  // Guide Usage Info (Dirty Flag)
+  // Guide Usage & Boost Info
+  let infoY = height - padding - footerHeight + 10;
+  if (guideUsageCount > 0 && hasUsedBoost) {
+      infoY -= 25;
+  }
+
   if (guideUsageCount > 0) {
       ctx.fillStyle = '#ff4d4d';
       ctx.font = '600 14px "Segoe UI", sans-serif';
@@ -106,7 +111,15 @@ export function buildShareCanvas(data, t, formattedTime) {
       const percent = Math.min(100, Math.round((guideUsageCount / totalCells) * 100));
       const guideText = t('win.usedGuide', { count: guideUsageCount, percent });
       
-      ctx.fillText(`⚠️ ${guideText}`, padding, height - padding - footerHeight + 10);
+      ctx.fillText(`⚠️ ${guideText}`, padding, infoY);
+      if (hasUsedBoost) infoY += 25;
+  }
+
+  if (hasUsedBoost) {
+      ctx.fillStyle = '#ffd700';
+      ctx.font = '600 14px "Segoe UI", sans-serif';
+      const boostText = t('win.boosted');
+      ctx.fillText(`⚡ ${boostText}`, padding, infoY);
   }
 
   ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
@@ -116,7 +129,7 @@ export function buildShareCanvas(data, t, formattedTime) {
 }
 
 export function buildShareSVG(data, t, formattedTime) {
-  const { grid, size, currentDensity, guideUsageCount } = data;
+  const { grid, size, currentDensity, guideUsageCount, hasUsedBoost } = data;
   if (!grid || !grid.length) return null;
   
   const appUrl = typeof __APP_HOMEPAGE__ !== 'undefined' ? __APP_HOMEPAGE__ : '';
@@ -126,7 +139,7 @@ export function buildShareSVG(data, t, formattedTime) {
   const padding = 28;
   const headerHeight = 64;
   const footerHeight = 28;
-  const infoHeight = 40;
+  const infoHeight = (guideUsageCount > 0 && hasUsedBoost) ? 65 : 40;
   const width = boardSize + padding * 2;
   const height = boardSize + padding * 2 + headerHeight + footerHeight + infoHeight;
 
@@ -218,12 +231,23 @@ export function buildShareSVG(data, t, formattedTime) {
   }
   svgContent += cells;
 
-  // Guide Usage
+  // Guide Usage & Boost Info
+  let infoY = height - padding - footerHeight + 10;
+  if (guideUsageCount > 0 && hasUsedBoost) {
+      infoY -= 25;
+  }
+
   if (guideUsageCount > 0) {
       const totalCells = size * size;
       const percent = Math.min(100, Math.round((guideUsageCount / totalCells) * 100));
       const guideText = t('win.usedGuide', { count: guideUsageCount, percent });
-      svgContent += `<text x="${padding}" y="${height - padding - footerHeight + 10}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="14" fill="#ff4d4d">⚠️ ${guideText}</text>`;
+      svgContent += `<text x="${padding}" y="${infoY}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="14" fill="#ff4d4d">⚠️ ${guideText}</text>`;
+      if (hasUsedBoost) infoY += 25;
+  }
+
+  if (hasUsedBoost) {
+      const boostText = t('win.boosted');
+      svgContent += `<text x="${padding}" y="${infoY}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="14" fill="#ffd700">⚡ ${boostText}</text>`;
   }
 
   // URL
