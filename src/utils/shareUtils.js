@@ -1,19 +1,30 @@
 import { calculateDifficulty } from '@/utils/puzzleUtils';
 
 export function buildShareCanvas(data, t, formattedTime) {
-  const { grid, size, currentDensity, guideUsageCount, hasUsedBoost } = data;
+  const { grid, size, rows, cols, currentDensity, guideUsageCount, hasUsedBoost } = data;
   if (!grid || !grid.length) return null;
+  
+  // Backward compatibility if rows/cols not provided
+  const numRows = rows || size;
+  const numCols = cols || size;
   
   const appUrl = typeof __APP_HOMEPAGE__ !== 'undefined' ? __APP_HOMEPAGE__ : '';
   const maxBoard = 640;
-  const cellSize = Math.max(8, Math.floor(maxBoard / size));
-  const boardSize = cellSize * size;
+  // Calculate cell size based on the largest dimension to fit within maxBoard
+  const maxDim = Math.max(numRows, numCols);
+  const cellSize = Math.max(8, Math.floor(maxBoard / maxDim));
+  
+  const boardWidth = cellSize * numCols;
+  const boardHeight = cellSize * numRows;
+  
   const padding = 28;
   const headerHeight = 64;
   const footerHeight = 28;
   const infoHeight = (guideUsageCount > 0 && hasUsedBoost) ? 65 : 40;
-  const width = boardSize + padding * 2;
-  const height = boardSize + padding * 2 + headerHeight + footerHeight + infoHeight;
+  
+  const width = boardWidth + padding * 2;
+  const height = boardHeight + padding * 2 + headerHeight + footerHeight + infoHeight;
+  
   const scale = window.devicePixelRatio || 1;
   const canvas = document.createElement('canvas');
   canvas.width = width * scale;
@@ -38,7 +49,8 @@ export function buildShareCanvas(data, t, formattedTime) {
   
   // Difficulty & Density Info
   const densityPercent = Math.round(currentDensity * 100);
-  const { level: difficultyKey } = calculateDifficulty(currentDensity, size);
+  // Calculate difficulty using the max dimension (size) as it relates to complexity
+  const { level: difficultyKey } = calculateDifficulty(currentDensity, maxDim);
   let diffColor = '#33ff33';
   if (difficultyKey === 'extreme') diffColor = '#ff3333';
   else if (difficultyKey === 'hardest') diffColor = '#ff9933';
@@ -56,26 +68,34 @@ export function buildShareCanvas(data, t, formattedTime) {
   const gridX = padding;
   const gridY = padding + headerHeight;
   ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
-  ctx.fillRect(gridX, gridY, boardSize, boardSize);
+  ctx.fillRect(gridX, gridY, boardWidth, boardHeight);
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
   ctx.lineWidth = 1;
-  for (let i = 0; i <= size; i++) {
+  
+  // Vertical lines
+  for (let i = 0; i <= numCols; i++) {
     const x = gridX + i * cellSize;
-    const y = gridY + i * cellSize;
     ctx.beginPath();
     ctx.moveTo(x, gridY);
-    ctx.lineTo(x, gridY + boardSize);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(gridX, y);
-    ctx.lineTo(gridX + boardSize, y);
+    ctx.lineTo(x, gridY + boardHeight);
     ctx.stroke();
   }
+  
+  // Horizontal lines
+  for (let i = 0; i <= numRows; i++) {
+    const y = gridY + i * cellSize;
+    ctx.beginPath();
+    ctx.moveTo(gridX, y);
+    ctx.lineTo(gridX + boardWidth, y);
+    ctx.stroke();
+  }
+
   ctx.fillStyle = '#00f2fe';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
   ctx.lineWidth = Math.max(1.5, Math.floor(cellSize * 0.12));
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
+  
+  for (let r = 0; r < numRows; r++) {
+    for (let c = 0; c < numCols; c++) {
       const state = grid[r]?.[c];
       if (state === 1) {
         const x = gridX + c * cellSize + 1;
@@ -107,7 +127,7 @@ export function buildShareCanvas(data, t, formattedTime) {
       ctx.fillStyle = '#ff4d4d';
       ctx.font = '600 14px "Segoe UI", sans-serif';
       
-      const totalCells = size * size;
+      const totalCells = numRows * numCols;
       const percent = Math.min(100, Math.round((guideUsageCount / totalCells) * 100));
       const guideText = t('win.usedGuide', { count: guideUsageCount, percent });
       
@@ -129,19 +149,27 @@ export function buildShareCanvas(data, t, formattedTime) {
 }
 
 export function buildShareSVG(data, t, formattedTime) {
-  const { grid, size, currentDensity, guideUsageCount, hasUsedBoost } = data;
+  const { grid, size, rows, cols, currentDensity, guideUsageCount, hasUsedBoost } = data;
   if (!grid || !grid.length) return null;
+  
+  // Backward compatibility
+  const numRows = rows || size;
+  const numCols = cols || size;
   
   const appUrl = typeof __APP_HOMEPAGE__ !== 'undefined' ? __APP_HOMEPAGE__ : '';
   const maxBoard = 640;
-  const cellSize = Math.max(8, Math.floor(maxBoard / size));
-  const boardSize = cellSize * size;
+  const maxDim = Math.max(numRows, numCols);
+  const cellSize = Math.max(8, Math.floor(maxBoard / maxDim));
+  
+  const boardWidth = cellSize * numCols;
+  const boardHeight = cellSize * numRows;
+  
   const padding = 28;
   const headerHeight = 64;
   const footerHeight = 28;
   const infoHeight = (guideUsageCount > 0 && hasUsedBoost) ? 65 : 40;
-  const width = boardSize + padding * 2;
-  const height = boardSize + padding * 2 + headerHeight + footerHeight + infoHeight;
+  const width = boardWidth + padding * 2;
+  const height = boardHeight + padding * 2 + headerHeight + footerHeight + infoHeight;
 
   // Colors
   const bgGradientStart = '#1b2a4a';
@@ -156,7 +184,7 @@ export function buildShareSVG(data, t, formattedTime) {
 
   // Difficulty Logic
   const densityPercent = Math.round(currentDensity * 100);
-  const { level: difficultyKey } = calculateDifficulty(currentDensity, size);
+  const { level: difficultyKey } = calculateDifficulty(currentDensity, maxDim);
   
   let diffColor = '#33ff33';
   if (difficultyKey === 'extreme') diffColor = '#ff3333';
@@ -194,16 +222,19 @@ export function buildShareSVG(data, t, formattedTime) {
   const gridY = padding + headerHeight;
 
   // Grid Background
-  svgContent += `<rect x="${gridX}" y="${gridY}" width="${boardSize}" height="${boardSize}" fill="${gridColor}"/>`;
+  svgContent += `<rect x="${gridX}" y="${gridY}" width="${boardWidth}" height="${boardHeight}" fill="${gridColor}"/>`;
 
   // Grid Lines
   let gridLines = '';
-  for (let i = 0; i <= size; i++) {
+  // Vertical
+  for (let i = 0; i <= numCols; i++) {
     const pos = i * cellSize;
-    // Vertical
-    gridLines += `<line x1="${gridX + pos}" y1="${gridY}" x2="${gridX + pos}" y2="${gridY + boardSize}" stroke="${gridLineColor}" stroke-width="1"/>`;
-    // Horizontal
-    gridLines += `<line x1="${gridX}" y1="${gridY + pos}" x2="${gridX + boardSize}" y2="${gridY + pos}" stroke="${gridLineColor}" stroke-width="1"/>`;
+    gridLines += `<line x1="${gridX + pos}" y1="${gridY}" x2="${gridX + pos}" y2="${gridY + boardHeight}" stroke="${gridLineColor}" stroke-width="1"/>`;
+  }
+  // Horizontal
+  for (let i = 0; i <= numRows; i++) {
+    const pos = i * cellSize;
+    gridLines += `<line x1="${gridX}" y1="${gridY + pos}" x2="${gridX + boardWidth}" y2="${gridY + pos}" stroke="${gridLineColor}" stroke-width="1"/>`;
   }
   svgContent += gridLines;
 
@@ -211,8 +242,8 @@ export function buildShareSVG(data, t, formattedTime) {
   let cells = '';
   const lineWidth = Math.max(1.5, Math.floor(cellSize * 0.12));
   
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
+  for (let r = 0; r < numRows; r++) {
+    for (let c = 0; c < numCols; c++) {
       const state = grid[r]?.[c];
       const cx = gridX + c * cellSize;
       const cy = gridY + r * cellSize;
@@ -238,7 +269,7 @@ export function buildShareSVG(data, t, formattedTime) {
   }
 
   if (guideUsageCount > 0) {
-      const totalCells = size * size;
+      const totalCells = numRows * numCols;
       const percent = Math.min(100, Math.round((guideUsageCount / totalCells) * 100));
       const guideText = t('win.usedGuide', { count: guideUsageCount, percent });
       svgContent += `<text x="${padding}" y="${infoY}" font-family="Segoe UI, sans-serif" font-weight="600" font-size="14" fill="#ff4d4d">⚠️ ${guideText}</text>`;
@@ -276,7 +307,9 @@ export const downloadShareSVG = (data, t, formattedTime) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `nonogram-${data.size}x${data.size}.svg`;
+  // Use cols x rows if available, else size x size
+  const dims = (data.cols && data.rows) ? `${data.cols}x${data.rows}` : `${data.size}x${data.size}`;
+  link.download = `nonogram-${dims}.svg`;
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -289,7 +322,8 @@ export const downloadShareImage = async (data, t, formattedTime) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `nonogram-${data.size}x${data.size}.png`;
+  const dims = (data.cols && data.rows) ? `${data.cols}x${data.rows}` : `${data.size}x${data.size}`;
+  link.download = `nonogram-${dims}.png`;
   document.body.appendChild(link);
   link.click();
   link.remove();

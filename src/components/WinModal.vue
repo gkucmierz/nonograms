@@ -46,6 +46,8 @@ const triggerVibration = () => {
 const getShareData = () => ({
   grid: store.playerGrid,
   size: store.size,
+  rows: store.playerGrid?.length || store.size,
+  cols: store.playerGrid?.[0]?.length || store.size,
   currentDensity: store.currentDensity,
   guideUsageCount: store.guideUsageCount,
   hasUsedBoost: store.hasUsedBoost,
@@ -71,9 +73,11 @@ const shareTo = async (target) => {
   try {
     // Try native share first if available (supports images)
     if (navigator.share && navigator.canShare) {
-      const blob = await createShareBlob(getShareData(), t, formattedTime.value);
+      const data = getShareData();
+      const blob = await createShareBlob(data, t, formattedTime.value);
       if (blob) {
-        const file = new File([blob], `nonogram-${store.size}x${store.size}.png`, { type: 'image/png' });
+        const dims = (data.cols && data.rows) ? `${data.cols}x${data.rows}` : `${store.size}x${store.size}`;
+        const file = new File([blob], `nonogram-${dims}.png`, { type: 'image/png' });
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
