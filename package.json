@@ -10,6 +10,10 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
     "fireworks-js": "^2.10.8",
     "flag-icons": "^7.5.0",
     "lucide-vue-next": "^0.563.0",
@@ -17,6 +21,7 @@
     "vue": "^3.4.19"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^28.0.0",

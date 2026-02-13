@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nonograms</string>
+    <string name="title_activity_main">Nonograms</string>
+    <string name="package_name">pl.nonograms.app</string>
+    <string name="custom_url_scheme">pl.nonograms.app</string>
+</resources>
