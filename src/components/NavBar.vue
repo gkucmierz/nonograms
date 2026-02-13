@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
-import { Gamepad2, Palette, CircleHelp, Sun, Moon, Menu, X, ChevronDown, ChevronUp, Monitor, Image as ImageIcon } from 'lucide-vue-next';
+import { Gamepad2, Palette, CircleHelp, Sun, Moon, Menu, X, ChevronDown, ChevronUp, Monitor, Image as ImageIcon, Sparkles, Shuffle, Grid3X3, Grid2X2, Grid, MousePointer2 } from 'lucide-vue-next';
 
 const store = usePuzzleStore();
 const { t, locale, setLocale, locales } = useI18n();
@@ -15,6 +15,13 @@ const isLangOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const langMenuRef = ref(null);
 const searchTerm = ref('');
+
+const getLevelIcon = (id) => {
+  if (id === 'easy') return Grid2X2;
+  if (id === 'medium') return Grid3X3;
+  if (id === 'hard') return Grid;
+  return Gamepad2;
+};
 
 // Map language codes to country codes for flag-icons
 const langToCountry = {
@@ -257,12 +264,15 @@ watch(isMobileMenuOpen, (val) => {
               class="dropdown-item"
               @click="selectLevel(lvl.id)"
             >
+              <component :is="getLevelIcon(lvl.id)" :size="16" />
               {{ lvl.label }}
             </button>
             <button class="dropdown-item" @click="openCustom">
+              <Shuffle :size="16" />
               {{ t('level.custom_random') }}
             </button>
             <button class="dropdown-item" @click="openImageImport">
+              <ImageIcon :size="16" />
               {{ t('level.custom_image') }}
             </button>
           </div>
@@ -357,12 +367,15 @@ watch(isMobileMenuOpen, (val) => {
                             class="mobile-sub-item"
                             @click="selectLevel(lvl.id)"
                           >
+                            <component :is="getLevelIcon(lvl.id)" :size="16" />
                             {{ lvl.label }}
                           </button>
                           <button class="mobile-sub-item" @click="openCustom">
+                            <Shuffle :size="16" />
                             {{ t('level.custom_random') }}
                           </button>
                           <button class="mobile-sub-item" @click="openImageImport">
+                            <ImageIcon :size="16" />
                             {{ t('level.custom_image') }}
                           </button>
                     </div>

@@ -6,6 +6,9 @@
  *  1: Filled
  */
 
+// Memoized helper for checking if hints fit
+const memo = new Map();
+
 /**
  * Solves a single line (row or column) based on hints and current knowledge.
  * Uses the "Left-Right Overlap" algorithm to find common filled cells.
@@ -19,6 +22,9 @@ function solveLine(currentLine, hints) {
     const length = currentLine.length;
     
     // If no hints, all must be empty
+    // Clear memo for this line solve
+    memo.clear();
+
     if (hints.length === 0 || (hints.length === 1 && hints[0] === 0)) {
         return Array(length).fill(0);
     }
@@ -45,11 +51,6 @@ function solveLine(currentLine, hints) {
         while (currentIdx <= length - block) {
             if (canPlace(currentLine, currentIdx, block)) {
                 // Verify we can fit remaining blocks
-                // Simple heuristic: do we have enough space? 
-                // A full recursive check is better but slower. 
-                // For "Logical Solver" we assume valid placement is possible if we respect current constraints.
-                // However, strictly, we need to know if there is *any* valid arrangement starting here.
-                // Let's use a recursive check with memoization for "can fit rest".
                 if (canFitRest(currentLine, currentIdx + block + 1, hints, hIndex + 1)) {
                     leftPositions.push(currentIdx);
                     currentIdx += block + 1; // Move past this block + 1 space
@@ -61,12 +62,10 @@ function solveLine(currentLine, hints) {
         if (leftPositions.length <= hIndex) return null; // Impossible
     }
 
+    // Clear memo for right-side calculation (different line/hints)
+    memo.clear();
+
     // 2. Calculate Right-Most Positions (by reversing line and hints)
-    // This is symmetrical to Left-Most.
-    // Instead of implementing reverse logic, we can just reverse inputs, run left-most, and reverse back.
-    // But we need to respect the "currentLine" constraints which might be asymmetric.
-    
-    // Actually, "Right-Most" is just "Left-Most" on the reversed grid.
     const reversedLine = [...currentLine].reverse();
     const reversedHints = [...hints].reverse();
     const rightPositionsReversed = [];
@@ -88,8 +87,6 @@ function solveLine(currentLine, hints) {
     }
     
     // Convert reversed positions to actual indices
-    // index in reversed = length - 1 - (original_index + block_size - 1)
-    // original_start = length - 1 - (reversed_start + block_size - 1) = length - reversed_start - block_size
     const rightPositions = rightPositionsReversed.map((rStart, i) => {
         const block = reversedHints[i];
         return length - rStart - block;
@@ -106,13 +103,6 @@ function solveLine(currentLine, hints) {
         const block = hints[i];
         
         // If overlap exists: [r, l + block - 1]
-        // Example: Block 5. Left: 2, Right: 4.
-        // Left:  ..XXXXX...
-        // Right: ....XXXXX.
-        // Overlap:   ..XXX...
-        // Indices: max(l, r) to min(l+block, r+block) - 1 ?
-        // Range is [r, l + block - 1] (inclusive)
-        
         if (r < l + block) {
             for (let k = r; k < l + block; k++) {
                 newLine[k] = 1;
@@ -121,15 +111,6 @@ function solveLine(currentLine, hints) {
     }
 
     // Determine Empty cells?
-    // A cell is empty if it is not covered by ANY block in ANY valid configuration.
-    // This is harder with just L/R limits.
-    // However, we can use the "Simple Glue" logic:
-    // If a cell is outside the range [LeftLimit[i], RightLimit[i] + block] for ALL i, it's empty.
-    // Wait, indices are not strictly partitioned. Block 1 could be at 0 or 10.
-    // But logic dictates order.
-    // Range of block i is [LeftPositions[i], RightPositions[i] + hints[i]].
-    // If a cell k is not in ANY of these ranges, it is 0.
-    
     // Mask of possible filled cells
     const possibleFilled = Array(length).fill(false);
     for (let i = 0; i < hints.length; i++) {
@@ -148,8 +129,7 @@ function solveLine(currentLine, hints) {
 }
 
 // Memoized helper for checking if hints fit
-const memo = new Map();
-function canFitRest(line, startIndex, hints, hintIndex) {
+export function canFitRest(line, startIndex, hints, hintIndex) {
     // Optimization: If hints are empty, we just need to check if remaining line has no '1's
     if (hintIndex >= hints.length) {
         for (let i = startIndex; i < line.length; i++) {
@@ -158,23 +138,32 @@ function canFitRest(line, startIndex, hints, hintIndex) {
         return true;
     }
 
-    // Key for memoization (primitive approach)
-    // In a full solver, we'd pass a cache. For single line, maybe overkill, but safe.
-    // let key = `${startIndex}-${hintIndex}`; 
-    // Skipping memo for now as line lengths are small (<80) and recursion depth is low.
-    
+    // Memoization key
+    const key = `${startIndex}-${hintIndex}`;
+    if (memo.has(key)) return memo.get(key);
+
     const remainingLen = line.length - startIndex;
     // Min space needed: sum of hints + (hints.length - 1) spaces
-    // Calculate lazily or precalc?
     let minSpace = 0;
     for(let i=hintIndex; i<hints.length; i++) minSpace += hints[i] + (i < hints.length - 1 ? 1 : 0);
     
-    if (remainingLen < minSpace) return false;
+    if (remainingLen < minSpace) {
+        memo.set(key, false);
+        return false;
+    }
 
     const block = hints[hintIndex];
     // Try to find *any* valid placement for this block
-    // We only need ONE valid path to return true.
-    for (let i = startIndex; i <= line.length - minSpace; i++) { // Optimization on upper bound?
+    for (let i = startIndex; i <= line.length - minSpace; i++) {
+         // If we skipped a '1', we went too far. All 1s must be covered by blocks.
+         // Since we are placing the *next* block, any 1s between startIndex and i are uncovered.
+         // Thus, if we find a 1 in [startIndex, i-1], we must stop.
+         let skippedOne = false;
+         for (let x = startIndex; x < i; x++) {
+             if (line[x] === 1) { skippedOne = true; break; }
+         }
+         if (skippedOne) break;
+
          // Check placement
          let valid = true;
          // Block
@@ -183,240 +172,276 @@ function canFitRest(line, startIndex, hints, hintIndex) {
          }
          if (!valid) continue;
          
-         // Boundary before (checked by loop start usually, but strictly:
-         if (i > 0 && line[i-1] === 1) valid = false; // Should have been handled by caller or skip
-         // Wait, the caller (loop) iterates i. 
-         // If i > startIndex, we implied space at i-1.
-         // If line[i-1] is 1, we can't place here if we skipped it.
-         // Actually, if we skip a '1', that's invalid.
-         // So we can't just skip '1's.
+         // Boundary before
+         if (i > 0 && line[i-1] === 1) valid = false; 
          
-         // Correct logic:
-         // We iterate i. If we pass a '1' at index < i, that 1 is orphaned -> Invalid path.
-         // So we can only scan forward as long as we don't skip a '1'.
-         
-         let skippedOne = false;
-         for (let x = startIndex; x < i; x++) {
-             if (line[x] === 1) { skippedOne = true; break; }
-         }
-         if (skippedOne) break; // Cannot go further right, we left a 1 behind.
-         
-         // Boundary after
+         // Boundary after (check implicit in next block placement or end of line, but we need to check i+block cell)
          if (i + block < line.length && line[i+block] === 1) valid = false;
          
          if (valid) {
              // Recurse
-             if (canFitRest(line, i + block + 1, hints, hintIndex + 1)) return true;
+             if (canFitRest(line, i + block + 1, hints, hintIndex + 1)) {
+                 memo.set(key, true);
+                 return true;
+             }
          }
     }
     
+    memo.set(key, false);
     return false;
 }
 
-
 /**
- * Solves the puzzle using logical iteration.
- * @param {number[][]} rowHints 
- * @param {number[][]} colHints 
- * @param {number[][]} initialGrid - Optional starting state
- * @returns {object} { grid: number[][], changed: boolean }
- */
-function solveLogically(rowHints, colHints, initialGrid) {
-    const rows = rowHints.length;
-    const cols = colHints.length;
-    
-    // Initialize grid with -1 if not provided
-    let grid = initialGrid ? initialGrid.map(row => [...row]) : Array(rows).fill(null).map(() => Array(cols).fill(-1));
-    
-    let changed = true;
-    let iterations = 0;
-    const MAX_ITER = 100; // Safety break
-    
-    while (changed && iterations < MAX_ITER) {
-        changed = false;
-        iterations++;
-        
-        // Rows
-        for (let r = 0; r < rows; r++) {
-            const newLine = solveLine(grid[r], rowHints[r]);
-            if (!newLine) return { grid, contradiction: true }; // Contradiction found
-            
-            for (let c = 0; c < cols; c++) {
-                if (grid[r][c] !== newLine[c]) {
-                    // If we try to overwrite a known value with a different one -> Contradiction
-                    if (grid[r][c] !== -1 && grid[r][c] !== newLine[c]) return { grid, contradiction: true };
-                    
-                    grid[r][c] = newLine[c];
-                    changed = true;
-                }
-            }
-        }
-        
-        // Cols
-        for (let c = 0; c < cols; c++) {
-            const currentCol = grid.map(row => row[c]);
-            const newCol = solveLine(currentCol, colHints[c]);
-            if (!newCol) return { grid, contradiction: true }; // Contradiction found
-            
-            for (let r = 0; r < rows; r++) {
-                if (grid[r][c] !== newCol[r]) {
-                    if (grid[r][c] !== -1 && grid[r][c] !== newCol[r]) return { grid, contradiction: true };
-                    
-                    grid[r][c] = newCol[r];
-                    changed = true;
-                }
-            }
-        }
-    }
-    
-    return { grid, changed: iterations > 1, iterations, contradiction: false };
-}
-
-/**
- * Main solver function that attempts to solve the puzzle using logic and lookahead.
+ * Main solver function that attempts to solve the puzzle using logic and backtracking (DFS).
+ * Uses an efficient propagation queue and undo stack to avoid deep copying the grid.
+ * 
  * @param {number[][]} rowHints 
  * @param {number[][]} colHints 
  * @param {function} onProgress - Optional callback for progress reporting (percent)
+ * @param {number[][]} initialGrid - Optional initial grid state
+ * @param {boolean} logicOnly - If true, stops after logical propagation (no guessing)
  * @returns {object} result
  */
-export function solvePuzzle(rowHints, colHints, onProgress) {
+export function solvePuzzle(rowHints, colHints, onProgress, initialGrid = null, logicOnly = false) {
     const rows = rowHints.length;
     const cols = colHints.length;
     const totalCells = rows * cols;
     
-    // 1. Basic Logical Solve
-    let { grid, iterations, contradiction } = solveLogically(rowHints, colHints);
+    // Grid initialization: -1 (Unknown), 0 (Empty), 1 (Filled)
+    // Use initialGrid if provided (deep copy to be safe)
+    const grid = initialGrid 
+        ? initialGrid.map(row => [...row]) 
+        : Array(rows).fill().map(() => Array(cols).fill(-1));
     
-    // Count solved
+    // Stats
+    let iterations = 0; // Total calls to solve()
+    let maxDepth = 0;   // Max recursion depth
+    let backtracks = 0; // Failed guesses
+    let logicSteps = 0; // Cells filled by propagation
+    let lastProgressTime = 0;
+
+    function reportProgress() {
+        if (!onProgress) return;
+        const now = Date.now();
+        if (now - lastProgressTime >= 50) {
+            let filled = 0;
+            for(let r=0; r<rows; r++) {
+                for(let c=0; c<cols; c++) {
+                    if(grid[r][c] !== -1) filled++;
+                }
+            }
+            onProgress(Math.floor((filled/totalCells) * 100));
+            lastProgressTime = now;
+        }
+    }
+    
+    // Queue for propagation (Set of strings "r{i}" or "c{i}")
+    const queue = new Set();
+    for(let r=0; r<rows; r++) queue.add(`r${r}`);
+    for(let c=0; c<cols; c++) queue.add(`c${c}`);
+
+    // Helper: Undo changes from a propagation step
+    function undo(changes) {
+        for(let i=changes.length-1; i>=0; i--) {
+            const {r, c, old} = changes[i];
+            grid[r][c] = old;
+        }
+    }
+
+    // Helper: Propagate logic constraints until fixed point or contradiction
+    // Returns list of changes made, or null if contradiction found
+    function propagate() {
+        const changes = [];
+        
+        try {
+            while(queue.size > 0) {
+                reportProgress();
+                
+                const item = queue.values().next().value;
+                queue.delete(item);
+                
+                const type = item[0];
+                const idx = parseInt(item.slice(1));
+                
+                let currentLine, hints;
+                if (type === 'r') {
+                    currentLine = grid[idx]; // Reference for row (fast)
+                    hints = rowHints[idx];
+                } else {
+                    currentLine = grid.map(row => row[idx]); // Copy for col (slower)
+                    hints = colHints[idx];
+                }
+                
+                const newLine = solveLine(currentLine, hints);
+                
+                if (!newLine) throw 'contradiction';
+                
+                // Apply changes
+                for(let i=0; i<newLine.length; i++) {
+                    if (currentLine[i] !== newLine[i]) {
+                        // If we try to change a known value to something else -> Contradiction
+                        if (currentLine[i] !== -1 && currentLine[i] !== newLine[i]) throw 'contradiction';
+                        
+                        if (currentLine[i] === -1) {
+                            const r = type === 'r' ? idx : i;
+                            const c = type === 'r' ? i : idx;
+                            
+                            // Double check if already set by orthogonal update in same loop?
+                            // (Should be handled by -1 check above, as grid is shared)
+                            if (grid[r][c] === -1) {
+                                grid[r][c] = newLine[i];
+                                changes.push({r, c, old: -1});
+                                logicSteps++;
+                                
+                                // Add orthogonal line to queue
+                                if (type === 'r') queue.add(`c${c}`);
+                                else queue.add(`r${r}`);
+                            } else if (grid[r][c] !== newLine[i]) {
+                                console.log('Contradiction: Orthogonal Conflict at', r, c, 'Grid:', grid[r][c], 'New:', newLine[i]);
+                                throw 'contradiction';
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            // Revert changes from this failed propagation
+            undo(changes);
+            return null;
+        }
+        return changes;
+    }
+
+    // DFS Solver
+    function solve(depth) {
+        maxDepth = Math.max(maxDepth, depth);
+        iterations++;
+        
+        reportProgress();
+        
+        // 1. Propagate Logic
+        const changes = propagate();
+        if (!changes) return false; // Contradiction
+        
+        // 2. Find Best Branch Candidate
+        let bestR = -1, bestC = -1;
+        let minUnknowns = Infinity;
+        let isComplete = true;
+        
+        // Scan for unknowns and pick heuristic
+        // Heuristic: Line with fewest unknowns (most constrained)
+        for(let r=0; r<rows; r++) {
+            let unknowns = 0;
+            let firstUnknownC = -1;
+            for(let c=0; c<cols; c++) {
+                if(grid[r][c] === -1) {
+                    unknowns++;
+                    if (firstUnknownC === -1) firstUnknownC = c;
+                }
+            }
+            
+            if (unknowns > 0) {
+                isComplete = false;
+                if (unknowns < minUnknowns) {
+                    minUnknowns = unknowns;
+                    bestR = r;
+                    bestC = firstUnknownC;
+                }
+                if (minUnknowns === 1) break; // Optimal
+            }
+        }
+        
+        if (isComplete) return true; // Solved!
+        
+        // 3. Branching (Guessing)
+        // Try 1
+        grid[bestR][bestC] = 1;
+        queue.add(`r${bestR}`);
+        queue.add(`c${bestC}`);
+        
+        if (solve(depth + 1)) return true;
+        
+        // Backtrack from 1
+        grid[bestR][bestC] = -1; // Undo guess
+        // (Recursive call already undid its propagation changes)
+        
+        // Try 0
+        grid[bestR][bestC] = 0;
+        queue.add(`r${bestR}`);
+        queue.add(`c${bestC}`);
+        
+        if (solve(depth + 1)) return true;
+        
+        // Backtrack from 0
+        grid[bestR][bestC] = -1; // Undo guess
+        backtracks++;
+        
+        // Undo propagation from this level
+        undo(changes);
+        return false;
+    }
+    
+    // Start Solving
+    if (logicOnly) {
+        // Just logical propagation without guessing
+        if (initialGrid) {
+            // If resuming, ensure queue has all lines to check consistency
+            queue.clear();
+            for(let r=0; r<rows; r++) queue.add(`r${r}`);
+            for(let c=0; c<cols; c++) queue.add(`c${c}`);
+        }
+        
+        // Propagate logic constraints
+        propagate();
+        // No DFS, so iterations/backtracks remain 0
+    } else if (!initialGrid) {
+        // Normal start (full solver)
+        solve(0);
+    } else {
+        // Resume from provided state (full solver)
+        // We need to populate the queue with all rows/cols since we don't know what changed
+        queue.clear();
+        for(let r=0; r<rows; r++) queue.add(`r${r}`);
+        for(let c=0; c<cols; c++) queue.add(`c${c}`);
+        solve(0);
+    }
+    
+    // Calculate Percent Solved
     let solvedCount = 0;
     grid.forEach(r => r.forEach(c => { if(c !== -1) solvedCount++; }));
     let percentSolved = (solvedCount / totalCells) * 100;
     
     if (onProgress) onProgress(Math.floor(percentSolved));
 
-    // Difficulty calculation
-    // Base: complexity of grid
+    // Difficulty Calculation
+    // Logic:
+    // - Base: 0-20% based on size/density
+    // - Logic: 0-30% based on iterations needed (depth 0)
+    // - Guessing: 0-50% based on backtracks/depth
+    
     let difficultyScore = 0;
+    const effectiveSize = Math.sqrt(totalCells);
     
-    // If simple logic failed to solve completely, try Lookahead (Smash)
-    let lookaheadUsed = false;
-    
-    if (percentSolved < 100 && !contradiction) {
-        // Lookahead loop
-        // Find an unknown cell, try 0 and 1. If one leads to contradiction, the other is true.
-        let progress = true;
-        while (progress && percentSolved < 100) {
-            progress = false;
-            
-            // Find unknown cells (optimize: sort by most constrained?)
-            // For now, just scan.
-            let candidates = [];
-            for(let r=0; r<rows; r++) {
-                for(let c=0; c<cols; c++) {
-                    if (grid[r][c] === -1) candidates.push({r, c});
-                }
-            }
-            
-            // Limit candidates for performance (e.g., first 50 or heuristic)
-            // But we need to solve it...
-            // Let's try top 20 candidates? Or all?
-            // "Parallel web workers" allows us to be heavier, but 80x80 is 6400 cells.
-            // We can't try all 6400 in every pass.
-            // Heuristic: pick cells in rows/cols that are nearly full.
-            
-            let checkedCount = 0;
-            const totalCandidates = candidates.length;
-            let lastReportedPercent = -1;
-
-            for (const {r, c} of candidates) {
-                checkedCount++;
-                
-                // Report progress inside the heavy loop
-                if (onProgress) {
-                    const currentScanPercent = Math.floor((checkedCount / totalCandidates) * 100);
-                    // Report every 1% change or at least every 10 items to avoid flooding but keep it responsive
-                    if (currentScanPercent > lastReportedPercent || checkedCount % 10 === 0) {
-                        lastReportedPercent = currentScanPercent;
-                        onProgress(currentScanPercent);
-                    }
-                }
-                
-                // Try assuming 1
-                // We need to clone the grid for simulation
-                const gridCopy1 = grid.map(row => [...row]);
-                gridCopy1[r][c] = 1;
-                const res1 = solveLogically(rowHints, colHints, gridCopy1);
-                
-                // Try assuming 0
-                const gridCopy0 = grid.map(row => [...row]);
-                gridCopy0[r][c] = 0;
-                const res0 = solveLogically(rowHints, colHints, gridCopy0);
-                
-                let deduced = null;
-                
-                if (res1.contradiction && !res0.contradiction) {
-                    deduced = 0; // Must be 0
-                } else if (!res1.contradiction && res0.contradiction) {
-                    deduced = 1; // Must be 1
-                }
-                
-                if (deduced !== null) {
-                    grid[r][c] = deduced;
-                    progress = true;
-                    lookaheadUsed = true;
-                    difficultyScore += 5; // Penalty for requiring lookahead
-                    
-                    // Run logic again to propagate this new info
-                    const updated = solveLogically(rowHints, colHints, grid);
-                    if (updated.contradiction) break; // Should not happen if logic is sound
-                    grid = updated.grid;
-                    
-                    break; // Restart loop to use new info
-                }
-            }
-            
-            // Recalculate percent (this is for loop exit condition)
-            solvedCount = 0;
-            grid.forEach(row => row.forEach(c => { if(c !== -1) solvedCount++; }));
-            percentSolved = (solvedCount / totalCells) * 100;
-            // Note: we don't report percentSolved here because we want the spinner to show SCAN progress (0-100% of current pass)
-            // If we reported percentSolved, the user might see the spinner jump from 100% (scan done) to 5% (solved amount), which is confusing.
-        }
-    }
-    
-    // Final Difficulty Calculation
-    // Factors:
-    // 1. Size (rows * cols)
-    // 2. Iterations (how many passes of line logic)
-    // 3. Lookahead (did we need it?)
-    
-    const effectiveSize = Math.sqrt(rows * cols);
-    // iterations is usually 2-20. 
-    // difficultyScore accumulates lookahead steps.
-    
-    // Normalize iterations
-    const iterScore = Math.min(20, iterations) * 2;
-    
-    // Base difficulty
-    let totalScore = effectiveSize + iterScore + difficultyScore;
-    
-    // If not fully solved, massive penalty
     if (percentSolved < 100) {
-        // Unsolvable by logic+lookahead
-        // This is "Extreme" or "Guessing Required"
-        totalScore = 100; // Cap at max
+        difficultyScore = 100; // Unsolvable (or timed out/too hard)
     } else {
-        // Solved
-        // Normalize score 0-100 (approximately)
-        // Max theoretical "normal" score ~ 80 (size 80) + 40 (iter) + 20 (lookahead) = 140?
-        // Let's scale it.
-        totalScore = Math.min(100, totalScore);
+        if (maxDepth === 0) {
+            // Pure logic
+            difficultyScore = Math.min(30, effectiveSize);
+        } else {
+            // Required guessing
+            // Simple heuristic: 30 + backtracks * 5 + depth * 2
+            difficultyScore = 30 + (backtracks * 2) + (maxDepth * 5);
+            difficultyScore = Math.min(100, difficultyScore);
+        }
     }
     
     return { 
         percentSolved, 
-        difficultyScore: totalScore, 
-        lookaheadUsed,
-        iterations 
+        difficultyScore: Math.round(difficultyScore), 
+        lookaheadUsed: maxDepth > 0,
+        iterations,
+        maxDepth,
+        backtracks
     };
 }

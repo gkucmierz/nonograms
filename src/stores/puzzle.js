@@ -32,12 +32,15 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     let count = 0;
     if (solution.value.length === 0 || playerGrid.value.length === 0) return 0;
     
-    for (let r = 0; r < size.value; r++) {
-      for (let c = 0; c < size.value; c++) {
+    const rows = solution.value.length;
+    const cols = solution.value[0].length;
+    
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
         // Zliczamy tylko poprawne wypełnienia (czarne), 
         // ale w nonogramach postęp to często: (poprawne_czarne - bledne_czarne) / total_czarne
         // Zróbmy prostą wersję: % poprawnie zaznaczonych czarnych - błędnie zaznaczone czarne
-        if (playerGrid.value[r][c] === 1) {
+        if (playerGrid.value[r] && playerGrid.value[r][c] === 1) {
             if (solution.value[r][c] === 1) count++;
             else count--; // kara za błąd
         }
@@ -96,7 +99,11 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   function initFromImage(grid) {
     stopTimer();
     currentLevelId.value = 'custom_image';
-    size.value = grid.length;
+    // Use the larger dimension for size to ensure loops cover everything if square-assumption exists
+    // But ideally we should support rectangular.
+    // For now, size.value is used in resetGrid loop.
+    // Let's update resetGrid to handle rectangular.
+    size.value = Math.max(grid.length, grid[0].length);
     solution.value = grid;
     
     resetGrid();
@@ -111,13 +118,13 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     elapsedTime.value = 0;
     startTimer();
     saveState();
-  }
-
   function resetGrid() {
-    playerGrid.value = Array(size.value).fill().map(() => Array(size.value).fill(0));
-    moves.value = 0;
+    const rows = solution.value.length;
+    const cols = solution.value[0].length;
+    playerGrid.value = Array(rows).fill().map(() => Array(cols).fill(0));
     history.value = [];
-    currentTransaction.value = null;
+    moves.value = 0;
+  } currentTransaction.value = null;
   }
   
   function startInteraction() {
@@ -218,11 +225,14 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     
     // Calculate expected hints from solution (truth)
     // We do this dynamically to ensure we always check against the rules of the board
+    const rows = solution.value.length;
+    const cols = solution.value[0].length;
+    
     const solutionRows = solution.value;
-    const solutionCols = Array(size.value).fill().map((_, c) => solution.value.map(r => r[c]));
+    const solutionCols = Array(cols).fill().map((_, c) => solution.value.map(r => r[c]));
     
     // Check Rows
-    for (let r = 0; r < size.value; r++) {
+    for (let r = 0; r < rows; r++) {
       const targetHints = calculateLineHints(solutionRows[r]);
       const playerLine = playerGrid.value[r];
       if (!validateLine(playerLine, targetHints)) {
@@ -233,7 +243,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     
     if (correct) {
       // Check Columns
-      for (let c = 0; c < size.value; c++) {
+      for (let c = 0; c < cols; c++) {
         const targetHints = calculateLineHints(solutionCols[c]);
         const playerLine = playerGrid.value.map(row => row[c]);
         if (!validateLine(playerLine, targetHints)) {

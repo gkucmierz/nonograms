@@ -10,6 +10,10 @@ const store = usePuzzleStore();
 const { rowHints, colHints } = useHints(computed(() => store.solution));
 const { startDrag, onMouseEnter, stopDrag } = useNonogram();
 
+// Compute grid dimensions from hints
+const gridRows = computed(() => rowHints.value.length);
+const gridCols = computed(() => colHints.value.length);
+
 const cellSize = ref(30);
 const rowHintsRef = ref(null);
 const activeRow = ref(null);
@@ -143,13 +147,16 @@ const computeCellSize = () => {
   // Ensure we don't have negative space
   const availableForGrid = Math.max(0, containerWidth - hintWidth);
   
-  const size = Math.floor((availableForGrid - gridPad * 2 - (store.size - 1) * gap) / store.size);
+  // Calculate cell size based on width availability (columns)
+  // Vertical scrolling is acceptable, so we don't constrain by height (rows)
+  const cols = Math.max(1, gridCols.value);
+  const size = Math.floor((availableForGrid - gridPad * 2 - (cols - 1) * gap) / cols);
   
   if (isDesktop) {
       // Desktop: Allow overflow, use comfortable size
       cellSize.value = 30;
   } else {
-      // Mobile: Fit to screen
+      // Mobile: Fit to screen width
       // Keep min 18, max 36
       cellSize.value = Math.max(18, Math.min(36, size));
   }
@@ -240,17 +247,17 @@ watch(() => store.size, async () => {
       <div class="corner-spacer"></div>
       
       <!-- Column Hints -->
-      <Hints :hints="colHints" orientation="col" :size="store.size" :activeIndex="activeCol" />
+      <Hints :hints="colHints" orientation="col" :size="gridCols" :activeIndex="activeCol" />
       
       <!-- Row Hints -->
-      <Hints ref="rowHintsRef" :hints="rowHints" orientation="row" :size="store.size" :activeIndex="activeRow" />
+      <Hints ref="rowHintsRef" :hints="rowHints" orientation="row" :size="gridRows" :activeIndex="activeRow" />
       
       <!-- Grid -->
       <div 
         class="grid" 
         :style="{ 
-          gridTemplateColumns: `repeat(${store.size}, var(--cell-size))`,
-          gridTemplateRows: `repeat(${store.size}, var(--cell-size))`
+          gridTemplateColumns: `repeat(${gridCols}, var(--cell-size))`,
+          gridTemplateRows: `repeat(${gridRows}, var(--cell-size))`
         }"
         @pointermove.prevent="handlePointerMove"
         @mouseleave="handleGridLeave"
@@ -263,8 +270,8 @@ watch(() => store.size, async () => {
             :r="r"
             :c="c"
             :class="{ 
-                'guide-right': (c + 1) % 5 === 0 && c !== store.size - 1,
-                'guide-bottom': (r + 1) % 5 === 0 && r !== store.size - 1
+                'guide-right': (c + 1) % 5 === 0 && c !== gridCols - 1,
+                'guide-bottom': (r + 1) % 5 === 0 && r !== gridRows - 1
             }"
             @start-drag="startDrag"
             @enter-cell="handleCellEnter"

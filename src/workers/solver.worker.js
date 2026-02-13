@@ -2,7 +2,7 @@ import { calculateHints } from '../utils/puzzleUtils';
 import { solvePuzzle } from '../utils/solver';
 
 self.onmessage = (e) => {
-    const { id, grid } = e.data;
+    const { id, grid, initialGrid } = e.data;
     
     try {
         if (!grid || grid.length === 0) {
@@ -12,10 +12,11 @@ self.onmessage = (e) => {
 
         const rows = grid.length;
         const cols = grid[0].length;
-        const size = Math.max(rows, cols);
-        const density = grid.flat().filter(c => c === 1).length / (rows * cols);
-
-        // 1. Calculate Hints
+        // Use initialGrid if provided, otherwise assume we are starting fresh
+        // BUT wait, 'grid' passed here is usually the 0/1 grid from Image Import (target pattern).
+        // 'initialGrid' would be the partial solution state (-1/0/1).
+        
+        // 1. Calculate Hints from the TARGET grid (the image)
         const { rowHints, colHints } = calculateHints(grid);
 
         // 2. Run Solver (Logic + Lookahead)
@@ -27,7 +28,7 @@ self.onmessage = (e) => {
             });
         };
 
-        const { percentSolved, difficultyScore, lookaheadUsed } = solvePuzzle(rowHints, colHints, onProgress);
+        const { percentSolved, difficultyScore, lookaheadUsed } = solvePuzzle(rowHints, colHints, onProgress, initialGrid);
 
         // 3. Determine Level
         let value = difficultyScore;

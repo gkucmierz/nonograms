@@ -93,6 +93,7 @@ const handlePointerCancel = (e) => {
   height: var(--cell-size);
   background-color: var(--cell-empty);
   border: 1px solid var(--glass-border);
+  box-sizing: border-box;
   cursor: pointer;
   display: flex;
   justify-content: center;

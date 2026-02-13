@@ -26,6 +26,7 @@ const installDismissed = ref(false);
 const isCoarsePointer = ref(false);
 const isStandalone = ref(false);
 const isIos = ref(false);
+const isDev = ref(false);
 const themePreference = ref('system');
 const appVersion = __APP_VERSION__;
 let displayModeMedia = null;
@@ -65,7 +66,7 @@ const updateStandalone = () => {
 const handleBeforeInstallPrompt = (e) => {
   e.preventDefault();
   deferredPrompt.value = e;
-  if (!isStandalone.value) {
+  if (!isStandalone.value && !isDev.value) {
     canInstall.value = true;
   }
 };
@@ -118,6 +119,7 @@ onMounted(() => {
     isCoarsePointer.value = window.matchMedia('(pointer: coarse)').matches;
     const ua = navigator.userAgent.toLowerCase();
     isIos.value = /ipad|iphone|ipod/.test(ua) || (ua.includes('mac') && navigator.maxTouchPoints > 1);
+    isDev.value = window.location.port !== '' && window.location.port !== '80' && window.location.port !== '443';
     const storedTheme = typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null;
     if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
       themePreference.value = storedTheme;
@@ -170,7 +172,7 @@ onUnmounted(() => {
     />
     <FixedBar />
 
-    <div v-if="(canInstall || (isIos && !isStandalone)) && !installDismissed" class="install-banner">
+    <div v-if="!isDev && (canInstall || (isIos && !isStandalone)) && !installDismissed" class="install-banner">
       <div class="install-content">
         <img src="/pwa-192x192.png" alt="App Icon" class="install-icon" />
         <div class="install-text">

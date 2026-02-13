@@ -58,13 +58,13 @@ defineProps({
 
 .hints-container.col {
   padding-bottom: var(--grid-padding);
-  align-items: flex-end;
+  /* align-items: flex-end; - Removed to ensure uniform column height */
   padding-left: var(--grid-padding);
   padding-right: var(--grid-padding);
 }
 
 .hints-container.row {
-  align-items: flex-end;
+  /* align-items: flex-end; - Removed to ensure row hints fill the cell height */
   padding: var(--grid-padding) var(--grid-padding) var(--grid-padding) 0;
   width: max-content;
 }
@@ -97,6 +97,21 @@ defineProps({
   color: var(--text-strong);
   font-weight: bold;
   padding: 2px;
+}
+
+@media (max-width: 768px) {
+    .hint-num {
+        font-size: 0.7rem;
+        padding: 1px;
+    }
+    
+    .col .hint-group {
+        padding: 2px 0;
+    }
+    
+    .row .hint-group {
+        padding: 0 4px;
+    }
 }
 
 /* Alternating Colors within the group */

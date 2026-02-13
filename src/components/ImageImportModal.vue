@@ -225,16 +225,36 @@ const calculateStats = async () => {
     
     try {
         const pool = getWorkerPool();
-        pool.clearQueue(); // Clear pending tasks
+        pool.cancelAll(); // Force stop previous calculations for immediate responsiveness
         
-        const result = await pool.run({
-            id: requestId,
-            grid: generatedGrid.value
-        }, (progress) => {
-            if (currentStatsRequestId === requestId) {
-                processingProgress.value = progress;
+        // Demonstrate parallel execution capability
+        // We split the problem into two branches: assuming first cell is EMPTY (0) vs FILLED (1)
+        // This doubles the search power by utilizing 2 workers immediately.
+        
+        // Ensure we send plain objects to workers, not Vue proxies
+        const rawGrid = JSON.parse(JSON.stringify(generatedGrid.value));
+        const rows = rawGrid.length;
+        const cols = rawGrid[0].length;
+        
+        // Create initial states
+        const gridA = Array(rows).fill().map(() => Array(cols).fill(-1));
+        gridA[0][0] = 0; // Branch A: Assume (0,0) is Empty
+        
+        const gridB = Array(rows).fill().map(() => Array(cols).fill(-1));
+        gridB[0][0] = 1; // Branch B: Assume (0,0) is Filled
+        
+        const tasks = [
+            {
+                data: { id: requestId, grid: rawGrid, initialGrid: gridA },
+                onProgress: (p) => { if (currentStatsRequestId === requestId) processingProgress.value = Math.max(processingProgress.value, p); }
+            },
+            {
+                data: { id: requestId, grid: rawGrid, initialGrid: gridB },
+                onProgress: (p) => { if (currentStatsRequestId === requestId) processingProgress.value = Math.max(processingProgress.value, p); }
             }
-        });
+        ];
+
+        const result = await pool.runRace(tasks);
         
         if (result.id === currentStatsRequestId) {
             solvability.value = result.solvability;
@@ -242,12 +262,14 @@ const calculateStats = async () => {
             difficultyLabel.value = result.difficultyLabel;
         }
     } catch (err) {
-        if (err.message !== 'Cancelled') {
+        if (err.message !== 'Cancelled' && err.message !== 'Terminated') {
             console.error('Worker error:', err);
             if (currentStatsRequestId === requestId) {
                 solvability.value = 0;
                 difficulty.value = 0;
-                difficultyLabel.value = 'unknown';
+                // If translation key is missing, this might show 'difficulty.error'
+                // Ensure we have a fallback or the key exists
+                difficultyLabel.value = 'error'; 
             }
         }
     } finally {
@@ -266,6 +288,11 @@ watch([maxDimension, threshold], () => {
         debounceTimer = setTimeout(() => {
             updateGrid();
         }, 50);
+    } else {
+        // If no image loaded, just update the display values
+        // Assuming square aspect ratio for preview
+        gridRows.value = maxDimension.value;
+        gridCols.value = maxDimension.value;
     }
 });
 
@@ -543,6 +570,8 @@ onUnmounted(() => {
   position: relative;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
   color: var(--text-color);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .close-btn {

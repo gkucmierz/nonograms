@@ -71,11 +71,12 @@ const startSimulation = async () => {
             for (let i = 0; i < SAMPLES_PER_POINT; i++) {
                 const grid = generateRandomGrid(size, density);
                 const { rowHints, colHints } = calculateHints(grid);
-                const { percentSolved } = solvePuzzle(rowHints, colHints);
+                // Use logicOnly=true for fast simulation
+                const { percentSolved } = solvePuzzle(rowHints, colHints, null, null, true);
                 totalSolved += percentSolved;
                 
                 // Yield to UI every few samples to keep it responsive
-                if (i % 2 === 0) await new Promise(r => setTimeout(r, 0));
+                if (i % 10 === 0) await new Promise(r => setTimeout(r, 0));
             }
 
             const avgSolved = totalSolved / SAMPLES_PER_POINT;
