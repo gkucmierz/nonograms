@@ -61,39 +61,43 @@ export function generateRandomGrid(size, density = 0.5) {
     return grid;
 }
 
+// Data derived from Monte Carlo Simulation (Logical Solver)
+// Format: { size: [solved_pct_at_0.1, ..., solved_pct_at_0.9] }
+const SIM_DATA = {
+    5: [88, 76, 71, 80, 90, 98, 99, 100, 100],
+    10: [58, 25, 18, 44, 81, 99, 100, 100, 100],
+    15: [36, 7, 3, 11, 67, 99, 100, 100, 100],
+    20: [24, 3, 0, 3, 48, 99, 100, 100, 100],
+    25: [13, 1, 0, 1, 21, 99, 100, 100, 100],
+    30: [9, 0, 0, 0, 7, 99, 100, 100, 100],
+    35: [5, 0, 0, 0, 5, 97, 100, 100, 100],
+    40: [3, 0, 0, 0, 2, 91, 100, 100, 100],
+    45: [2, 0, 0, 0, 1, 84, 100, 100, 100],
+    50: [1, 0, 0, 0, 0, 65, 100, 100, 100],
+    55: [1, 0, 0, 0, 0, 55, 100, 100, 100],
+    60: [0, 0, 0, 0, 0, 35, 100, 100, 100],
+    65: [0, 0, 0, 0, 0, 20, 100, 100, 100],
+    70: [0, 0, 0, 0, 0, 11, 100, 100, 100],
+    75: [0, 0, 0, 0, 0, 12, 100, 100, 100],
+    80: [0, 0, 0, 0, 0, 4, 100, 100, 100]
+};
+
+const SIM_SIZES = Object.keys(SIM_DATA).map(Number).sort((a, b) => a - b);
+
 export function calculateDifficulty(density, size = 10) {
-    // Data derived from Monte Carlo Simulation (Logical Solver)
-    // Format: { size: [solved_pct_at_0.1, ..., solved_pct_at_0.9] }
-    const SIM_DATA = {
-        5: [88, 76, 71, 80, 90, 98, 99, 100, 100],
-        10: [58, 25, 18, 44, 81, 99, 100, 100, 100],
-        15: [36, 7, 3, 11, 67, 99, 100, 100, 100],
-        20: [24, 3, 0, 3, 48, 99, 100, 100, 100],
-        25: [13, 1, 0, 1, 21, 99, 100, 100, 100],
-        30: [9, 0, 0, 0, 7, 99, 100, 100, 100],
-        35: [5, 0, 0, 0, 5, 97, 100, 100, 100],
-        40: [3, 0, 0, 0, 2, 91, 100, 100, 100],
-        45: [2, 0, 0, 0, 1, 84, 100, 100, 100],
-        50: [1, 0, 0, 0, 0, 65, 100, 100, 100],
-        55: [1, 0, 0, 0, 0, 55, 100, 100, 100],
-        60: [0, 0, 0, 0, 0, 35, 100, 100, 100],
-        65: [0, 0, 0, 0, 0, 20, 100, 100, 100],
-        70: [0, 0, 0, 0, 0, 11, 100, 100, 100],
-        75: [0, 0, 0, 0, 0, 12, 100, 100, 100],
-        80: [0, 0, 0, 0, 0, 4, 100, 100, 100]
-    };
+    density = Number(density);
+    size = Number(size);
 
     // Helper to get interpolated value from array
     const getSimulatedSolvedPct = (s, d) => {
         // Find closest sizes
-        const sizes = Object.keys(SIM_DATA).map(Number).sort((a, b) => a - b);
-        let sLower = sizes[0];
-        let sUpper = sizes[sizes.length - 1];
+        let sLower = SIM_SIZES[0];
+        let sUpper = SIM_SIZES[SIM_SIZES.length - 1];
         
-        for (let i = 0; i < sizes.length - 1; i++) {
-            if (s >= sizes[i] && s <= sizes[i+1]) {
-                sLower = sizes[i];
-                sUpper = sizes[i+1];
+        for (let i = 0; i < SIM_SIZES.length - 1; i++) {
+            if (s >= SIM_SIZES[i] && s <= SIM_SIZES[i+1]) {
+                sLower = SIM_SIZES[i];
+                sUpper = SIM_SIZES[i+1];
                 break;
             }
         }

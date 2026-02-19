@@ -197,7 +197,9 @@ const messages = {
     'simulation.table.size': 'Rozmiar',
     'simulation.table.density': 'Gęstość',
     'simulation.table.solved': 'Rozwiązano (Logika)',
-    'simulation.empty': 'Naciśnij Start, aby uruchomić symulację Monte Carlo'
+    'simulation.empty': 'Naciśnij Start, aby uruchomić symulację Monte Carlo',
+    'difficultyMap.size': 'Rozmiar',
+    'difficultyMap.density': 'Gęstość'
   },
   en: {
     'app.title': 'Nonograms',
@@ -395,7 +397,9 @@ const messages = {
     'simulation.table.solved': 'Solved (Logic)',
     'simulation.empty': 'Press Start to run Monte Carlo simulation',
     'custom.hideMap': 'Hide difficulty map',
-    'custom.showMap': 'Show difficulty map'
+    'custom.showMap': 'Show difficulty map',
+    'difficultyMap.size': 'Size',
+    'difficultyMap.density': 'Density'
   },
   zh: {
     'app.title': 'Nonograms',

@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 import { calculateDifficulty } from '@/utils/puzzleUtils';
 import { HelpCircle } from 'lucide-vue-next';
+import DifficultyMap from './DifficultyMap.vue';
 
 const emit = defineEmits(['close', 'open-simulation']);
 const store = usePuzzleStore();
@@ -12,161 +13,11 @@ const { t } = useI18n();
 const customSize = ref(10);
 const fillRate = ref(50);
 const errorMsg = ref('');
-const difficultyCanvas = ref(null);
-const isDragging = ref(false);
-const cachedBackground = ref(null);
 
-const drawMap = () => {
-  const canvas = difficultyCanvas.value;
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const width = canvas.width;
-  const height = canvas.height;
-
-  // Clear
-  ctx.clearRect(0, 0, width, height);
-
-  // Use cached background if available
-  if (cachedBackground.value) {
-      ctx.putImageData(cachedBackground.value, 0, 0);
-  } else {
-      // Draw Gradient Background (Heavy calculation)
-      const imgData = ctx.createImageData(width, height);
-      const data = imgData.data;
-
-      // Ranges:
-      // X: Fill Rate 10% -> 90%
-      // Y: Size 5 -> 80
-      
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const normalizedX = x / width;
-          const normalizedY = 1 - (y / height); // 0 at bottom, 1 at top
-          
-          const fRate = 0.1 + normalizedX * 0.8; // 0.1 to 0.9
-          const sSize = 5 + normalizedY * 75;    // 5 to 80
-          
-          const { value } = calculateDifficulty(fRate, sSize);
-          
-          // Color Mapping
-          const hue = 120 * (1 - value / 100);
-          const [r, g, b] = hslToRgb(hue / 360, 1, 0.5);
-          
-          const index = (y * width + x) * 4;
-          data[index] = r;
-          data[index + 1] = g;
-          data[index + 2] = b;
-          data[index + 3] = 255; // Alpha
-        }
-      }
-      ctx.putImageData(imgData, 0, 0);
-      cachedBackground.value = imgData;
-  }
-
-  // Draw current position
-  // Map current fillRate/size to x,y
-  // Fill: 10..90. Size: 5..80.
-  const currentFill = Math.max(10, Math.min(90, fillRate.value));
-  const currentSize = Math.max(5, Math.min(80, customSize.value));
-  
-  const posX = ((currentFill - 10) / 80) * width;
-  const posY = (1 - (currentSize - 5) / 75) * height;
-
-  // Draw Crosshair/Circle
-  ctx.beginPath();
-  ctx.arc(posX, posY, 6, 0, Math.PI * 2);
-  ctx.fillStyle = '#fff';
-  ctx.fill();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = '#000';
-  ctx.stroke();
-};
-
-const hslToRgb = (h, s, l) => {
-    let r, g, b;
-    if (s === 0) {
-        r = g = b = l; // achromatic
-    } else {
-        const hue2rgb = (p, q, t) => {
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
-            if (t < 1 / 6) return p + (q - p) * 6 * t;
-            if (t < 1 / 2) return q;
-            if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-            return p;
-        };
-        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        const p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1 / 3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1 / 3);
-    }
-    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-};
-
-const updateFromEvent = (e) => {
-    const canvas = difficultyCanvas.value;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    
-    // Handle Touch or Mouse
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    let x = clientX - rect.left;
-    let y = clientY - rect.top;
-    
-    // Clamp
-    x = Math.max(0, Math.min(rect.width, x));
-    y = Math.max(0, Math.min(rect.height, y));
-    
-    // Reverse Map
-    // x / width -> fillRate (10..90)
-    // 1 - y / height -> size (5..80)
-    
-    const normalizedX = x / rect.width;
-    const normalizedY = 1 - (y / rect.height);
-    
-    const newFill = 10 + normalizedX * 80;
-    const newSize = 5 + normalizedY * 75;
-    
-    fillRate.value = Math.round(newFill);
-    customSize.value = Math.round(newSize);
-};
-
-const startDrag = (e) => {
-    isDragging.value = true;
-    updateFromEvent(e);
-    // Add global listeners for mouse to handle dragging outside canvas
-    window.addEventListener('mousemove', onDrag);
-    window.addEventListener('mouseup', stopDrag);
-};
-
-const onDrag = (e) => {
-    if (!isDragging.value) return;
-    updateFromEvent(e);
-};
-
-const stopDrag = () => {
-    isDragging.value = false;
-    window.removeEventListener('mousemove', onDrag);
-    window.removeEventListener('mouseup', stopDrag);
-};
-
-onUnmounted(() => {
-    window.removeEventListener('mousemove', onDrag);
-    window.removeEventListener('mouseup', stopDrag);
-});
-
-const showAdvanced = ref(false);
+const showAdvanced = ref(true);
 
 const toggleAdvanced = () => {
     showAdvanced.value = !showAdvanced.value;
-    if (showAdvanced.value) {
-        // Reset cache when opening to ensure size is correct if canvas resized
-        cachedBackground.value = null; 
-        nextTick(drawMap);
-    }
 };
 
 onMounted(() => {
@@ -179,14 +30,6 @@ onMounted(() => {
   if (savedFillRate && !isNaN(savedFillRate)) {
     fillRate.value = Math.max(10, Math.min(90, Number(savedFillRate)));
   }
-  
-  // Don't draw map initially if hidden
-});
-
-watch([customSize, fillRate], () => {
-    if (showAdvanced.value) {
-        drawMap();
-    }
 });
 
 watch(customSize, (newVal) => {
@@ -245,7 +88,7 @@ const confirm = () => {
               <div class="range-value">{{ customSize }}</div>
               <input 
                 type="range" 
-                v-model="customSize" 
+                v-model.number="customSize" 
                 min="5" 
                 max="80"
                 step="1"
@@ -264,7 +107,7 @@ const confirm = () => {
               <div class="range-value">{{ fillRate }}%</div>
               <input 
                 type="range" 
-                v-model="fillRate" 
+                v-model.number="fillRate" 
                 min="10" 
                 max="90"
                 step="1"
@@ -278,15 +121,14 @@ const confirm = () => {
         </div>
 
         <div class="map-section" v-if="showAdvanced">
-            <canvas 
-                ref="difficultyCanvas" 
-                width="400" 
-                height="400"
-                @mousedown="startDrag"
-                @touchstart.prevent="startDrag"
-                @touchmove.prevent="onDrag"
-                @touchend="stopDrag"
-            ></canvas>
+            <DifficultyMap 
+                v-model:size="customSize"
+                v-model:density="fillRate"
+                :interactive="true"
+                :width="400"
+                :height="400"
+                class="difficulty-map-canvas"
+            />
         </div>
       </div>
 

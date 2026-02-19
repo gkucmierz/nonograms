@@ -3,6 +3,7 @@ import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 import { getWorkerPool } from '@/utils/workerPool';
+import DifficultyMap from './DifficultyMap.vue';
 import { Upload, Image as ImageIcon, X, AlertTriangle, Camera, RefreshCw } from 'lucide-vue-next';
 
 const emit = defineEmits(['close']);
@@ -492,6 +493,17 @@ onUnmounted(() => {
             </div>
             
             <div v-if="imageLoaded" class="stats-panel">
+                <div class="difficulty-map-wrapper">
+                    <DifficultyMap 
+                        :size="maxDimension"
+                        :density="threshold"
+                        :actual-difficulty="difficulty > 0 ? difficulty : null"
+                        :interactive="false"
+                        :width="200"
+                        :height="200"
+                        class="difficulty-map-mini"
+                    />
+                </div>
                 <div v-if="processing" class="loading-stats">
                     <div class="spinner"></div>
                     <span>{{ t('image.calculatingSolvability') || 'Calculating solvability...' }} {{ processingProgress }}%</span>
@@ -531,6 +543,24 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.difficulty-map-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    background: #000;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.difficulty-map-mini :deep(canvas) {
+    width: 100% !important;
+    max-width: 200px;
+    height: auto !important;
+    aspect-ratio: 1;
+    border-radius: 4px;
+}
+
 .loading-stats {
     display: flex;
     align-items: center;
