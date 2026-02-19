@@ -387,6 +387,7 @@ const capturePhoto = () => {
 
 onUnmounted(() => {
     stopCameraStream();
+    getWorkerPool().cancelAll();
 });
 
 </script>

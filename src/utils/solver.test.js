@@ -1,3 +1,8 @@
+import { describe, it, expect } from 'vitest';
+import { solvePuzzle } from './solver';
+import { calculateHints, generateRandomGrid } from './puzzleUtils';
+
+describe('Solver', () => {
     it('solves a puzzle requiring guessing (Backtracking)', () => {
         // A puzzle that logic alone cannot start usually has multiple solutions or requires a guess.
         // Example: The "domino" or "ambiguous" pattern, but we need a unique solution that requires lookahead.
@@ -60,5 +65,82 @@
             }
             expect(result.percentSolved).toBe(100);
         }
+    });
+
+    // Merged from repro_solver.test.js
+    it('should solve a simple generated puzzle', () => {
+        const grid = [
+            [1, 0, 1, 1, 0],
+            [1, 1, 0, 0, 1],
+            [0, 0, 1, 0, 0],
+            [1, 1, 1, 1, 1],
+            [0, 1, 0, 1, 0]
+        ];
+        const { rowHints, colHints } = calculateHints(grid);
+        
+        const result = solvePuzzle(rowHints, colHints);
+        expect(result.percentSolved).toBe(100);
+    });
+
+    // Merged from debug_solver.test.js
+    it('should solve the broken grid (debug case)', () => {
+        const grid = [
+            [0,1,1,1,0,0,1,0,1,1],
+            [1,1,1,0,0,1,1,1,0,0],
+            [1,0,1,0,1,0,0,1,0,0],
+            [1,0,0,0,1,1,1,1,0,1],
+            [1,1,0,1,0,0,0,1,0,1],
+            [1,0,1,0,1,0,0,0,1,0],
+            [1,1,1,0,0,1,1,0,0,0],
+            [0,1,0,0,1,0,1,0,0,0],
+            [0,0,0,1,1,0,0,0,1,0],
+            [1,0,1,1,0,0,1,0,1,1]
+        ];
+
+        const { rowHints, colHints } = calculateHints(grid);
+        const result = solvePuzzle(rowHints, colHints);
+        
+        // console.log('Solve Result:', result);
+        expect(result.percentSolved).toBe(100);
+    });
+
+    // Merged from large_grid_solver.test.js
+    it('should solve a large 55x28 grid without crashing', () => {
+        const rows = 28;
+        const cols = 55;
+        // Create a simple pattern: checkerboard or lines
+        const grid = Array(rows).fill().map((_, r) => 
+            Array(cols).fill().map((_, c) => (r + c) % 2 === 0 ? 1 : 0)
+        );
+        
+        // Calculate hints
+        const rowHints = grid.map(row => {
+            const hints = [];
+            let current = 0;
+            row.forEach(cell => {
+                if (cell === 1) current++;
+                else if (current > 0) { hints.push(current); current = 0; }
+            });
+            if (current > 0) hints.push(current);
+            return hints.length ? hints : [0];
+        });
+        
+        const colHints = Array(cols).fill().map((_, c) => {
+            const hints = [];
+            let current = 0;
+            for(let r=0; r<rows; r++) {
+                if (grid[r][c] === 1) current++;
+                else if (current > 0) { hints.push(current); current = 0; }
+            }
+            if (current > 0) hints.push(current);
+            return hints.length ? hints : [0];
+        });
+        
+        // console.log('Starting solve...');
+        const result = solvePuzzle(rowHints, colHints); // Removed console.log callback to reduce noise
+        // console.log('Result:', result);
+        
+        expect(result.percentSolved).toBeGreaterThan(0);
+        expect(result.difficultyScore).toBeDefined();
     });
 });
