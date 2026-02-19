@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nonograms:
-    container_name: nonograms
+    container_name: ${CONTAINER_NAME:-nonograms}
     build:
       context: .
       dockerfile: Dockerfile
