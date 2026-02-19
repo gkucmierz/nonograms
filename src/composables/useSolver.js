@@ -1,4 +1,4 @@
-import { ref, computed, onUnmounted } from 'vue';
+import { ref, computed, onUnmounted, watch } from 'vue';
 import { usePuzzleStore } from '@/stores/puzzle';
 import { useI18n } from '@/composables/useI18n';
 
@@ -17,6 +17,24 @@ export function useSolver() {
     let intervalId = null;
     let worker = null;
     let requestId = 0;
+
+    // Reset solver state when game resets or changes
+    watch(() => store.currentLevelId, () => {
+        resetSolverState();
+    });
+
+    watch(() => store.moves, (newVal) => {
+        if (newVal === 0) {
+            resetSolverState();
+        }
+    });
+
+    function resetSolverState() {
+        pause();
+        isStuck.value = false;
+        statusText.value = t('guide.waiting');
+        isProcessing.value = false;
+    }
 
     function step() {
         if (store.isGameWon) {

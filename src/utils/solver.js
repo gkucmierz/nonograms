@@ -446,6 +446,7 @@ export function solvePuzzle(rowHints, colHints, onProgress, initialGrid = null, 
         lookaheadUsed: maxDepth > 0,
         iterations,
         maxDepth,
-        backtracks
+        backtracks,
+        solution: grid
     };
 }
