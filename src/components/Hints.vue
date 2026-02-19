@@ -16,6 +16,10 @@ defineProps({
   activeIndex: {
     type: Number,
     default: null
+  },
+  completedLines: {
+    type: Array,
+    default: () => []
   }
 });
 </script>
@@ -34,6 +38,7 @@ defineProps({
       class="hint-group"
       :class="{
         'is-active': index === activeIndex,
+        'is-completed': completedLines[index],
         'guide-right': orientation === 'col' && (index + 1) % 5 === 0 && index !== size - 1,
         'guide-bottom': orientation === 'row' && (index + 1) % 5 === 0 && index !== size - 1
       }"
@@ -79,6 +84,15 @@ defineProps({
   transition: all 0.3s ease;
   width: 100%;
   height: 100%;
+}
+
+.hint-group.is-completed {
+  opacity: 0.5;
+  background-color: var(--hint-bg);
+}
+
+.hint-group.is-completed .hint-num {
+  color: var(--text-muted);
 }
 
 .col .hint-group {

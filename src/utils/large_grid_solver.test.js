@@ -39,6 +39,6 @@ describe('Large Grid Solver', () => {
         console.log('Result:', result);
         
         expect(result.percentSolved).toBeGreaterThan(0);
-        expect(result.difficulty).toBeDefined();
+        expect(result.difficultyScore).toBeDefined();
     });
 });

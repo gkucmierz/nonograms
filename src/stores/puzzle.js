@@ -56,6 +56,31 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     return Math.min(100, (filledCorrectly.value / totalCellsToFill.value) * 100);
   });
 
+  const completedRows = computed(() => {
+    if (!solution.value.length || !playerGrid.value.length) return [];
+    const rows = solution.value.length;
+    return Array(rows).fill().map((_, r) => {
+      const targetHints = calculateLineHints(solution.value[r]);
+      const playerLine = playerGrid.value[r];
+      return validateLine(playerLine, targetHints);
+    });
+  });
+
+  const completedCols = computed(() => {
+    if (!solution.value.length || !playerGrid.value.length) return [];
+    const rows = solution.value.length;
+    const cols = solution.value[0].length;
+    return Array(cols).fill().map((_, c) => {
+        const col = [];
+        for (let r = 0; r < rows; r++) {
+            col.push(solution.value[r][c]);
+        }
+        const targetHints = calculateLineHints(col);
+        const playerLine = playerGrid.value.map(row => row[c]);
+        return validateLine(playerLine, targetHints);
+    });
+  });
+
   // Actions
   function initGame(levelId = 'easy') {
     stopTimer();
@@ -408,7 +433,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     currentDensity,
     markGuideUsed,
     startInteraction,
-    endInteraction
+    endInteraction,
+    completedRows,
+    completedCols
   };
 
 });

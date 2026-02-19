@@ -247,10 +247,10 @@ watch(() => store.size, async () => {
       <div class="corner-spacer"></div>
       
       <!-- Column Hints -->
-      <Hints :hints="colHints" orientation="col" :size="gridCols" :activeIndex="activeCol" />
+      <Hints :hints="colHints" orientation="col" :size="gridCols" :activeIndex="activeCol" :completedLines="store.completedCols" />
       
       <!-- Row Hints -->
-      <Hints ref="rowHintsRef" :hints="rowHints" orientation="row" :size="gridRows" :activeIndex="activeRow" />
+      <Hints ref="rowHintsRef" :hints="rowHints" orientation="row" :size="gridRows" :activeIndex="activeRow" :completedLines="store.completedRows" />
       
       <!-- Grid -->
       <div 
