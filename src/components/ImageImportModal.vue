@@ -657,13 +657,14 @@ onUnmounted(() => {
 
 .camera-controls {
     position: absolute;
-    bottom: 20px;
+    bottom: 0;
     left: 0;
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 20px;
+    padding-bottom: 40px;
     background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
 }
 
