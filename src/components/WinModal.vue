@@ -36,10 +36,14 @@ const handleKeyDown = (e) => {
 
 const triggerVibration = () => {
   if (!('vibrate' in navigator)) return;
-  const isCoarse = window.matchMedia?.('(pointer: coarse)')?.matches;
-  const isTouch = navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
-  if (isCoarse || isTouch) {
-    navigator.vibrate([80, 40, 120, 40, 180]);
+  try {
+    const isCoarse = window.matchMedia?.('(pointer: coarse)')?.matches;
+    const isTouch = navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
+    if (isCoarse || isTouch) {
+      navigator.vibrate([200, 100, 200, 100, 200]);
+    }
+  } catch (e) {
+    console.error('Vibration failed:', e);
   }
 };
 
