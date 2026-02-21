@@ -199,7 +199,15 @@ const messages = {
     'simulation.table.solved': 'Rozwiązano (Logika)',
     'simulation.empty': 'Naciśnij Start, aby uruchomić symulację Monte Carlo',
     'difficultyMap.size': 'Rozmiar',
-    'difficultyMap.density': 'Gęstość'
+    'difficultyMap.density': 'Gęstość',
+    'worker.solved': 'Rozwiązane!',
+    'worker.logicRow': 'Logika: Wiersz {row}, Kolumna {col} -> {state}',
+    'worker.logicCol': 'Logika: Kolumna {col}, Wiersz {row} -> {state}',
+    'worker.stuck': 'Brak logicznego ruchu. Spróbuj zgadnąć lub cofnąć.',
+    'worker.boosted': 'Boost (DFS): Wiersz {row}, Kolumna {col} -> {state}',
+    'worker.done': 'Koniec!',
+    'worker.state.filled': 'Pełne',
+    'worker.state.empty': 'Puste'
   },
   en: {
     'app.title': 'Nonograms',
@@ -399,7 +407,15 @@ const messages = {
     'custom.hideMap': 'Hide difficulty map',
     'custom.showMap': 'Show difficulty map',
     'difficultyMap.size': 'Size',
-    'difficultyMap.density': 'Density'
+    'difficultyMap.density': 'Density',
+    'worker.solved': 'Solved!',
+    'worker.logicRow': 'Logic: Row {row}, Column {col} -> {state}',
+    'worker.logicCol': 'Logic: Column {col}, Row {row} -> {state}',
+    'worker.stuck': 'No logical move found. Try guessing or undoing.',
+    'worker.boosted': 'Boost (DFS): Row {row}, Column {col} -> {state}',
+    'worker.done': 'Done!',
+    'worker.state.filled': 'Filled',
+    'worker.state.empty': 'Empty'
   },
   zh: {
     'app.title': 'Nonograms',

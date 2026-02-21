@@ -97,10 +97,20 @@ export function useSolver() {
 
     function ensureWorker() {
         if (worker) return;
-        worker = new Worker(new URL('../workers/solverWorker.js', import.meta.url), { type: 'module' });
+        worker = new Worker(new URL('../workers/solver.worker.js', import.meta.url), { type: 'module' });
         worker.onmessage = (event) => {
-            const { type, r, c, state, statusText: text } = event.data;
-            if (text) statusText.value = text;
+            const { type, r, c, state, status } = event.data;
+            if (status) {
+                const params = status.params ? { ...status.params } : {};
+                if (params.stateKey) {
+                    params.state = t(params.stateKey);
+                }
+                statusText.value = t(status.key, params);
+            } else if (event.data.statusText) {
+                // Fallback for legacy messages if any
+                statusText.value = event.data.statusText;
+            }
+
             if (type === 'move') {
                 store.setCell(r, c, state);
                 isProcessing.value = false;
