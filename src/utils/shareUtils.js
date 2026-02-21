@@ -253,8 +253,12 @@ export function buildShareSVG(data, t, formattedTime) {
       } else if (state === 2) { // Cross
         const d = cellSize * 0.6;
         const off = cellSize * 0.2;
+        const x1 = (cx + off).toFixed(1);
+        const y1 = (cy + off).toFixed(1);
+        const x2 = (cx + off + d).toFixed(1);
+        const y2 = (cy + off + d).toFixed(1);
         cells += `
-          <path d="M${cx + off} ${cy + off} L${cx + off + d} ${cy + off + d} M${cx + off + d} ${cy + off} L${cx + off} ${cy + off + d}" 
+          <path d="M${x1} ${y1} L${x2} ${y2} M${x2} ${y1} L${x1} ${y2}" 
           stroke="${crossColor}" stroke-width="${lineWidth}" stroke-linecap="round"/>
         `;
       }
