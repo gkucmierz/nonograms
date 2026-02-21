@@ -38,8 +38,6 @@ export function buildShareCanvas(data, t, formattedTime) {
   bg.addColorStop(1, '#0a1324');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-  ctx.fillRect(12, 12, width - 24, height - 24);
   
   ctx.fillStyle = '#e8fbff';
   ctx.font = '700 26px "Segoe UI", sans-serif';
@@ -204,7 +202,6 @@ export function buildShareSVG(data, t, formattedTime) {
       </linearGradient>
     </defs>
     <rect width="100%" height="100%" fill="url(#bg)"/>
-    <rect x="12" y="12" width="${width - 24}" height="${height - 24}" fill="${overlayColor}"/>
   `;
 
   // Text: Title & Time
