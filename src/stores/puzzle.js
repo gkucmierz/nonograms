@@ -376,7 +376,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
   }
   
   function resetGame() {
-    if (currentLevelId.value === 'custom') {
+    if (currentLevelId.value === 'custom' || currentLevelId.value === 'custom_image') {
         resetGrid();
         isGameWon.value = false;
         hasUsedGuide.value = false;
