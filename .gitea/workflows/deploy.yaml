@@ -1,23 +1,11 @@
-name: Deploy to Production
-run-name: Deploy to Production by @${{ github.actor }}
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Build and deploy with Docker Compose
+      - name: Deploy n
+        working-directory: /home/gkucmierz/docker/nonograms-app
         run: |
-          # Próba zatrzymania i usunięcia starego kontenera (ignoruje błąd jeśli nie istnieje)
           docker compose down --remove-orphans || true
-          docker rm -f nonograms-app || true
-          
-          # Start nowej wersji
           docker compose up -d --build
