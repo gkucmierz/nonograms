@@ -10,8 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy n
-        working-directory: /home/gkucmierz/docker/nonograms-app
+      - name: Deploy nonograms-app
         run: |
           docker compose down --remove-orphans || true
           docker compose up -d --build
+
+          
