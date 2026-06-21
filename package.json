@@ -18,7 +18,8 @@
     "flag-icons": "^7.5.0",
     "lucide-vue-next": "^0.563.0",
     "pinia": "^2.1.7",
-    "vue": "^3.4.19"
+    "vue": "^3.4.19",
+    "@gkucmierz/analytics": "^1.0.1"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

@@ -1,3 +1,6 @@
+import { tracker } from '@gkucmierz/analytics'
+tracker.init('nonograms', 'https://analytics.7u.pl')
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
